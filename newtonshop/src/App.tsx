@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { getCategoriesInfo, getAirpods } from './api';
+import { CategoryInfo, AirpodsDto } from './types';
 
-function App() {
+const App: React.FC = () => {
+  const [categoriesInfo, setCategoriesInfo] = useState<CategoryInfo[]>([]);
+  const [airpods, setAirpods] = useState<AirpodsDto[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const categoriesInfoData = await getCategoriesInfo();
+        const airpodsData = await getAirpods();
+
+        setCategoriesInfo(categoriesInfoData);
+        setAirpods(airpodsData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div>
+        <h1>Categories Info</h1>
+        <pre>{JSON.stringify(categoriesInfo, null, 2)}</pre>
+
+        <h1>Airpods</h1>
+        <pre>{JSON.stringify(airpods, null, 2)}</pre>
+      </div>
   );
-}
+};
 
 export default App;
