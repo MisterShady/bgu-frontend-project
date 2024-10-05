@@ -6,6 +6,8 @@ import Watches from './components/Watches';
 import Ipads from './components/Ipads';
 import Iphones from './components/Iphones';
 import CurrencySelector from './components/CurrencySelector';
+import Navbar from './components/Navbar'; // Подключаем навигационную панель
+import Footer from './components/Footer'; // Подключаем подвал
 import './App.css';
 
 const App: React.FC = () => {
@@ -33,16 +35,9 @@ const App: React.FC = () => {
     return (
         <Router>
             <div className="app-container">
+                <Navbar /> {/* Вставляем навигационную панель */}
                 <h1>Товары Apple</h1>
                 <CurrencySelector onCurrencyChange={handleCurrencyChange} />
-                <nav className="navigation">
-                    <ul>
-                        <li><Link to="/airpods">AirPods</Link></li>
-                        <li><Link to="/watches">Watch</Link></li>
-                        <li><Link to="/ipads">iPad</Link></li>
-                        <li><Link to="/iphones">iPhone</Link></li>
-                    </ul>
-                </nav>
                 <Routes>
                     <Route path="/airpods" element={<Airpods currency={currency} conversionRate={conversionRate} />} />
                     <Route path="/watches" element={<Watches currency={currency} conversionRate={conversionRate} />} />
@@ -50,6 +45,7 @@ const App: React.FC = () => {
                     <Route path="/iphones" element={<Iphones currency={currency} conversionRate={conversionRate} />} />
                     <Route path="/" element={<h2>Выберите категорию товаров</h2>} />
                 </Routes>
+                <Footer /> {/* Вставляем подвал */}
             </div>
         </Router>
     );

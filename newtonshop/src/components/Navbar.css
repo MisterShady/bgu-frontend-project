@@ -1,0 +1,92 @@
+/* Навигационная панель */
+.navigation {
+    background-color: #333;
+    padding: 10px 20px; /* Отступы сверху и снизу */
+    display: flex; /* Flexbox для навбара */
+    justify-content: space-between; /* Элементы навбара по краям */
+    align-items: center; /* Центрирование по вертикали */
+}
+
+/* Логотип */
+.navigation .logo img {
+    height: 40px;
+}
+
+/* Кнопка меню */
+.menu-button {
+    background-color: transparent;
+    color: white; /* Белый цвет текста */
+    border: none; /* Убраны границы */
+    padding: 10px 15px; /* Установка отступов */
+    font-size: 18px; /* Установка размера шрифта */
+    cursor: pointer; /* Указатель курсора при наведении */
+    transition: opacity 0.3s ease; /* Плавная анимация изменения прозрачности */
+}
+
+.menu-button:hover {
+    opacity: 0.8; /* Уменьшение прозрачности при наведении */
+}
+
+/* Выпадающее меню */
+.menu-item {
+    position: relative; /* Установка относительного позиционирования для dropdown */
+}
+
+.dropdown {
+    position: absolute; /* Позиционирование dropdown */
+    top: 100%; /* Появление под кнопкой "Все товары" */
+    left: 0; /* Установка слева */
+    display: none; /* Скрываем по умолчанию */
+}
+
+.dropdown.open {
+    display: flex; /* Показываем меню при открытом состоянии */
+    animation: slideIn 0.5s forwards; /* Анимация появления */
+    flex-direction: row; /* Горизонтальное размещение элементов */
+    background-color: #333; /* Цвет фона для dropdown */
+    border: 1px solid #4CAF50; /* Граница для dropdown */
+}
+
+/* Элементы выпадающего меню */
+.dropdown-content {
+    display: flex; /* Использование flexbox для размещения элементов */
+    gap: 20px; /* Промежуток между элементами */
+}
+
+/* Элементы выпадающего меню */
+.dropdown-content li {
+    display: flex; /* Использование flexbox для размещения элементов */
+    align-items: center; /* Центрирование по вертикали */
+    transition: transform 0.3s ease; /* Плавная анимация при наведении */
+}
+
+.dropdown-content li:hover {
+    transform: scale(1.1); /* Увеличение размера элемента при наведении */
+}
+
+.dropdown-content img {
+    height: 30px; /* Высота изображений в выпадающем меню */
+    margin-right: 10px; /* Отступ справа для изображений */
+}
+
+/* Анимация выдвижения */
+@keyframes slideIn {
+    0% {
+        opacity: 0; /* Исходная прозрачность */
+        transform: translateY(-20px); /* Перемещение вверх */
+    }
+    100% {
+        opacity: 1; /* Конечная прозрачность */
+        transform: translateY(0); /* Возврат на место */
+    }
+}
+
+/* Иконка аккаунта */
+.account-icon {
+    margin-left: auto; /* Установка отступа слева для иконки аккаунта, чтобы прижать к правому краю */
+}
+
+.account-icon img {
+    height: 40px; /* Высота иконки аккаунта */
+    cursor: pointer; /* Указатель курсора при наведении */
+}

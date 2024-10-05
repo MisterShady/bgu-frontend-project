@@ -1,22 +1,11 @@
+/* Общие стили */
 .app-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.navigation ul {
-  display: flex;
-  list-style: none;
-  justify-content: space-around;
-}
-
-.navigation li a {
-  text-decoration: none;
-  padding: 10px;
-  font-size: 18px;
-  color: #4CAF50;
-}
-
+/* Карточки товаров */
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -35,6 +24,10 @@
   padding: 15px;
 }
 
+.card:hover {
+  transform: scale(1.05);
+}
+
 .card-image {
   width: 100%;
   height: auto;
@@ -47,19 +40,7 @@
   margin: 10px 0;
 }
 
-.buy-button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
-.buy-button:hover {
-  background-color: #45a049;
-}
-
+/* Селектор валют */
 .currency-selector {
   margin: 10px 0;
   display: flex;
@@ -70,6 +51,7 @@
   margin-right: 10px;
 }
 
+/* Модальное окно */
 .modal {
   position: fixed;
   top: 0;
@@ -114,7 +96,6 @@
   background-color: #c82333;
 }
 
-
 .view-button {
   margin-top: 10px;
   padding: 10px 20px;
@@ -144,4 +125,3 @@
 .buy-button:hover {
   background-color: #218838;
 }
-
