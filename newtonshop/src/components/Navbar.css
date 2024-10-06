@@ -1,10 +1,10 @@
 /* Навигационная панель */
 .navigation {
     background-color: #333;
-    padding: 10px 20px; /* Отступы сверху и снизу */
-    display: flex; /* Flexbox для навбара */
-    justify-content: space-between; /* Элементы навбара по краям */
-    align-items: center; /* Центрирование по вертикали */
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /* Логотип */
@@ -15,78 +15,129 @@
 /* Кнопка меню */
 .menu-button {
     background-color: transparent;
-    color: white; /* Белый цвет текста */
-    border: none; /* Убраны границы */
-    padding: 10px 15px; /* Установка отступов */
-    font-size: 18px; /* Установка размера шрифта */
-    cursor: pointer; /* Указатель курсора при наведении */
-    transition: opacity 0.3s ease; /* Плавная анимация изменения прозрачности */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
 }
 
 .menu-button:hover {
-    opacity: 0.8; /* Уменьшение прозрачности при наведении */
+    opacity: 0.8;
+}
+
+/* Поисковая строка */
+.search-bar {
+    position: relative;
+    margin-left: 20px;
+}
+
+.search-bar input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
+    width: 200px;
+    transition: width 0.3s ease;
+}
+
+.search-bar input:focus {
+    width: 250px;
+    outline: none;
+}
+
+/* Выпадающий список предложений */
+.suggestions-list {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 250px;
+    background: white;
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
+    z-index: 1000;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.suggestion-item a {
+    text-decoration: none;
+    color: #333;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+
+.suggestion-item a:hover {
+    color: #4CAF50;
 }
 
 /* Выпадающее меню */
 .menu-item {
-    position: relative; /* Установка относительного позиционирования для dropdown */
+    position: relative;
 }
 
 .dropdown {
-    position: absolute; /* Позиционирование dropdown */
-    top: 100%; /* Появление под кнопкой "Все товары" */
-    left: 0; /* Установка слева */
-    display: none; /* Скрываем по умолчанию */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
 }
 
 .dropdown.open {
-    display: flex; /* Показываем меню при открытом состоянии */
-    animation: slideIn 0.5s forwards; /* Анимация появления */
-    flex-direction: row; /* Горизонтальное размещение элементов */
-    background-color: #333; /* Цвет фона для dropdown */
-    border: 1px solid #4CAF50; /* Граница для dropdown */
+    display: flex;
+    animation: slideIn 0.5s forwards;
+    flex-direction: row;
+    background-color: #333;
+    border: 1px solid #4CAF50;
 }
 
-/* Элементы выпадающего меню */
 .dropdown-content {
-    display: flex; /* Использование flexbox для размещения элементов */
-    gap: 20px; /* Промежуток между элементами */
+    display: flex;
+    gap: 20px;
 }
 
-/* Элементы выпадающего меню */
 .dropdown-content li {
-    display: flex; /* Использование flexbox для размещения элементов */
-    align-items: center; /* Центрирование по вертикали */
-    transition: transform 0.3s ease; /* Плавная анимация при наведении */
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
 }
 
 .dropdown-content li:hover {
-    transform: scale(1.1); /* Увеличение размера элемента при наведении */
+    transform: scale(1.1);
 }
 
 .dropdown-content img {
-    height: 30px; /* Высота изображений в выпадающем меню */
-    margin-right: 10px; /* Отступ справа для изображений */
+    height: 30px;
+    margin-right: 10px;
 }
 
-/* Анимация выдвижения */
 @keyframes slideIn {
     0% {
-        opacity: 0; /* Исходная прозрачность */
-        transform: translateY(-20px); /* Перемещение вверх */
+        opacity: 0;
+        transform: translateY(-20px);
     }
     100% {
-        opacity: 1; /* Конечная прозрачность */
-        transform: translateY(0); /* Возврат на место */
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
 /* Иконка аккаунта */
 .account-icon {
-    margin-left: auto; /* Установка отступа слева для иконки аккаунта, чтобы прижать к правому краю */
+    margin-left: auto;
 }
 
 .account-icon img {
-    height: 40px; /* Высота иконки аккаунта */
-    cursor: pointer; /* Указатель курсора при наведении */
+    height: 40px;
+    cursor: pointer;
 }

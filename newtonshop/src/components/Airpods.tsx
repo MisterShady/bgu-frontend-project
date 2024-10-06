@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getAirpods } from '../api';
 import { AirpodsDto } from '../types';
 import { motion } from 'framer-motion';
-import { formatPrice } from './utils';
-import Modal from './Modal';
+import { Link } from 'react-router-dom';
 
 const Airpods: React.FC<{ currency: string; conversionRate: number }> = ({ currency, conversionRate }) => {
     const [airpods, setAirpods] = useState<AirpodsDto[]>([]);
@@ -33,15 +32,13 @@ const Airpods: React.FC<{ currency: string; conversionRate: number }> = ({ curre
                 <motion.div className="card" key={item.id} whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
                     <img src={item.thumbUrl} alt={item.title} className="card-image" />
                     <h2>{item.title}</h2>
-                    <p className="price">{formatPrice(item.price * conversionRate)} {currency}</p>
-                    <p>{item.audioFeatures.join(', ')}</p>
-                    <button className="view-button" onClick={() => setSelectedItem(item)}>
-                        Посмотреть характеристики
+                    <p className="price">{item.price} {currency}</p>
+                    <button className="view-button">
+                        <Link to={`/airpods/${item.id}`}>Посмотреть характеристики</Link>
                     </button>
                     <button className="buy-button">Купить</button>
                 </motion.div>
             ))}
-            {selectedItem && <Modal item={selectedItem} onClose={() => setSelectedItem(null)} />}
         </div>
     );
 };

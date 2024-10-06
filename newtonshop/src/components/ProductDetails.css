@@ -1,0 +1,143 @@
+.product-details {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.product-images {
+    flex: 1;
+}
+
+.main-image {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+}
+
+.image-thumbnails {
+    display: flex;
+    margin-top: 1rem;
+}
+
+.thumbnail {
+    width: 80px;
+    height: 80px;
+    margin-right: 0.5rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.thumbnail.selected {
+    border-color: #007bff;
+}
+
+.product-info {
+    flex: 2;
+}
+
+.product-info h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.product-price {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.product-colors ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.product-colors li {
+    display: inline-block;
+    margin-right: 1rem;
+}
+
+.product-features h3 {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+}
+
+.product-features p {
+    margin-bottom: 0.5rem;
+}
+
+.price-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.product-price {
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.buy-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.buy-button:hover {
+    background-color: #0056b3;
+}
+
+.product-colors {
+    margin-bottom: 20px;
+}
+
+.color-squares {
+    display: flex;
+    gap: 10px;
+}
+
+.color-square {
+    width: 40px;
+    height: 40px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border 0.3s ease;
+}
+
+.color-square.selected {
+    border: 2px solid #000; /* рамка при выборе */
+}
+
+
+.product-description {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.description-block {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.description-block h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+}
+
+.description-block p {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+}
