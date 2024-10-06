@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AirpodsDto, WatchDto, IpadDto, IphoneDto } from './types';
+import {AirpodsDto, IpadDto, IphoneDto, WatchDto} from './types';
 
 const BASE_URL = 'http://localhost:9000/api/v1';
 

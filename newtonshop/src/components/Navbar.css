@@ -12,15 +12,23 @@
     height: 40px;
 }
 
-/* Кнопка меню */
+/* Кнопка "Каталог товаров" */
 .menu-button {
-    background-color: transparent;
+    background-color: #333;
     color: white;
-    border: none;
-    padding: 10px 15px;
+    border: 2px solid white;
+    border-radius: 25px;
+    padding: 10px 20px;
     font-size: 18px;
     cursor: pointer;
-    transition: opacity 0.3s ease;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.menu-button .arrow {
+    margin-left: 5px;
+    font-size: 14px;
 }
 
 .menu-button:hover {
@@ -30,21 +38,26 @@
 /* Поисковая строка */
 .search-bar {
     position: relative;
+    flex-grow: 0.8; /* Растягивает строку поиска вправо */ /* <-- Это отвечает за растягивание строки поиска */
     margin-left: 20px;
+    display: flex;
 }
 
 .search-bar input {
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #4CAF50;
-    border-radius: 5px;
-    width: 200px;
-    transition: width 0.3s ease;
+    border-radius: 25px;
+    width: 100%;
+    outline: none;
 }
 
-.search-bar input:focus {
-    width: 250px;
-    outline: none;
+.search-bar .search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #333;
 }
 
 /* Выпадающий список предложений */
@@ -54,7 +67,6 @@
     left: 0;
     width: 250px;
     background: white;
-    border: 1px solid #4CAF50;
     border-radius: 5px;
     z-index: 1000;
     padding: 0;
@@ -77,10 +89,6 @@
     background-color: #f0f0f0;
 }
 
-.suggestion-item a:hover {
-    color: #4CAF50;
-}
-
 /* Выпадающее меню */
 .menu-item {
     position: relative;
@@ -88,40 +96,45 @@
 
 .dropdown {
     position: absolute;
-    top: 100%;
-    left: 0;
+    left: 15%;
     display: none;
+    animation: slideDown 0.5s forwards;
+    background-color: #333;
+    border: 1px solid #ffffff;
 }
 
 .dropdown.open {
-    display: flex;
-    animation: slideIn 0.5s forwards;
-    flex-direction: row;
+    display: block;
+    animation: slideDown 0.5s forwards;
     background-color: #333;
-    border: 1px solid #4CAF50;
+    border: 1px solid #ffffff;
+    width: 75%;
 }
 
 .dropdown-content {
-    display: flex;
-    gap: 20px;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    text-align: left;
 }
 
 .dropdown-content li {
-    display: flex;
-    align-items: center;
-    transition: transform 0.3s ease;
+    padding: 15px;
+    transition: background-color 0.3s ease;
 }
 
-.dropdown-content li:hover {
-    transform: scale(1.1);
+.dropdown-content li a {
+    color: white;
+    font-family: 'Arial', sans-serif;
+    text-decoration: none;
 }
 
 .dropdown-content img {
-    height: 30px;
+    height: 20px;
     margin-right: 10px;
 }
 
-@keyframes slideIn {
+@keyframes slideDown {
     0% {
         opacity: 0;
         transform: translateY(-20px);
