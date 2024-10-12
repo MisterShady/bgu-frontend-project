@@ -1,10 +1,22 @@
-/* Подвал */
+.footer-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: auto; /* Автоматическое отступление вверх, чтобы футер оставался внизу */
+}
+
 .footer {
-    background-color: #333;
-    color: white;
-    padding: 20px 0;
+    display: flex; /* Используем Flexbox для распределения контента */
+    justify-content: space-between; /* Равномерное распределение между текстом и картинкой */
+    align-items: center; /* Вертикальное выравнивание */
+    background-color: #ffffff;
+    color: #000000;
+    padding: 20px 40px;
     text-align: center;
-    margin-top: 50px;
+    max-width: 1200px;
+    width: 100%;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Добавление тени */
 }
 
 .footer p {
@@ -19,4 +31,14 @@
 
 .footer a:hover {
     text-decoration: underline;
+}
+
+.footer-content {
+    flex: 2; /* Контент займет всю доступную ширину, кроме места для изображения */
+}
+
+.footer-image {
+    max-width: 125px; /* Ограничиваем ширину изображения */
+    height: auto;
+    cursor: pointer; /* Курсор становится "рукой" при наведении */
 }

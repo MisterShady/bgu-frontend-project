@@ -40,22 +40,24 @@ const App: React.FC = () => {
     return (
         <Router>
             <div className="app-container">
-                <Navbar  /> {/* Вставляем навигационную панель */}
-                <h1>Товары Apple</h1>
-                <Routes>
-                    <Route path="/airpods" element={<Airpods currency={currency} conversionRate={conversionRate} />} />
-                    <Route path="/airpods/:id" element={<AirpodsProduct />} />
-                    <Route path="/watches" element={<Watches currency={currency} conversionRate={conversionRate} />} />
-                    <Route path="/watches/:id" element={<WatchProduct />} />
-                    <Route path="/ipads" element={<Ipads currency={currency} conversionRate={conversionRate} />} />
-                    <Route path="/ipads/:id" element={<IpadProduct />} />
-                    <Route path="/iphones" element={<Iphones currency={currency} conversionRate={conversionRate} />} />
-                    <Route path="/iphones/:id" element={<IphoneProduct />} />
-                    <Route path="/login" element={<Login />} /> {/* Страница авторизации */}
-                    <Route path="/register" element={<Register />} /> {/* Страница регистрации */}
-                    <Route path="/" element={<h2>Выберите категорию товаров</h2>} />
-                </Routes>
-                <Footer /> {/* Вставляем подвал */}
+                <Navbar />
+                <div className="content">
+                    <h1>Товары Apple</h1>
+                    <Routes>
+                        <Route path="/airpods" element={<Airpods currency={currency} conversionRate={conversionRate} />} />
+                        <Route path="/airpods/:id" element={<AirpodsProduct />} />
+                        <Route path="/watches" element={<Watches currency={currency} conversionRate={conversionRate} />} />
+                        <Route path="/watches/:id" element={<WatchProduct />} />
+                        <Route path="/ipads" element={<Ipads currency={currency} conversionRate={conversionRate} />} />
+                        <Route path="/ipads/:id" element={<IpadProduct />} />
+                        <Route path="/iphones" element={<Iphones currency={currency} conversionRate={conversionRate} />} />
+                        <Route path="/iphones/:id" element={<IphoneProduct />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/" element={<h2>Выберите категорию товаров</h2>} />
+                    </Routes>
+                </div>
+                <Footer />
             </div>
         </Router>
     );

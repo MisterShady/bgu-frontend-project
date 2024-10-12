@@ -1,9 +1,16 @@
 /* Общие стили */
 .app-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #e5e2e2;
 }
+
+.content {
+  flex-grow: 1; /* Занимает доступное пространство, чтобы футер был внизу */
+  padding: 60px;
+}
+
 
 /* Карточки товаров */
 .card-container {

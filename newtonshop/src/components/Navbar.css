@@ -1,11 +1,27 @@
+/* Основной контейнер для центрирования */
+.navigation-wrapper {
+    display: flex;
+    justify-content: center; /* Центрирует навбар */
+    padding: 10px 0; /* Отступы для контейнера */
+}
+
+/* Центровка контейнера навбара */
+.navbar-center-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
 /* Навигационная панель */
 .navigation {
-    background-color: #333;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 1200px;
+    width: 100%; /* Ширина 100%, чтобы контейнер навбара был гибким */
 }
+
 
 /* Логотип */
 .navigation .logo img {
@@ -38,7 +54,7 @@
 /* Поисковая строка */
 .search-bar {
     position: relative;
-    flex-grow: 0.8; /* Растягивает строку поиска вправо */ /* <-- Это отвечает за растягивание строки поиска */
+    flex-grow: 0.8; /* Растягивает строку поиска вправо */
     margin-left: 20px;
     display: flex;
 }
@@ -145,7 +161,15 @@
     }
 }
 
-/* Иконка аккаунта */
+.cart-icon {
+    margin-left: auto;
+}
+
+.cart-icon img {
+    height: 40px;
+    cursor: pointer;
+}
+
 .account-icon {
     margin-left: auto;
 }

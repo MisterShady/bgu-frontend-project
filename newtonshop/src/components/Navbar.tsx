@@ -47,93 +47,99 @@ const Navbar: React.FC = () => {
     }, []);
 
     return (
-        <nav className="navigation">
-            {/* Логотип слева */}
-            <div className="logo">
-                <Link to="/">
-                    <img src="Ноги.jpg" alt="Apple Store"/>
-                </Link>
-            </div>
+        <div className="navbar-center-container">
+            <nav className="navigation">
+                {/* Логотип слева */}
+                <div className="logo">
+                    <Link to="/">
+                        <img src="Ноги.jpg" alt="Apple Store"/>
+                    </Link>
+                </div>
 
-            {/* Кнопка "Каталог товаров" и выпадающее меню */}
-            <div className="menu-item">
-                <button className="menu-button" onClick={toggleMenu}>
-                    Каталог товаров <span className="arrow">▼</span>
-                </button>
-                {isMenuOpen && (
-                    <div className="dropdown open">
-                        <ul className="dropdown-content">
-                            <li>
-                                <Link to="/macs">
-                                    <img src="/mac.png" alt="Mac"/> Mac
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/ipads">
-                                    <img src="/ipad.png" alt="iPad"/> iPad
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/iphones">
-                                    <img src="/smartphone.png" alt="iPhone"/> iPhone
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/watches">
-                                    <img src="/smartphone.png" alt="Watch"/> Watch
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/airpods">
-                                    <img src="/airpods.png" alt="Airpods"/> Airpods
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                )}
-            </div>
+                {/* Кнопка "Каталог товаров" и выпадающее меню */}
+                <div className="menu-item">
+                    <button className="menu-button" onClick={toggleMenu}>
+                        Каталог товаров <span className="arrow">▼</span>
+                    </button>
+                    {isMenuOpen && (
+                        <div className="dropdown open">
+                            <ul className="dropdown-content">
+                                <li>
+                                    <Link to="/macs">
+                                        <img src="/mac.png" alt="Mac"/> Mac
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/ipads">
+                                        <img src="/ipad.png" alt="iPad"/> iPad
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/iphones">
+                                        <img src="/smartphone.png" alt="iPhone"/> iPhone
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/watches">
+                                        <img src="/smartphone.png" alt="Watch"/> Watch
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link to="/airpods">
+                                        <img src="/airpods.png" alt="Airpods"/> Airpods
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
+                </div>
 
-            {/* Поисковая строка */}
-            <div className="search-bar">
-                <input
-                    type="text"
-                    placeholder="Поиск товаров..."
-                    value={searchTerm}
-                    onChange={(event) => setSearchTerm(event.target.value)}
-                    onBlur={(event) => {
-                        if (!event.currentTarget.contains(event.relatedTarget)) {
-                            clearSuggestions();
-                        }
-                    }}
-                />
-                <span className="search-icon">🔍</span> {/* Иконка лупы */}
-                {suggestions.length > 0 && (
-                    <ul className="suggestions-list">
-                        {suggestions.map((suggestion) => (
-                            <li
-                                key={suggestion.id}
-                                className="suggestion-item"
-                                onMouseDown={(e) => e.preventDefault()}
-                            >
-                                <Link
-                                    to={`/${toPlural(suggestion.type)}/${suggestion.id}`}
-                                    onClick={clearSuggestions}
+                {/* Поисковая строка */}
+                <div className="search-bar">
+                    <input
+                        type="text"
+                        placeholder="Поиск товаров..."
+                        value={searchTerm}
+                        onChange={(event) => setSearchTerm(event.target.value)}
+                        onBlur={(event) => {
+                            if (!event.currentTarget.contains(event.relatedTarget)) {
+                                clearSuggestions();
+                            }
+                        }}
+                    />
+                    <span className="search-icon">🔍</span> {/* Иконка лупы */}
+                    {suggestions.length > 0 && (
+                        <ul className="suggestions-list">
+                            {suggestions.map((suggestion) => (
+                                <li
+                                    key={suggestion.id}
+                                    className="suggestion-item"
+                                    onMouseDown={(e) => e.preventDefault()}
                                 >
-                                    {suggestion.title}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
+                                    <Link
+                                        to={`/${toPlural(suggestion.type)}/${suggestion.id}`}
+                                        onClick={clearSuggestions}
+                                    >
+                                        {suggestion.title}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
 
-            {/* Личный кабинет справа */}
-            <div className="account-icon">
-                <Link to="/login">
-                    <img src="account.png" alt="Account"/>
-                </Link>
-            </div>
-        </nav>
+                <div className="cart-icon">
+                    <Link to="/login">
+                        <img src="cart.png" alt="Cart"/>
+                    </Link>
+                </div>
+                <div className="account-icon">
+                    <Link to="/login">
+                        <img src="account.png" alt="Account"/>
+                    </Link>
+                </div>
+            </nav>
+        </div>
     );
 };
 
