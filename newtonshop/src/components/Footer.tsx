@@ -22,13 +22,13 @@ const Footer: React.FC = () => {
                     <a href="/about-us" className="about-link">О нас</a>
                 </div>
                 <img
-                    src="/skeleton.gif"
+                    src="/image/skeleton.gif"
                     alt="Skeleton GIF"
                     className="footer-image"
                     onClick={handleGifClick} // Добавляем событие клика
                 />
                 <audio ref={audioRef}>
-                    <source src="/igor.ogg" type="audio/ogg" />
+                    <source src="/image/igor.ogg" type="audio/ogg" />
                     Ваш браузер не поддерживает аудио.
                 </audio>
             </footer>

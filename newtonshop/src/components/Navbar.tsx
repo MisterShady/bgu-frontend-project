@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
                 {/* Логотип слева */}
                 <div className="logo">
                     <Link to="/">
-                        <img src="Ноги.jpg" alt="Apple Store"/>
+                        <img src="/image/logo.png" alt="Apple Store"/>
                     </Link>
                 </div>
 
@@ -66,27 +66,27 @@ const Navbar: React.FC = () => {
                             <ul className="dropdown-content">
                                 <li>
                                     <Link to="/macs">
-                                        <img src="/mac.png" alt="Mac"/> Mac
+                                        <img src="/image/device/mac.svg" alt="Mac"/> Mac
                                     </Link>
                                 </li>
                                 <li>
                                     <Link to="/ipads">
-                                        <img src="/ipad.png" alt="iPad"/> iPad
+                                        <img src="/image/device/ipad.svg" alt="iPad"/> iPad
                                     </Link>
                                 </li>
                                 <li>
                                     <Link to="/iphones">
-                                        <img src="/smartphone.png" alt="iPhone"/> iPhone
+                                        <img src="/image/device/iphone.svg" alt="iPhone"/> iPhone
                                     </Link>
                                 </li>
                                 <li>
                                     <Link to="/watches">
-                                        <img src="/smartphone.png" alt="Watch"/> Watch
+                                        <img src="/image/device/watch.svg" alt="Watch"/> Watch
                                     </Link>
                                 </li>
                                 <li>
                                     <Link to="/airpods">
-                                        <img src="/airpods.png" alt="Airpods"/> Airpods
+                                        <img src="/image/device/airpods.svg" alt="Airpods"/> Airpods
                                     </Link>
                                 </li>
                             </ul>
@@ -107,7 +107,7 @@ const Navbar: React.FC = () => {
                             }
                         }}
                     />
-                    <span className="search-icon">🔍</span> {/* Иконка лупы */}
+                    <img src="/image/magnifier.svg" alt="Search" className="search-icon"/> {/* Иконка лупы */}
                     {suggestions.length > 0 && (
                         <ul className="suggestions-list">
                             {suggestions.map((suggestion) => (
@@ -130,12 +130,12 @@ const Navbar: React.FC = () => {
 
                 <div className="cart-icon">
                     <Link to="/login">
-                        <img src="cart.png" alt="Cart"/>
+                        <img src="/image/cart.png" alt="Cart"/>
                     </Link>
                 </div>
                 <div className="account-icon">
                     <Link to="/login">
-                        <img src="account.png" alt="Account"/>
+                        <img src="/image/account.png" alt="Account"/>
                     </Link>
                 </div>
             </nav>

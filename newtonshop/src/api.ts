@@ -36,6 +36,7 @@ export const getIphones = async (): Promise<IphoneDto[]> => {
     return response.data;
 };
 
+
 // Запросы для конкретного продукта по идентификатору
 export const getAirpodsById = async (id: string): Promise<AirpodsDto> => {
     const response = await axios.get<AirpodsDto>(`${BASE_URL}/products/airpods/${id}`);

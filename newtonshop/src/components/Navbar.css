@@ -1,8 +1,8 @@
 /* Основной контейнер для центрирования */
 .navigation-wrapper {
     display: flex;
-    justify-content: center; /* Центрирует навбар */
-    padding: 10px 0; /* Отступы для контейнера */
+    justify-content: center;
+    padding: 10px 0;
 }
 
 /* Центровка контейнера навбара */
@@ -10,6 +10,7 @@
     display: flex;
     justify-content: center;
     width: 100%;
+    z-index: 1000;
 }
 
 /* Навигационная панель */
@@ -19,9 +20,8 @@
     justify-content: space-between;
     align-items: center;
     max-width: 1200px;
-    width: 100%; /* Ширина 100%, чтобы контейнер навбара был гибким */
+    width: 100%;
 }
-
 
 /* Логотип */
 .navigation .logo img {
@@ -54,7 +54,7 @@
 /* Поисковая строка */
 .search-bar {
     position: relative;
-    flex-grow: 0.8; /* Растягивает строку поиска вправо */
+    flex-grow: 0.8;
     margin-left: 20px;
     display: flex;
 }
@@ -136,7 +136,7 @@
 
 .dropdown-content li {
     padding: 15px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, border 0.3s ease;
 }
 
 .dropdown-content li a {
@@ -148,6 +148,12 @@
 .dropdown-content img {
     height: 20px;
     margin-right: 10px;
+}
+
+.dropdown-content li:hover {
+    background-color: #444;
+    border: 1px solid white;
+    border-radius: 5px;
 }
 
 @keyframes slideDown {
@@ -177,4 +183,20 @@
 .account-icon img {
     height: 40px;
     cursor: pointer;
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    color: #333;
+}
+
+/* Стили для SVG-иконок в выпадающем меню */
+.dropdown-icon {
+    fill: white;
+    stroke: white;
 }
