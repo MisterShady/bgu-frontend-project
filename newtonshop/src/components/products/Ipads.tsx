@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { getIphones } from '../api';
-import { IphoneDto } from '../types';
+import { getIpads } from '../../api';
+import { IpadDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-const Iphones: React.FC<{ currency: string; conversionRate: number }> = ({ currency, conversionRate }) => {
-    const [iphones, setIphones] = useState<IphoneDto[]>([]);
+const Ipads: React.FC = () => {
+    const [ipads, setIpads] = useState<IpadDto[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const iphonesData = await getIphones();
-                setIphones(iphonesData);
+                const ipadsData = await getIpads();
+                setIpads(ipadsData);
             } catch (error: any) {
                 setError(error.message || 'Ошибка загрузки данных');
             }
@@ -27,13 +27,13 @@ const Iphones: React.FC<{ currency: string; conversionRate: number }> = ({ curre
 
     return (
         <div className="card-container">
-            {iphones.map((item) => (
+            {ipads.map((item) => (
                 <motion.div className="card" key={item.id} whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
                     <img src={item.thumbUrl} alt={item.title} className="card-image" />
                     <h2>{item.title}</h2>
-                    <p className="price">{(item.price * conversionRate).toFixed(2)} {currency}</p>
+                    <p className="price">{item.price}</p>
                     <button className="view-button">
-                        <Link to={`/iphones/${item.id}`}>Посмотреть характеристики</Link>
+                        <Link to={`/ipads/${item.id}`}>Посмотреть характеристики</Link>
                     </button>
                     <button className="buy-button">Купить</button>
                 </motion.div>
@@ -42,4 +42,4 @@ const Iphones: React.FC<{ currency: string; conversionRate: number }> = ({ curre
     );
 };
 
-export default Iphones;
+export default Ipads;

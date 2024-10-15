@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getIphoneById } from '../api';
-import { IphoneDto } from '../types';
+import { getIpadById } from '../../api';
+import { IpadDto } from '../../types';
 import './ProductDetails.css';
 
-const IphoneProduct: React.FC = () => {
+const IpadProduct: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const [iphone, setIphone] = useState<IphoneDto | null>(null);
+    const [ipad, setIpad] = useState<IpadDto | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 if (id) {
-                    const iphoneData = await getIphoneById(id);
-                    setIphone(iphoneData);
+                    const ipadData = await getIpadById(id);
+                    setIpad(ipadData);
                 }
             } catch (error: any) {
                 setError(error.message || 'Ошибка загрузки данных');
@@ -28,36 +28,36 @@ const IphoneProduct: React.FC = () => {
         return <div>Ошибка загрузки данных: {error}</div>;
     }
 
-    if (!iphone) {
+    if (!ipad) {
         return <div>Загрузка...</div>;
     }
 
     return (
         <div className="product-details">
             <div className="product-images">
-                <img src={iphone.thumbUrl} alt={iphone.title} className="main-image" />
+                <img src={ipad.thumbUrl} alt={ipad.title} className="main-image" />
             </div>
             <div className="product-info">
-                <h2>{iphone.title}</h2>
-                <p className="product-price">${iphone.price}</p>
+                <h2>{ipad.title}</h2>
+                <p className="product-price">${ipad.price}</p>
                 <button className="buy-button">Купить</button>
 
                 <div className="product-description">
                     <div className="description-block">
                         <h3>Экран</h3>
-                        <p>{iphone.display.size} дюймов, {iphone.display.resolution}</p>
+                        <p>{ipad.display.size} дюймов, {ipad.display.resolution}</p>
                     </div>
                     <div className="description-block">
                         <h3>Процессор</h3>
-                        <p>{iphone.processor.chip}</p>
+                        <p>{ipad.processor.chip}</p>
                     </div>
                     <div className="description-block">
                         <h3>Камеры</h3>
-                        <p>Основные камеры: {iphone.camera.rearCameras.map(cam => cam.resolution).join(', ')}</p>
+                        <p>Основные камеры: {ipad.camera.rearCameras.map(cam => cam.resolution).join(', ')}</p>
                     </div>
                     <div className="description-block">
                         <h3>Аккумулятор</h3>
-                        <p>{iphone.battery.capacity}</p>
+                        <p>{ipad.battery.capacity}</p>
                     </div>
                 </div>
             </div>
@@ -65,4 +65,4 @@ const IphoneProduct: React.FC = () => {
     );
 };
 
-export default IphoneProduct;
+export default IpadProduct;

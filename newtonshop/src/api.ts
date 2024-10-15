@@ -7,6 +7,10 @@ const BASE_URL = 'http://localhost:9000/api/v1';
 export interface ProductDto {
     id: string;
     title: string;
+    thumbUrl: string;
+    price: number;
+    currency: string;
+    images: string[];
     type: string;
 }
 

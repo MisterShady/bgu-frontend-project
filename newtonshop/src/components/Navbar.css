@@ -40,6 +40,8 @@
     margin-left: 15px;
     display: flex;
     align-items: center;
+    justify-content: center; /* Центрирование содержимого по горизонтали */
+    width: 150px;
 }
 
 .menu-button .arrow {

@@ -1,7 +1,7 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
-import {getAllProducts, ProductDto} from '../api';
-import {toPlural} from '../utils';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getAllProducts, ProductDto } from '../api';
+import { toPlural } from '../utils';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
@@ -24,7 +24,9 @@ const Navbar: React.FC = () => {
             }
         };
 
-        fetchProducts();
+        fetchProducts().catch(error => {
+            console.error('Ошибка при выполнении fetchProducts:', error);
+        });
     }, []);
 
     useEffect(() => {
@@ -52,41 +54,41 @@ const Navbar: React.FC = () => {
                 {/* Логотип слева */}
                 <div className="logo">
                     <Link to="/">
-                        <img src="/image/logo.png" alt="Apple Store"/>
+                        <img src="/image/logo.png" alt="Apple Store" />
                     </Link>
                 </div>
 
                 {/* Кнопка "Каталог товаров" и выпадающее меню */}
                 <div className="menu-item">
                     <button className="menu-button" onClick={toggleMenu}>
-                        Каталог товаров <span className="arrow">▼</span>
+                        Каталог <span className="arrow">▼</span>
                     </button>
                     {isMenuOpen && (
                         <div className="dropdown open">
                             <ul className="dropdown-content">
                                 <li>
                                     <Link to="/macs">
-                                        <img src="/image/device/mac.svg" alt="Mac"/> Mac
+                                        <img src="/image/device/mac.svg" alt="Mac" /> Mac
                                     </Link>
                                 </li>
                                 <li>
                                     <Link to="/ipads">
-                                        <img src="/image/device/ipad.svg" alt="iPad"/> iPad
+                                        <img src="/image/device/ipad.svg" alt="iPad" /> iPad
                                     </Link>
                                 </li>
                                 <li>
                                     <Link to="/iphones">
-                                        <img src="/image/device/iphone.svg" alt="iPhone"/> iPhone
+                                        <img src="/image/device/iphone.svg" alt="iPhone" /> iPhone
                                     </Link>
                                 </li>
                                 <li>
                                     <Link to="/watches">
-                                        <img src="/image/device/watch.svg" alt="Watch"/> Watch
+                                        <img src="/image/device/watch.svg" alt="Watch" /> Watch
                                     </Link>
                                 </li>
                                 <li>
                                     <Link to="/airpods">
-                                        <img src="/image/device/airpods.svg" alt="Airpods"/> Airpods
+                                        <img src="/image/device/airpods.svg" alt="Airpods" /> Airpods
                                     </Link>
                                 </li>
                             </ul>
@@ -107,7 +109,7 @@ const Navbar: React.FC = () => {
                             }
                         }}
                     />
-                    <img src="/image/magnifier.svg" alt="Search" className="search-icon"/> {/* Иконка лупы */}
+                    <img src="/image/magnifier.svg" alt="Search" className="search-icon" /> {/* Иконка лупы */}
                     {suggestions.length > 0 && (
                         <ul className="suggestions-list">
                             {suggestions.map((suggestion) => (
@@ -130,12 +132,12 @@ const Navbar: React.FC = () => {
 
                 <div className="cart-icon">
                     <Link to="/login">
-                        <img src="/image/cart.png" alt="Cart"/>
+                        <img src="/image/cart.png" alt="Cart" />
                     </Link>
                 </div>
                 <div className="account-icon">
                     <Link to="/login">
-                        <img src="/image/account.png" alt="Account"/>
+                        <img src="/image/account.png" alt="Account" />
                     </Link>
                 </div>
             </nav>

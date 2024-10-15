@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getIpadById } from '../api';
-import { IpadDto } from '../types';
+import { getWatchById } from '../../api';
+import { WatchDto } from '../../types';
 import './ProductDetails.css';
 
-const IpadProduct: React.FC = () => {
+const WatchProduct: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const [ipad, setIpad] = useState<IpadDto | null>(null);
+    const [watch, setWatch] = useState<WatchDto | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 if (id) {
-                    const ipadData = await getIpadById(id);
-                    setIpad(ipadData);
+                    const watchData = await getWatchById(id);
+                    setWatch(watchData);
                 }
             } catch (error: any) {
                 setError(error.message || 'Ошибка загрузки данных');
@@ -28,36 +28,32 @@ const IpadProduct: React.FC = () => {
         return <div>Ошибка загрузки данных: {error}</div>;
     }
 
-    if (!ipad) {
+    if (!watch) {
         return <div>Загрузка...</div>;
     }
 
     return (
         <div className="product-details">
             <div className="product-images">
-                <img src={ipad.thumbUrl} alt={ipad.title} className="main-image" />
+                <img src={watch.thumbUrl} alt={watch.title} className="main-image" />
             </div>
             <div className="product-info">
-                <h2>{ipad.title}</h2>
-                <p className="product-price">${ipad.price}</p>
+                <h2>{watch.title}</h2>
+                <p className="product-price">${watch.price}</p>
                 <button className="buy-button">Купить</button>
 
                 <div className="product-description">
                     <div className="description-block">
                         <h3>Экран</h3>
-                        <p>{ipad.display.size} дюймов, {ipad.display.resolution}</p>
+                        <p>{watch.display.screen.large.size} дюймов, {watch.display.screen.large.resolution}</p>
                     </div>
                     <div className="description-block">
                         <h3>Процессор</h3>
-                        <p>{ipad.processor.chip}</p>
-                    </div>
-                    <div className="description-block">
-                        <h3>Камеры</h3>
-                        <p>Основные камеры: {ipad.camera.rearCameras.map(cam => cam.resolution).join(', ')}</p>
+                        <p>{watch.chipset.cpu}</p>
                     </div>
                     <div className="description-block">
                         <h3>Аккумулятор</h3>
-                        <p>{ipad.battery.capacity}</p>
+                        <p>{watch.battery.lifetime}</p>
                     </div>
                 </div>
             </div>
@@ -65,4 +61,4 @@ const IpadProduct: React.FC = () => {
     );
 };
 
-export default IpadProduct;
+export default WatchProduct;

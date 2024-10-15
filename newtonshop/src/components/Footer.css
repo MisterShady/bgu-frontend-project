@@ -1,13 +1,13 @@
 .footer-wrapper {
     display: flex;
     justify-content: center;
-    margin-top: auto; /* Автоматическое отступление вверх, чтобы футер оставался внизу */
+    margin-top: auto;
 }
 
 .footer {
-    display: flex; /* Используем Flexbox для распределения контента */
-    justify-content: space-between; /* Равномерное распределение между текстом и картинкой */
-    align-items: center; /* Вертикальное выравнивание */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: #ffffff;
     color: #000000;
     padding: 20px 40px;
@@ -16,7 +16,7 @@
     width: 100%;
     border-top-left-radius: 25px;
     border-top-right-radius: 25px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Добавление тени */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 .footer p {
@@ -34,11 +34,11 @@
 }
 
 .footer-content {
-    flex: 2; /* Контент займет всю доступную ширину, кроме места для изображения */
+    flex: 2;
 }
 
 .footer-image {
-    max-width: 125px; /* Ограничиваем ширину изображения */
+    max-width: 125px;
     height: auto;
-    cursor: pointer; /* Курсор становится "рукой" при наведении */
+    cursor: pointer;
 }

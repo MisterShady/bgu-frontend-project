@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { getWatches } from '../api';
-import { WatchDto } from '../types';
+import { getIphones } from '../../api';
+import { IphoneDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-const Watches: React.FC<{ currency: string; conversionRate: number }> = ({ currency, conversionRate }) => {
-    const [watches, setWatches] = useState<WatchDto[]>([]);
+const Iphones: React.FC = () => {
+    const [iphones, setIphones] = useState<IphoneDto[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const watchesData = await getWatches();
-                setWatches(watchesData);
+                const iphonesData = await getIphones();
+                setIphones(iphonesData);
             } catch (error: any) {
                 setError(error.message || 'Ошибка загрузки данных');
             }
@@ -27,13 +27,13 @@ const Watches: React.FC<{ currency: string; conversionRate: number }> = ({ curre
 
     return (
         <div className="card-container">
-            {watches.map((item) => (
+            {iphones.map((item) => (
                 <motion.div className="card" key={item.id} whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
                     <img src={item.thumbUrl} alt={item.title} className="card-image" />
                     <h2>{item.title}</h2>
-                    <p className="price">{(item.price * conversionRate).toFixed(2)} {currency}</p>
+                    <p className="price">{item.price}</p>
                     <button className="view-button">
-                        <Link to={`/watches/${item.id}`}>Посмотреть характеристики</Link>
+                        <Link to={`/iphones/${item.id}`}>Посмотреть характеристики</Link>
                     </button>
                     <button className="buy-button">Купить</button>
                 </motion.div>
@@ -42,4 +42,4 @@ const Watches: React.FC<{ currency: string; conversionRate: number }> = ({ curre
     );
 };
 
-export default Watches;
+export default Iphones;

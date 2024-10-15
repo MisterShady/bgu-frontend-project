@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getAirpodsById } from '../api';
-import { AirpodsDto } from '../types';
+import { getAirpodsById } from '../../api';
+import { AirpodsDto } from '../../types';
 import './ProductDetails.css'; // Стили
 
 const AirpodsProduct: React.FC = () => {
