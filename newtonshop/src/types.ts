@@ -237,4 +237,67 @@ export interface WatchDto {
     }[];
     description: string;
 }
+export interface MacDto {
+    id: string;
+    type: string;
+    category: string;
+    title: string;
+    namingCode: string;
+    model: string;
+    thumbUrl: string;
+    images: string[];
+    colors: string[];
+    price: number;
+    display: {
+        type: string;
+        brightness: string;
+        ppi: number;
+        smallScreen: {
+            size: string;
+            resolution: string;
+        };
+        largeScreen: {
+            size: string;
+            resolution: string;
+        };
+        material: string;
+        protection: string;
+        alwaysOn: boolean;
+    };
+    processor: {
+        name: string;
+        cpu: string;
+        gpu: string;
+        speed: string;
+    };
+    ramMemories: {
+        size: string;
+        additionalPrice: number;
+    }[];
+    storages: {
+        size: string;
+        additionalPrice: number;
+    }[];
+    connectivity: {
+        cellular: string;
+        wifi: string;
+        bluetooth: number;
+        ultraWideBand: string;
+    };
+    battery: {
+        lifetime: string;
+    };
+    dimensions: {
+        size: string;
+        height: string;
+        width: string;
+        depth: string;
+        weight: string;
+    };
+    operatingSystem: {
+        initial: string;
+        latest: string;
+    };
+}
+
 

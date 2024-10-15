@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getAllProducts, ProductDto } from '../api';
+import ImageWrapper from "./handler/ImageWrapper";
 
 const PopularProducts: React.FC = () => {
     const [products, setProducts] = useState<ProductDto[]>([]);
@@ -33,7 +34,7 @@ const PopularProducts: React.FC = () => {
             <div className="product-list">
                 {products.map(product => (
                     <div key={product.id} className="product-item">
-                        <img src={product.thumbUrl} alt={product.title} className="product-image" />
+                        <ImageWrapper src={product.thumbUrl} alt={product.title} className="product-image" />
                         <h3>{product.title}</h3>
                         <p>{product.price}$ {product.currency}</p>
                     </div>

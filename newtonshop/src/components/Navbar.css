@@ -2,10 +2,12 @@
 .navigation-wrapper {
     display: flex;
     justify-content: center;
-    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
-/* Центровка контейнера навбара */
 .navbar-center-container {
     display: flex;
     justify-content: center;
@@ -15,22 +17,27 @@
 
 /* Навигационная панель */
 .navigation {
-    padding: 10px 20px;
+    padding: 20px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: #ffffff;
+    color: #000000;
+    text-align: center;
     max-width: 1200px;
     width: 100%;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Логотип */
 .navigation .logo img {
     height: 40px;
 }
 
 /* Кнопка "Каталог товаров" */
 .menu-button {
-    background-color: #333;
+    background-color: #514ED9;
     color: white;
     border: 2px solid white;
     border-radius: 25px;
@@ -40,8 +47,8 @@
     margin-left: 15px;
     display: flex;
     align-items: center;
-    justify-content: center; /* Центрирование содержимого по горизонтали */
-    width: 150px;
+    justify-content: center;
+    width: 165px;
 }
 
 .menu-button .arrow {
@@ -67,6 +74,8 @@
     border-radius: 25px;
     width: 100%;
     outline: none;
+    border: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 .search-bar .search-icon {
@@ -100,7 +109,7 @@
 
 .suggestion-item a {
     text-decoration: none;
-    color: #333;
+    color: #514ED9;
 }
 
 .suggestion-item:hover {
@@ -114,19 +123,20 @@
 
 .dropdown {
     position: absolute;
-    left: 15%;
+    left: 9%;
     display: none;
     animation: slideDown 0.5s forwards;
-    background-color: #333;
+    background-color: #514ED9;
     border: 1px solid #ffffff;
 }
 
 .dropdown.open {
     display: block;
     animation: slideDown 0.5s forwards;
-    background-color: #333;
+    background-color: #514ED9;
     border: 1px solid #ffffff;
-    width: 75%;
+    width: 90%;
+    border-radius: 25px;
 }
 
 .dropdown-content {
@@ -139,6 +149,7 @@
 .dropdown-content li {
     padding: 15px;
     transition: background-color 0.3s ease, border 0.3s ease;
+    border-radius: 25px;
 }
 
 .dropdown-content li a {
@@ -153,9 +164,9 @@
 }
 
 .dropdown-content li:hover {
-    background-color: #444;
+    background-color: #FF6140;
     border: 1px solid white;
-    border-radius: 5px;
+    border-radius: 25px;
 }
 
 @keyframes slideDown {
@@ -197,7 +208,6 @@
     color: #333;
 }
 
-/* Стили для SVG-иконок в выпадающем меню */
 .dropdown-icon {
     fill: white;
     stroke: white;

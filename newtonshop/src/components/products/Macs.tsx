@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { getIpads } from '../../api';
-import { IpadDto } from '../../types';
+import { getMacs } from '../../api';
+import { MacDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import ImageWrapper from "../handler/ImageWrapper";
 
-const Ipads: React.FC = () => {
-    const [ipads, setIpads] = useState<IpadDto[]>([]);
+const Macs: React.FC = () => {
+    const [macs, setMacs] = useState<MacDto[]>([]);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const ipadsData = await getIpads();
-                setIpads(ipadsData);
+                const macsData = await getMacs();
+                setMacs(macsData);
             } catch (error: any) {
                 setError(error.message || 'Ошибка загрузки данных');
             }
@@ -28,14 +27,13 @@ const Ipads: React.FC = () => {
 
     return (
         <div className="card-container">
-
-            {ipads.map((item) => (
+            {macs.map((item) => (
                 <motion.div className="card" key={item.id} whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
-                    <ImageWrapper src={item.thumbUrl} alt={item.title} className="card-image" />
+                    <img src={item.thumbUrl} alt={item.title} className="card-image" />
                     <h2>{item.title}</h2>
                     <p className="price">{item.price}$</p>
                     <button className="view-button">
-                        <Link to={`/ipads/${item.id}`}>Посмотреть характеристики</Link>
+                        <Link to={`/macs/${item.id}`}>Посмотреть характеристики</Link>
                     </button>
                     <button className="buy-button">Купить</button>
                 </motion.div>
@@ -44,4 +42,4 @@ const Ipads: React.FC = () => {
     );
 };
 
-export default Ipads;
+export default Macs;

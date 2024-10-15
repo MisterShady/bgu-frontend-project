@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {AirpodsDto, IpadDto, IphoneDto, WatchDto} from './types';
+import {AirpodsDto, IpadDto, IphoneDto, MacDto, WatchDto} from './types';
 
 const BASE_URL = 'http://localhost:9000/api/v1';
 
@@ -40,6 +40,11 @@ export const getIphones = async (): Promise<IphoneDto[]> => {
     return response.data;
 };
 
+export const getMacs = async (): Promise<MacDto[]> => {
+    const response = await axios.get<MacDto[]>(`${BASE_URL}/categories/macs`);
+    return response.data;
+};
+
 
 // Запросы для конкретного продукта по идентификатору
 export const getAirpodsById = async (id: string): Promise<AirpodsDto> => {
@@ -59,5 +64,9 @@ export const getIpadById = async (id: string): Promise<IpadDto> => {
 
 export const getWatchById = async (id: string): Promise<WatchDto> => {
     const response = await axios.get<WatchDto>(`${BASE_URL}/products/watches/${id}`);
+    return response.data;
+};
+export const getMacById = async (id: string): Promise<MacDto> => {
+    const response = await axios.get<MacDto>(`${BASE_URL}/products/macs/${id}`);
     return response.data;
 };

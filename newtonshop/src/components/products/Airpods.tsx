@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 
 const Airpods: React.FC = () => {
     const [airpods, setAirpods] = useState<AirpodsDto[]>([]);
-    const [selectedItem, setSelectedItem] = useState<AirpodsDto | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -32,7 +31,7 @@ const Airpods: React.FC = () => {
                 <motion.div className="card" key={item.id} whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
                     <img src={item.thumbUrl} alt={item.title} className="card-image" />
                     <h2>{item.title}</h2>
-                    <p className="price">{item.price}</p>
+                    <p className="price">{item.price}$</p>
                     <button className="view-button">
                         <Link to={`/airpods/${item.id}`}>Посмотреть характеристики</Link>
                     </button>

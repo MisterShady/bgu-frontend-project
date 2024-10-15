@@ -4,6 +4,7 @@ import Airpods from './components/products/Airpods';
 import Watches from './components/products/Watches';
 import Ipads from './components/products/Ipads';
 import Iphones from './components/products/Iphones';
+import Macs from './components/products/Macs';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import './App.css';
@@ -11,6 +12,7 @@ import AirpodsProduct from './components/products/AirpodsProduct';
 import IpadProduct from './components/products/IpadProduct';
 import WatchProduct from './components/products/WatchProduct';
 import IphoneProduct from './components/products/IphoneProduct';
+import MacsProduct from './components/products/MacsProduct';
 import Login from './components/Login';
 import Register from './components/Register';
 import HomePage from './components/HomePage';
@@ -31,6 +33,8 @@ const App: React.FC = () => {
                         <Route path="/ipads/:id" element={<IpadProduct />} />
                         <Route path="/iphones" element={<Iphones />} />
                         <Route path="/iphones/:id" element={<IphoneProduct />} />
+                        <Route path="/macs" element={<Macs />} />
+                        <Route path="/macs/:id" element={<MacsProduct />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                     </Routes>
