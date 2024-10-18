@@ -4,6 +4,7 @@ import { getAllProducts, ProductDto } from '../api';
 import { toPlural } from '../utils';
 import './Navbar.css';
 
+// FC
 const Navbar: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');

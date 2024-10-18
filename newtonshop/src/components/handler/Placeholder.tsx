@@ -1,6 +1,7 @@
 // Placeholder.tsx
 import React from 'react';
 
+// FC
 const Placeholder: React.FC = () => {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

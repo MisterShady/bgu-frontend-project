@@ -4,6 +4,7 @@ import PopularProducts from './PopularProducts';
 import QuickSearch from './QuickSearch';
 import './HomePage.css';
 
+// FC
 const HomePage: React.FC = () => {
     return (
         <div>

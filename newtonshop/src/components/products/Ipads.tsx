@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import ImageWrapper from "../handler/ImageWrapper";
 
+// FC
 const Ipads: React.FC = () => {
     const [ipads, setIpads] = useState<IpadDto[]>([]);
     const [error, setError] = useState<string | null>(null);

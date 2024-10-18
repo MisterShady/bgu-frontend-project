@@ -8,6 +8,7 @@ interface ImageWrapperProps {
     className?: string;
 }
 
+// вместо этого лучше писать const ImageWrapper = ({ src, alt, className }: ImageWrapperProps) => {
 const ImageWrapper: React.FC<ImageWrapperProps> = ({ src, alt, className }) => {
     const [isError, setIsError] = useState(false);
 

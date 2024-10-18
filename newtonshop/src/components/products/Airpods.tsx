@@ -4,6 +4,7 @@ import { AirpodsDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
+// FC
 const Airpods: React.FC = () => {
     const [airpods, setAirpods] = useState<AirpodsDto[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -13,7 +14,9 @@ const Airpods: React.FC = () => {
             try {
                 const airpodsData = await getAirpods();
                 setAirpods(airpodsData);
-            } catch (error: any) {
+            }
+            // AxiosError?
+            catch (error: any) {
                 setError(error.message || 'Ошибка загрузки данных');
             }
         };

@@ -17,6 +17,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import HomePage from './components/HomePage';
 
+// использовать FC не рекомендуется https://github.com/facebook/create-react-app/pull/8177
 const App: React.FC = () => {
     return (
         <Router>

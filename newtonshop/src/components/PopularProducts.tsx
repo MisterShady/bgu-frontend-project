@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getAllProducts, ProductDto } from '../api';
 import ImageWrapper from "./handler/ImageWrapper";
 
+// FC
 const PopularProducts: React.FC = () => {
     const [products, setProducts] = useState<ProductDto[]>([]);
     const [loading, setLoading] = useState(true);

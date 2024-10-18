@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+// FC
 const QuickSearch: React.FC = () => {
     const products = [
         { id: 1, name: '14 Pro', link: '/iphones/14-pro' },

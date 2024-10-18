@@ -4,6 +4,7 @@ import { getAirpodsById } from '../../api';
 import { AirpodsDto } from '../../types';
 import './ProductDetails.css'; // Стили
 
+// FC
 const AirpodsProduct: React.FC = () => {
     const { id } = useParams<{ id: string }>(); // Получаем ID из параметров маршрута
     const [airpods, setAirpods] = useState<AirpodsDto | null>(null);
@@ -24,7 +25,9 @@ const AirpodsProduct: React.FC = () => {
                     const firstImageForColor = getImagesByColor(airpodsData.images, defaultColor)[0];
                     setSelectedImage(firstImageForColor || airpodsData.images[0]);
                 }
-            } catch (error: any) {
+            }
+            // AxiosError?
+            catch (error: any) {
                 setError(error.message || 'Ошибка загрузки данных');
             }
         };
@@ -58,6 +61,7 @@ const AirpodsProduct: React.FC = () => {
                 <div className="image-thumbnails">
                     {airpods.images.map((image, index) => (
                         <img
+                            {/*лучше не использовать index как key*/}
                             key={index}
                             src={image}
                             alt={`AirPods Image ${index + 1}`}
@@ -84,6 +88,7 @@ const AirpodsProduct: React.FC = () => {
                     <div className="color-squares">
                         {airpods.colors.map((color, index) => (
                             <div
+                                {/*лучше не использовать index как key*/}
                                 key={index}
                                 className={`color-square ${selectedColor === color ? 'selected' : ''}`}
                                 style={{ backgroundColor: getColorHex(color) }}

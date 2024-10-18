@@ -3,6 +3,7 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+// FC
 const Carousel: React.FC = () => {
     const settings = {
         dots: true,

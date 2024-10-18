@@ -4,6 +4,7 @@ import { IphoneDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
+// FC
 const Iphones: React.FC = () => {
     const [iphones, setIphones] = useState<IphoneDto[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -13,7 +14,9 @@ const Iphones: React.FC = () => {
             try {
                 const iphonesData = await getIphones();
                 setIphones(iphonesData);
-            } catch (error: any) {
+            }
+            // AxiosError?
+            catch (error: any) {
                 setError(error.message || 'Ошибка загрузки данных');
             }
         };

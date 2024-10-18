@@ -4,6 +4,7 @@ import { getIphoneById } from '../../api';
 import { IphoneDto } from '../../types';
 import './ProductDetails.css';
 
+// FC
 const IphoneProduct: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [iphone, setIphone] = useState<IphoneDto | null>(null);
@@ -16,7 +17,9 @@ const IphoneProduct: React.FC = () => {
                     const iphoneData = await getIphoneById(id);
                     setIphone(iphoneData);
                 }
-            } catch (error: any) {
+            }
+            // AxiosError?
+            catch (error: any) {
                 setError(error.message || 'Ошибка загрузки данных');
             }
         };
