@@ -4,6 +4,7 @@ import { MacDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
+// FC
 const Macs: React.FC = () => {
     const [macs, setMacs] = useState<MacDto[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -13,7 +14,9 @@ const Macs: React.FC = () => {
             try {
                 const macsData = await getMacs();
                 setMacs(macsData);
-            } catch (error: any) {
+            }
+            // AxiosError?
+            catch (error: any) {
                 setError(error.message || 'Ошибка загрузки данных');
             }
         };

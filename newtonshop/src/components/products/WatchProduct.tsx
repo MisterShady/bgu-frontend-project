@@ -4,6 +4,7 @@ import { getWatchById } from '../../api';
 import { WatchDto } from '../../types';
 import './ProductDetails.css';
 
+// FC
 const WatchProduct: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [watch, setWatch] = useState<WatchDto | null>(null);
@@ -16,7 +17,9 @@ const WatchProduct: React.FC = () => {
                     const watchData = await getWatchById(id);
                     setWatch(watchData);
                 }
-            } catch (error: any) {
+            }
+            // AxiosError?
+            catch (error: any) {
                 setError(error.message || 'Ошибка загрузки данных');
             }
         };

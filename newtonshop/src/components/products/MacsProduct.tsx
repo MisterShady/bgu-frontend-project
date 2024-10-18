@@ -4,6 +4,7 @@ import { getMacById } from '../../api';
 import { MacDto } from '../../types';
 import './ProductDetails.css';
 
+// FC
 const MacsProduct: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [mac, setMac] = useState<MacDto | null>(null);
@@ -16,7 +17,9 @@ const MacsProduct: React.FC = () => {
                     const macData = await getMacById(id);
                     setMac(macData);
                 }
-            } catch (error: any) {
+            }
+            // AxiosError?
+            catch (error: any) {
                 setError(error.message || 'Ошибка загрузки данных');
             }
         };

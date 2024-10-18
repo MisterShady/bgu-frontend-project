@@ -5,6 +5,7 @@ import { IpadDto } from '../../types';
 import './ProductDetails.css';
 import ImageWrapper from "../handler/ImageWrapper";
 
+// FC
 const IpadProduct: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [ipad, setIpad] = useState<IpadDto | null>(null);

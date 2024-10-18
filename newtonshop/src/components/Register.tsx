@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import './Auth.css';
 
+// FC
 const Register: React.FC = () => {
     return (
         <div className="auth-container">
