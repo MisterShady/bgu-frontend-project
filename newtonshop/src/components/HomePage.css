@@ -64,7 +64,6 @@
     background-color: #514ED9;
     opacity: 1;
 }
-/* Изменение цвета полосок при наведении */
 .slick-dots li button:hover:before {
     background-color: #FF6140;
     opacity: 1;
@@ -114,7 +113,7 @@
 .product-item h3 {
     margin: 10px 0;
     font-size: 1.2em;
-    text-decoration: none; /* Убираем подчеркивание */
+    text-decoration: none;
 }
 
 .product-item p {
