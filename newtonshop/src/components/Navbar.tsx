@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAllProducts, ProductDto } from '../api';
+import { searchProducts, ProductDto } from '../api';
 import { toPlural } from '../utils';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [allProducts, setAllProducts] = useState<ProductDto[]>([]);
     const [suggestions, setSuggestions] = useState<ProductDto[]>([]);
 
     const toggleMenu = useCallback(() => {
@@ -15,34 +14,21 @@ const Navbar: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const products = await getAllProducts();
-                setAllProducts(products);
-            } catch (error) {
-                console.error('Ошибка при загрузке списка продуктов:', error);
-            }
-        };
-
-        fetchProducts().catch(error => {
-            console.error('Ошибка при выполнении fetchProducts:', error);
-        });
-    }, []);
-
-    useEffect(() => {
-        const delayDebounceFn = setTimeout(() => {
+        const delayDebounceFn = setTimeout(async () => {
             if (searchTerm.length >= 2) {
-                const filteredSuggestions = allProducts.filter(product =>
-                    product.title.toLowerCase().includes(searchTerm.toLowerCase())
-                );
-                setSuggestions(filteredSuggestions);
+                try {
+                    const filteredSuggestions = await searchProducts(searchTerm, 0, 5); // Параметры page и size можно настроить
+                    setSuggestions(filteredSuggestions);
+                } catch (error) {
+                    console.error('Ошибка при поиске продуктов:', error);
+                }
             } else {
                 setSuggestions([]);
             }
         }, 300);
 
         return () => clearTimeout(delayDebounceFn);
-    }, [searchTerm, allProducts]);
+    }, [searchTerm]);
 
     const clearSuggestions = useCallback(() => {
         setSuggestions([]);
@@ -110,7 +96,7 @@ const Navbar: React.FC = () => {
                                 }
                             }}
                         />
-                        <img src="/image/magnifier.svg" alt="Search" className="search-icon" /> {/* Иконка лупы */}
+                        <img src="/image/magnifier.svg" alt="Search" className="search-icon" />
                         {suggestions.length > 0 && (
                             <ul className="suggestions-list">
                                 {suggestions.map((suggestion) => (

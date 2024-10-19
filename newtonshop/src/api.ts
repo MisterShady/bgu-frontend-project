@@ -19,6 +19,18 @@ export const getAllProducts = async (): Promise<ProductDto[]> => {
     return response.data;
 };
 
+export const searchProducts = async (name: string, page: number = 0, size: number = 0): Promise<ProductDto[]> => {
+    const response = await axios.get<ProductDto[]>(`${BASE_URL}/products/search`, {
+        params: {
+            name,
+            page,
+            size,
+            sort: 'title,ASC',
+        },
+    });
+    return response.data;
+};
+
 // Существующие API-запросы для категорий
 export const getAirpods = async (): Promise<AirpodsDto[]> => {
     const response = await axios.get<AirpodsDto[]>(`${BASE_URL}/categories/airpods`);
