@@ -12,7 +12,6 @@
     display: flex;
     justify-content: center;
     width: 100%;
-    z-index: 1000;
 }
 
 /* Навигационная панель */
@@ -22,8 +21,6 @@
     justify-content: space-between;
     align-items: center;
     background-color: #ffffff;
-    color: #000000;
-    text-align: center;
     max-width: 1200px;
     width: 100%;
     border-bottom-left-radius: 25px;
@@ -31,24 +28,23 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-.navigation .logo img {
+.logo img {
     height: 40px;
+    margin-right: 15px; /* Отступ между логотипом и кнопкой */
 }
 
 /* Кнопка "Каталог товаров" */
 .menu-button {
     background-color: #514ED9;
     color: white;
-    border: 2px solid white;
-    border-radius: 25px;
+    border-radius: 15px;
     padding: 10px 20px;
     font-size: 18px;
     cursor: pointer;
-    margin-left: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 165px;
+    width: 165px; /* Размер кнопки */
 }
 
 .menu-button .arrow {
@@ -66,90 +62,135 @@
     flex-grow: 0.8;
     margin-left: 20px;
     display: flex;
+    align-items: center;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    z-index: 1001; /* Выше, чем затемненный навбар */
 }
 
 .search-bar input {
     padding: 10px;
     font-size: 16px;
-    border-radius: 25px;
-    width: 100%;
+    border: none;
     outline: none;
-    border: 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    border-radius: 15px;
 }
 
-.search-bar .search-icon {
+.search-icon {
     position: absolute;
     right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 18px;
-    color: #333;
+    width: 25px;
+    height: 25px;
+}
+
+.search-bar.active {
+    border-radius: 15px 15px 0 0; /* Скругление только сверху */
 }
 
 /* Выпадающий список предложений */
 .suggestions-list {
     position: absolute;
-    top: 40px;
+    top: 100%; /* Список появится сразу под полем ввода */
     left: 0;
-    width: 250px;
+    width: 100%;
     background: white;
-    border-radius: 5px;
-    z-index: 1000;
+    border-radius: 0 0 15px 15px; /* Скругление только снизу */
+    z-index: 1001; /* Выше, чем затемненный навбар */
+    list-style-type: none;
     padding: 0;
     margin: 0;
-    list-style-type: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 .suggestion-item {
+    display: flex;
+    align-items: center;
     padding: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-}
-
-.suggestion-item a {
-    text-decoration: none;
-    color: #514ED9;
 }
 
 .suggestion-item:hover {
     background-color: #f0f0f0;
 }
 
-/* Выпадающее меню */
+.suggestion-link {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-decoration: none;
+    color: #514ED9;
+}
+
+.suggestion-thumb {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.suggestion-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.suggestion-title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.suggestion-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FF6140;
+}
+
+/* Скрытие лишних элементов при отсутствии предложений */
+.suggestions-list:empty {
+    display: none;
+}
+
+/* Иконки корзины и аккаунта */
+.cart-icon, .account-icon {
+    margin-left: auto;
+}
+
+.cart-icon img, .account-icon img {
+    height: 40px;
+    cursor: pointer;
+}
+
+/* Выпадающее меню каталога товаров */
 .menu-item {
     position: relative;
 }
 
 .dropdown {
     position: absolute;
-    left: 9%;
+    left: 0;
     display: none;
-    animation: slideDown 0.5s forwards;
     background-color: #514ED9;
-    border: 1px solid #ffffff;
+    border-radius: 15px;
+    width: 165px; /* Ширина выпадающего меню совпадает с шириной кнопки */
+    z-index: 1000;
 }
 
 .dropdown.open {
     display: block;
-    animation: slideDown 0.5s forwards;
-    background-color: #514ED9;
-    border: 1px solid #ffffff;
-    width: 90%;
-    border-radius: 25px;
 }
 
 .dropdown-content {
+    list-style-type: none;
     padding: 0;
     margin: 0;
-    list-style-type: none;
-    text-align: left;
 }
 
 .dropdown-content li {
     padding: 15px;
     transition: background-color 0.3s ease, border 0.3s ease;
-    border-radius: 25px;
+    border-radius: 15px;
 }
 
 .dropdown-content li a {
@@ -166,49 +207,5 @@
 .dropdown-content li:hover {
     background-color: #FF6140;
     border: 1px solid white;
-    border-radius: 25px;
 }
 
-@keyframes slideDown {
-    0% {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.cart-icon {
-    margin-left: auto;
-}
-
-.cart-icon img {
-    height: 40px;
-    cursor: pointer;
-}
-
-.account-icon {
-    margin-left: auto;
-}
-
-.account-icon img {
-    height: 40px;
-    cursor: pointer;
-}
-
-.search-icon {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 25px;
-    height: 25px;
-    color: #333;
-}
-
-.dropdown-icon {
-    fill: white;
-    stroke: white;
-}
