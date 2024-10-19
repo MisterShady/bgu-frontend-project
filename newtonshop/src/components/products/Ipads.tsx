@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getIpads } from '../../api';
+import { getIpads } from '../../Api';
 import { IpadDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';

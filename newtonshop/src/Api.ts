@@ -3,21 +3,28 @@ import {AirpodsDto, IpadDto, IphoneDto, MacDto, WatchDto} from './types';
 
 const BASE_URL = 'http://localhost:9000/api/v1';
 
-// Функция для получения списка всех продуктов
 export interface ProductDto {
     id: string;
     title: string;
     thumbUrl: string;
     price: number;
-    currency: string;
     images: string[];
     type: string;
 }
 
-export const getAllProducts = async (): Promise<ProductDto[]> => {
-    const response = await axios.get<ProductDto[]>(`${BASE_URL}/products`);
+export const getPopularProducts = async (page: number = 0, size: number = 0): Promise<ProductDto[]> => {
+    const response = await axios.get<ProductDto[]>(`${BASE_URL}/products/catalog-pages`, {
+        params: {
+            page,
+            size,
+            sort: 'title,Asc',
+        },
+    });
     return response.data;
 };
+
+
+
 
 export const searchProducts = async (name: string, page: number = 0, size: number = 0): Promise<ProductDto[]> => {
     const response = await axios.get<ProductDto[]>(`${BASE_URL}/products/search`, {
@@ -31,7 +38,6 @@ export const searchProducts = async (name: string, page: number = 0, size: numbe
     return response.data;
 };
 
-// Существующие API-запросы для категорий
 export const getAirpods = async (): Promise<AirpodsDto[]> => {
     const response = await axios.get<AirpodsDto[]>(`${BASE_URL}/categories/airpods`);
     return response.data;
@@ -58,7 +64,6 @@ export const getMacs = async (): Promise<MacDto[]> => {
 };
 
 
-// Запросы для конкретного продукта по идентификатору
 export const getAirpodsById = async (id: string): Promise<AirpodsDto> => {
     const response = await axios.get<AirpodsDto>(`${BASE_URL}/products/airpods/${id}`);
     return response.data;

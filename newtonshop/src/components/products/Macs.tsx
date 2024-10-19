@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getMacs } from '../../api';
+import { getMacs } from '../../Api';
 import { MacDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';

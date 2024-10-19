@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getMacById } from '../../api';
+import { getMacById } from '../../Api';
 import { MacDto } from '../../types';
 import './ProductDetails.css';
 

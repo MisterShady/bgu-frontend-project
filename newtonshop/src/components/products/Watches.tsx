@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getWatches } from '../../api';
+import { getWatches } from '../../Api';
 import { WatchDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';

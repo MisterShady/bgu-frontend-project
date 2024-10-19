@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getAirpodsById } from '../../api';
+import { getAirpodsById } from '../../Api';
 import { AirpodsDto } from '../../types';
 import './ProductDetails.css'; // Стили
 

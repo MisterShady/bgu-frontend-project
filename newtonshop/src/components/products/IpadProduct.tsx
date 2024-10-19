@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getIpadById } from '../../api';
+import { getIpadById } from '../../Api';
 import { IpadDto } from '../../types';
 import './ProductDetails.css';
 import ImageWrapper from "../handler/ImageWrapper";
