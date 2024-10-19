@@ -11,6 +11,65 @@
     object-fit: cover;
 }
 
+/* Стили для точек (полосок) */
+.slick-dots {
+    position: absolute;
+    display: block;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-align: center;
+}
+
+.slick-dots li {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 4px;
+    margin: 0 5px;
+    padding: 0;
+    cursor: pointer;
+}
+
+.slick-dots li button {
+    font-size: 0;
+    line-height: 0;
+    display: block;
+    width: 20px;
+    height: 4px;
+    padding: 5px;
+    cursor: pointer;
+    color: transparent;
+    border: 0;
+    outline: none;
+    background: transparent;
+}
+
+.slick-dots li button:before {
+    font-size: 0;
+    line-height: 0;
+    display: block;
+    width: 20px;
+    height: 4px;
+    content: '';
+    text-align: center;
+    background-color: #ccc;
+    border-radius: 2px;
+    opacity: 0.25;
+    transition: background-color 0.3s ease;
+}
+
+.slick-dots li.slick-active button:before {
+    background-color: #514ED9;
+    opacity: 1;
+}
+.slick-dots li button:hover:before {
+    background-color: #FF6140;
+    opacity: 1;
+}
+
+
 /* Стили для популярных товаров */
 .popular-products {
     margin-top: 20px;
@@ -54,13 +113,51 @@
 .product-item h3 {
     margin: 10px 0;
     font-size: 1.2em;
+    text-decoration: none;
 }
 
 .product-item p {
     font-size: 1.2em;
     font-weight: bold;
-    color: #e91e63;
+    color: #fff;
     margin: 10px 0;
+    text-decoration: none;
+}
+
+/* Стили для контейнера цены и корзины */
+.price-container1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.price-box {
+    margin-left: 40px;
+    color: #514ED9;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.cart-icon-container {
+    margin-right: 10px;
+    background-color: #514ED9;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cart-icon-container img {
+    padding-top: 10px;
+    height: 30px;
+    width: 90px;
+}
+
+.cart-icon-container:hover {
+    background-color: #FF6140;
 }
 
 /* Стили для быстрого поиска */
@@ -79,7 +176,7 @@
 }
 
 .search-button {
-    background-color: #333;
+    background-color: #514ED9;
     color: white;
     border: none;
     border-radius: 5px;
@@ -91,5 +188,5 @@
 }
 
 .search-button:hover {
-    background-color: #555;
+    background-color: #FF6140 ;
 }

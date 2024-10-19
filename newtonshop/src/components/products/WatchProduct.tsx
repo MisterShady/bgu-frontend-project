@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getWatchById } from '../../api';
+import { getWatchById } from '../../Api';
 import { WatchDto } from '../../types';
 import './ProductDetails.css';
 

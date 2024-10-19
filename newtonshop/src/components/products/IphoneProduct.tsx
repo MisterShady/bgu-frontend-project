@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getIphoneById } from '../../api';
+import { getIphoneById } from '../../Api';
 import { IphoneDto } from '../../types';
 import './ProductDetails.css';
 

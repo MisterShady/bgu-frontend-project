@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAirpods } from '../../api';
+import { getAirpods } from '../../Api';
 import { AirpodsDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';

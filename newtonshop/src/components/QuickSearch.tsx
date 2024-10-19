@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 const QuickSearch: React.FC = () => {
     const products = [
-        { id: 1, name: '14 Pro', link: '/iphones/14-pro' },
-        { id: 2, name: 'AirPods Pro', link: '/airpods/airpods-pro' },
-        { id: 3, name: 'iPad Pro', link: '/ipads/ipad-pro' },
-        { id: 4, name: 'Apple Watch', link: '/watches/apple-watch' },
+        { id: 1, name: '15 Pro', link: '/iphones/iphone-15-pro' },
+        { id: 2, name: 'AirPods Max', link: '/airpods/airpods-max' },
+        { id: 3, name: 'iPad Pro 12', link: '/ipads/ipad-pro-12' },
+        { id: 4, name: 'Apple Watch 9', link: '/watches/watch-9' },
     ];
 
     return (
