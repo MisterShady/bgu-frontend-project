@@ -1,20 +1,28 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
 
 const Login: React.FC = () => {
+    const navigate = useNavigate();
+
+    const handleLogin = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Здесь будет логика авторизации
+        navigate('/profile');
+    };
+
     return (
         <div className="auth-container">
             <Link to="/" className="back-button">←</Link>
             <h2>Авторизация</h2>
-            <form>
-                <div className="input-container">
+            <form onSubmit={handleLogin}>
+                <div className="auth-input-container">
                     <label htmlFor="email">Email:</label>
-                    <input type="email" id="email" required/>
+                    <input type="email" id="email" required className="auth-input-container input"/>
                 </div>
-                <div className="input-container">
+                <div className="auth-input-container">
                     <label htmlFor="password">Пароль:</label>
-                    <input type="password" id="password" required/>
+                    <input type="password" id="password" required className="auth-input-container input"/>
                 </div>
                 <button type="submit" className="submit-button">Войти</button>
             </form>
