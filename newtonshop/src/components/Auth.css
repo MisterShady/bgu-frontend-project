@@ -16,20 +16,20 @@
     color: #333;
 }
 
-.input-container {
+.auth-input-container {
     display: flex;
     flex-direction: column;
     margin-bottom: 15px;
     text-align: left;
 }
 
-.input-container label {
+.auth-input-container label {
     margin-bottom: 5px;
     font-weight: bold;
     color: #555;
 }
 
-.input-container input {
+.auth-input-container input {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;

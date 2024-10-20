@@ -25,12 +25,12 @@
     width: 100%;
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .logo img {
     height: 40px;
-    margin-right: 15px; /* Отступ между логотипом и кнопкой */
+    margin-right: 15px;
 }
 
 /* Кнопка "Каталог товаров" */
@@ -44,7 +44,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 165px; /* Размер кнопки */
+    width: 165px;
 }
 
 .menu-button .arrow {
@@ -53,7 +53,7 @@
 }
 
 .menu-button:hover {
-    opacity: 0.8;
+    background-color: #FF6140;
 }
 
 /* Поисковая строка */
@@ -65,8 +65,8 @@
     align-items: center;
     border-radius: 15px;
     background-color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    z-index: 1001; /* Выше, чем затемненный навбар */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
 }
 
 .search-bar input {
@@ -86,18 +86,18 @@
 }
 
 .search-bar.active {
-    border-radius: 15px 15px 0 0; /* Скругление только сверху */
+    border-radius: 15px 15px 0 0;
 }
 
 /* Выпадающий список предложений */
 .suggestions-list {
     position: absolute;
-    top: 100%; /* Список появится сразу под полем ввода */
+    top: 100%;
     left: 0;
     width: 100%;
     background: white;
-    border-radius: 0 0 15px 15px; /* Скругление только снизу */
-    z-index: 1001; /* Выше, чем затемненный навбар */
+    border-radius: 0 0 15px 15px;
+    z-index: 1001;
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -147,7 +147,6 @@
     color: #FF6140;
 }
 
-/* Скрытие лишних элементов при отсутствии предложений */
 .suggestions-list:empty {
     display: none;
 }
@@ -173,7 +172,7 @@
     display: none;
     background-color: #514ED9;
     border-radius: 15px;
-    width: 165px; /* Ширина выпадающего меню совпадает с шириной кнопки */
+    width: 165px;
     z-index: 1000;
 }
 
@@ -208,4 +207,3 @@
     background-color: #FF6140;
     border: 1px solid white;
 }
-

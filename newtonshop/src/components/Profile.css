@@ -1,0 +1,148 @@
+.profile-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+}
+
+.avatar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+    cursor: pointer;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    transition: filter 0.3s;
+}
+
+.avatar-container:hover .avatar {
+    filter: brightness(0.7);
+}
+
+.avatar-container:hover::after {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    color: white;
+}
+
+.menu {
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.menu-item {
+    cursor: pointer;
+}
+
+.file-input {
+    display: none;
+}
+
+.input-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.profile-input-container {
+    display: flex;
+    flex-direction: column;
+    width: 48%;
+}
+
+.label {
+    margin-bottom: 5px;
+}
+
+.profile-input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.rounded-button {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    color: #000;
+    cursor: pointer;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-button:hover {
+    background-color: #f0f0f0;
+}
+
+.delete-profile-button {
+    background-color: #FF6140;
+}
+
+.delete-profile-button:hover {
+    background-color: #e45b14;
+}
+
+.orders-title {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.orders-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.no-orders {
+    font-size: 1.2rem;
+    color: #888;
+}
+
+.order-item {
+    margin-bottom: 10px;
+}

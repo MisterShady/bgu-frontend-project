@@ -16,6 +16,7 @@ import MacsProduct from './components/products/MacsProduct';
 import Login from './components/Login';
 import Register from './components/Register';
 import HomePage from './components/HomePage';
+import ProfileForm from "./components/ProfileForm";
 
 const App: React.FC = () => {
     return (
@@ -37,6 +38,7 @@ const App: React.FC = () => {
                         <Route path="/macs/:id" element={<MacsProduct />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
+                        <Route path="/profile" element={<ProfileForm />} />
                     </Routes>
                 </div>
                 <Footer />
