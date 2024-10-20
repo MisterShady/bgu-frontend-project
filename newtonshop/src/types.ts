@@ -131,7 +131,7 @@ export interface IphoneDto {
     };
     memory: string;
     storages: {
-        size: string;
+        size: string; // изменено на string, так как объемы могут быть представлены и в текстовом формате.
         additionalPrice: number;
     }[];
     connectivities: string[];

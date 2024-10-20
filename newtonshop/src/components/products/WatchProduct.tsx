@@ -12,6 +12,7 @@ const WatchProduct: React.FC = () => {
     const [selectedBandTypeIndex, setSelectedBandTypeIndex] = useState<number | null>(null);
     const [selectedBandStyleIndex, setSelectedBandStyleIndex] = useState<number | null>(null);
 
+    // useEffect для получения данных часов
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -33,9 +34,18 @@ const WatchProduct: React.FC = () => {
         fetchData();
     }, [id]);
 
-    const getDataOrFallback = (data: any, fallback: string = "Данные отсутствуют") => {
-        return data ? data : fallback;
-    };
+    // useEffect для обновления изображения при выборе стиля ремешка
+    useEffect(() => {
+        if (watch && selectedBandTypeIndex !== null && selectedBandStyleIndex !== null) {
+            const currentBandType = watch.bandTypes[selectedBandTypeIndex];
+            const currentBandStyle = currentBandType?.styles[selectedBandStyleIndex];
+            if (currentBandStyle) {
+                setSelectedImage(currentBandStyle.image);
+            }
+        }
+    }, [watch, selectedBandTypeIndex, selectedBandStyleIndex]);
+
+    const getDataOrFallback = (data: any) => data && data.length > 0 ? data : null;
 
     if (error) {
         return <div>Ошибка загрузки данных: {error}</div>;
@@ -44,10 +54,6 @@ const WatchProduct: React.FC = () => {
     if (!watch) {
         return <div>Загрузка...</div>;
     }
-
-    // Получаем текущий выбранный стиль ремешка
-    const currentBandType = selectedBandTypeIndex !== null ? watch.bandTypes[selectedBandTypeIndex] : null;
-    const currentBandStyle = currentBandType && selectedBandStyleIndex !== null ? currentBandType.styles[selectedBandStyleIndex] : null;
 
     return (
         <div className="product-details">
@@ -91,9 +97,9 @@ const WatchProduct: React.FC = () => {
                                         </option>
                                     ))}
                                 </select>
-                                {currentBandType && (
+                                {selectedBandTypeIndex !== null && watch.bandTypes[selectedBandTypeIndex] && (
                                     <select onChange={(e) => setSelectedBandStyleIndex(Number(e.target.value))}>
-                                        {currentBandType.styles.map((style, index) => (
+                                        {watch.bandTypes[selectedBandTypeIndex].styles.map((style, index) => (
                                             <option key={index} value={index}>
                                                 {style.name} ({style.description})
                                             </option>
@@ -101,46 +107,82 @@ const WatchProduct: React.FC = () => {
                                     </select>
                                 )}
                             </div>
-                        ) : (
-                            <p>Ремешки отсутствуют</p>
-                        )}
+                        ) : null}
                     </div>
-                </div>
-
-                {/* Отображение выбранного ремешка */}
-                <div className="selected-band">
-                    <h4>Выбранный ремешок:</h4>
-                    {currentBandStyle ? (
-                        <div>
-                            <p>{currentBandStyle.name}</p>
-                            <img src={currentBandStyle.image} alt={currentBandStyle.name} className="band-image" />
-                            <p>Цвета: {currentBandStyle.colors?.join(', ')}</p>
-                            <p>Дополнительная цена: ${currentBandStyle.additionalPrice}</p>
-                        </div>
-                    ) : (
-                        <p>Ремешок не выбран</p>
-                    )}
                 </div>
 
                 {/* Характеристики продукта */}
                 <div className="product-description">
-                    <div className="description-block">
-                        <h3>Экран</h3>
-                        <p>Тип: {getDataOrFallback(watch.display.type)}</p>
-                        <p>Яркость: {getDataOrFallback(watch.display.brightness)} нитов</p>
-                    </div>
-                    <div className="description-block">
-                        <h3>Процессор</h3>
-                        <p>Модель: {getDataOrFallback(watch.chipset.cpu)}</p>
-                    </div>
-                    <div className="description-block">
-                        <h3>Аккумулятор</h3>
-                        <p>Время работы: {getDataOrFallback(watch.battery.lifetime)}</p>
-                    </div>
-                    <div className="description-block">
-                        <h3>Материал корпуса</h3>
-                        <p>{getDataOrFallback(watch.caseTypes[0]?.material)}</p>
-                    </div>
+                    {getDataOrFallback(watch.display.type) && (
+                        <div className="description-block">
+                            <h3>Экран</h3>
+                            <p>Тип: {watch.display.type}</p>
+                            <p>Яркость: {watch.display.brightness} нитов</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(watch.chipset.cpu) && (
+                        <div className="description-block">
+                            <h3>Процессор</h3>
+                            <p>Модель: {watch.chipset.cpu}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(watch.battery.lifetime) && (
+                        <div className="description-block">
+                            <h3>Аккумулятор</h3>
+                            <p>Время работы: {watch.battery.lifetime}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(watch.caseTypes) && watch.caseTypes[0]?.material && (
+                        <div className="description-block">
+                            <h3>Материал корпуса</h3>
+                            <p>{watch.caseTypes[0].material}</p>
+                        </div>
+                    )}
+
+                    {/* Новые характеристики с использованием getDataOrFallback */}
+                    {getDataOrFallback(watch.resistance?.water) && (
+                        <div className="description-block">
+                            <h3>Водонепроницаемость и пылезащита</h3>
+                            <p>Водонепроницаемость: {watch.resistance.water}</p>
+                            <p>Пылезащита: {watch.resistance.dust}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(watch.connectivity?.wifi) && (
+                        <div className="description-block">
+                            <h3>Связь</h3>
+                            <p>Wi-Fi: {watch.connectivity.wifi}</p>
+                            <p>Bluetooth: {watch.connectivity.bluetooth}</p>
+                            <p>Чип ультраширокополосной связи: {watch.connectivity.ultraWideBand}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(watch.sensors) && (
+                        <div className="description-block">
+                            <h3>Датчики</h3>
+                            {watch.sensors.map((sensor, index) => (
+                                <p key={index}>{sensor.name}: {sensor.spec}</p>
+                            ))}
+                        </div>
+                    )}
+
+                    {getDataOrFallback(watch.dimensions) && (
+                        <div className="description-block">
+                            <h3>Размеры и вес</h3>
+                            <p>Размеры: {watch.dimensions[0].height} x {watch.dimensions[0].width} x {watch.dimensions[0].depth}</p>
+                            <p>Вес: {watch.dimensions[0].weight} г</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(watch.operatingSystem) && (
+                        <div className="description-block">
+                            <h3>Операционная система</h3>
+                            <p>{watch.operatingSystem}</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

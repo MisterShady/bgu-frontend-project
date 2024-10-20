@@ -32,6 +32,8 @@ const AirpodsProduct: React.FC = () => {
         fetchData();
     }, [id]);
 
+    const getDataOrFallback = (data: any) => (data && data.length > 0 ? data : null);
+
     if (error) {
         return <div>Ошибка загрузки данных: {error}</div>;
     }
@@ -54,7 +56,6 @@ const AirpodsProduct: React.FC = () => {
                     alt={airpods.title}
                     className="main-image"
                 />
-                {/* Миниатюры изображений */}
                 <div className="image-thumbnails">
                     {airpods.images.map((image, index) => (
                         <img
@@ -93,36 +94,91 @@ const AirpodsProduct: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Блок с описанием в квадратном стиле */}
+                {/* Блок с характеристиками */}
                 <div className="product-description">
-                    <div className="description-block">
-                        <h3>Аудио функции</h3>
-                        <p>{airpods.audioFeatures.join(', ')}</p>
-                    </div>
-                    <div className="description-block">
-                        <h3>Микрофон</h3>
-                        <p>{airpods.mic}</p>
-                    </div>
-                    <div className="description-block">
-                        <h3>Чип</h3>
-                        <p>{airpods.chip}</p>
-                    </div>
-                    <div className="description-block">
-                        <h3>Управление</h3>
-                        <p>{airpods.controls.join(', ')}</p>
-                    </div>
-                    <div className="description-block">
-                        <h3>Размеры</h3>
-                        <p>Высота: {airpods.size.height}, Ширина: {airpods.size.width}, Глубина: {airpods.size.depth}, Вес: {airpods.size.weight}</p>
-                    </div>
-                    <div className="description-block">
-                        <h3>Аккумулятор</h3>
-                        <p>{airpods.battery}</p>
-                    </div>
-                    <div className="description-block">
-                        <h3>Подключение</h3>
-                        <p>{airpods.connectivity}</p>
-                    </div>
+                    {getDataOrFallback(airpods.audioFeatures) && (
+                        <div className="description-block">
+                            <h3>Аудио функции</h3>
+                            <p>{airpods.audioFeatures.join(', ')}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(airpods.mic) && (
+                        <div className="description-block">
+                            <h3>Микрофон</h3>
+                            <p>{airpods.mic}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(airpods.chip) && (
+                        <div className="description-block">
+                            <h3>Чип</h3>
+                            <p>{airpods.chip}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(airpods.controls) && (
+                        <div className="description-block">
+                            <h3>Управление</h3>
+                            <p>{airpods.controls.join(', ')}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(airpods.size) && (
+                        <div className="description-block">
+                            <h3>Размеры</h3>
+                            <p>Высота: {airpods.size.height}, Ширина: {airpods.size.width}, Глубина: {airpods.size.depth}, Вес: {airpods.size.weight}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(airpods.battery) && (
+                        <div className="description-block">
+                            <h3>Аккумулятор</h3>
+                            <p>{airpods.battery}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(airpods.connectivity) && (
+                        <div className="description-block">
+                            <h3>Подключение</h3>
+                            <p>{airpods.connectivity}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(airpods.resistance) && (
+                        <div className="description-block">
+                            <h3>Сопротивление</h3>
+                            <p>{airpods.resistance}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(airpods.sensors) && (
+                        <div className="description-block">
+                            <h3>Сенсоры</h3>
+                            <p>{airpods.sensors.join(', ')}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(airpods.packageEquipments) && (
+                        <div className="description-block">
+                            <h3>Комплектация</h3>
+                            <p>{airpods.packageEquipments.join(', ')}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(airpods.accessibilities) && (
+                        <div className="description-block">
+                            <h3>Возможности</h3>
+                            <p>{airpods.accessibilities.join(', ')}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(airpods.caseType) && (
+                        <div className="description-block">
+                            <h3>Тип кейса</h3>
+                            <p>{airpods.caseType}</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
