@@ -1,201 +1,201 @@
 .product-details {
-    display: flex;
-    gap: 2rem;
-    padding: 2rem;
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
 }
 
 .product-images {
-    flex: 1;
+  flex: 1;
 }
 
 .main-image {
-    width: 100%;
-    height: auto;
-    background-color: #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 16px;
+  width: 100%;
+  height: auto;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
 }
 
 .image-thumbnails {
-    display: flex;
-    margin-top: 1rem;
+  display: flex;
+  margin-top: 1rem;
 }
 
 .thumbnail {
-    width: 80px;
-    height: 80px;
-    margin-right: 0.5rem;
-    cursor: pointer;
-    border: 1px solid transparent;
-    background-color: #ffffff;
+  width: 80px;
+  height: 80px;
+  margin-right: 0.5rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background-color: #ffffff;
 }
 
 .thumbnail.selected {
-    border-color: #000000;
+  border-color: #000000;
 }
 
 .product-info {
-    flex: 2;
+  flex: 2;
 }
 
 .product-info h1 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+  font-size: 2rem;
+  margin-bottom: 1rem;
 }
 
 .product-price {
-    font-size: 1.5rem;
-    color: #333;
+  font-size: 1.5rem;
+  color: #333;
 }
 
 .product-colors ul {
-    list-style-type: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
 }
 
 .product-colors li {
-    display: inline-block;
-    margin-right: 1rem;
+  display: inline-block;
+  margin-right: 1rem;
 }
 
 .product-features h3 {
-    margin-top: 1rem;
-    font-size: 1.2rem;
+  margin-top: 1rem;
+  font-size: 1.2rem;
 }
 
 .product-features p {
-    margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .price-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px;
-    border-radius: 16px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px;
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
 .product-price {
-    font-size: 1.8rem;
-    color: #333;
+  font-size: 1.8rem;
+  color: #333;
 }
 
 .buy-button {
-    padding: 10px 20px;
-    background-color: #514ED9;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
+  padding: 10px 20px;
+  background-color: #514ed9;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
 .buy-button:hover {
-    background-color: #FF6140;
+  background-color: #ff6140;
 }
 
 .product-colors {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .color-squares {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .color-square {
-    width: 40px;
-    height: 40px;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: border 0.3s ease;
-    border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border 0.3s ease;
+  border-radius: 8px;
 }
 
 .color-square.selected {
-    border: 2px solid #000;
+  border: 2px solid #000;
 }
 
-
 .product-description {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    border: 1px solid #ddd;
-    padding: 20px;
-    border-radius: 16px;
-    background-color: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 16px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .description-block {
-    padding: 10px;
-    border-radius: 16px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .description-block h3 {
-    margin-top: 0;
-    font-size: 1.2rem;
+  margin-top: 0;
+  font-size: 1.2rem;
 }
 
 .description-block p {
-    margin: 0;
-    font-size: 1rem;
-    color: #333;
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
 }
 
-
 .product-configuration {
-    background-color: #fff;
-    padding: 1.5rem;
-    border-radius: 16px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
 .product-configuration h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
 }
 
 .config-option {
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .config-option select {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .config-option h4 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    color: #666;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #666;
 }
 
 select {
-    width: 100%;
-    padding: 10px 15px;
-    font-size: 1rem;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    color: #333;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 select:focus {
-    border-color: #514ED9;
-    box-shadow: 0 0 10px rgba(81, 78, 217, 0.2);
-    outline: none;
+  border-color: #514ed9;
+  box-shadow: 0 0 10px rgba(81, 78, 217, 0.2);
+  outline: none;
 }
 
 select:active {
-    border-color: #FF6140;
-    background-color: #ffffff;
+  border-color: #ff6140;
+  background-color: #ffffff;
 }
