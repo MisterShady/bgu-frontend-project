@@ -1,4 +1,3 @@
-// ImageWrapper.tsx
 import React, { useState } from 'react';
 import Placeholder from './Placeholder';
 

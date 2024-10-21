@@ -11,7 +11,7 @@
 .main-image {
     width: 100%;
     height: auto;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 16px;
 }
@@ -27,7 +27,7 @@
     margin-right: 0.5rem;
     cursor: pointer;
     border: 1px solid transparent;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
 }
 
 .thumbnail.selected {
@@ -73,8 +73,9 @@
     align-items: center;
     padding: 6px;
     border-radius: 16px;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
 .product-price {
@@ -115,7 +116,7 @@
 }
 
 .color-square.selected {
-    border: 2px solid #000; /* рамка при выборе */
+    border: 2px solid #000;
 }
 
 
@@ -126,7 +127,7 @@
     border: 1px solid #ddd;
     padding: 20px;
     border-radius: 16px;
-    background-color: #f9f9f9;
+    background-color: #fff;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -146,4 +147,55 @@
     margin: 0;
     font-size: 1rem;
     color: #333;
+}
+
+
+.product-configuration {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.product-configuration h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.config-option {
+    margin-bottom: 1.5rem;
+}
+
+.config-option select {
+    margin-bottom: 10px;
+}
+
+.config-option h4 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #666;
+}
+
+select {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:focus {
+    border-color: #514ED9;
+    box-shadow: 0 0 10px rgba(81, 78, 217, 0.2);
+    outline: none;
+}
+
+select:active {
+    border-color: #FF6140;
+    background-color: #ffffff;
 }

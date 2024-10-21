@@ -9,6 +9,6 @@ export const toPlural = (type: string): string => {
         case 'watch':
             return 'watches';
         default:
-            return type; // Для всех остальных категорий добавляем 's'
+            return type;
     }
 };

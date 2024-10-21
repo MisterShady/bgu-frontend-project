@@ -116,22 +116,24 @@ export interface IphoneDto {
         gpu: string;
     };
     camera: {
+        zoomValues: number[];
         rearCameras: {
+            id: number;
             resolution: string;
             aperture: string;
             type: string;
             features: string[];
         }[];
-        frontCamera: {
-            resolution: string;
-            aperture: string;
-            features: string[];
-        };
-        zoomValues: number[];
+    };
+    frontCamera?: {
+        id: number;
+        resolution: string;
+        aperture: string;
+        features: string[];
     };
     memory: string;
     storages: {
-        size: string; // изменено на string, так как объемы могут быть представлены и в текстовом формате.
+        size: string;
         additionalPrice: number;
     }[];
     connectivities: string[];
@@ -148,6 +150,7 @@ export interface IphoneDto {
     };
     operatingSystem: string;
 }
+
 
 export interface WatchDto {
     id: string;
@@ -209,7 +212,10 @@ export interface WatchDto {
             name: string;
             additionalPrice: number;
         };
-        small: string | null;
+        small: {
+            name: string;
+            additionalPrice: number;
+        } | string | null;
     };
     versions: {
         type: string;
@@ -249,20 +255,14 @@ export interface MacDto {
     colors: string[];
     price: number;
     display: {
-        type: string;
+        size: string;
+        resolution: string;
+        ppi: string;
+        ratio: string;
         brightness: string;
-        ppi: number;
-        smallScreen: {
-            size: string;
-            resolution: string;
-        };
-        largeScreen: {
-            size: string;
-            resolution: string;
-        };
-        material: string;
-        protection: string;
-        alwaysOn: boolean;
+        type: string;
+        color: string;
+        refreshRate: string;
     };
     processor: {
         name: string;
@@ -279,18 +279,17 @@ export interface MacDto {
         additionalPrice: number;
     }[];
     connectivity: {
-        cellular: string;
         wifi: string;
         bluetooth: number;
-        ultraWideBand: string;
+        ports?: string[];
     };
     battery: {
-        lifetime: string;
+        life: string;
+        type: string;
     };
     dimensions: {
-        size: string;
-        height: string;
         width: string;
+        height: string;
         depth: string;
         weight: string;
     };

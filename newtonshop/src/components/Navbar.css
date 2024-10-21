@@ -1,4 +1,3 @@
-/* Основной контейнер для центрирования */
 .navigation-wrapper {
     display: flex;
     justify-content: center;
@@ -14,7 +13,6 @@
     width: 100%;
 }
 
-/* Навигационная панель */
 .navigation {
     padding: 20px 40px;
     display: flex;
@@ -33,7 +31,6 @@
     margin-right: 15px;
 }
 
-/* Кнопка "Каталог товаров" */
 .menu-button {
     background-color: #514ED9;
     color: white;
@@ -45,6 +42,15 @@
     align-items: center;
     justify-content: center;
     width: 165px;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1001;
+}
+
+.menu-button.open {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
 }
 
 .menu-button .arrow {
@@ -56,11 +62,10 @@
     background-color: #FF6140;
 }
 
-/* Поисковая строка */
 .search-bar {
     position: relative;
     flex-grow: 0.8;
-    margin-left: 20px;
+    margin-left: 40px;
     display: flex;
     align-items: center;
     border-radius: 15px;
@@ -89,7 +94,6 @@
     border-radius: 15px 15px 0 0;
 }
 
-/* Выпадающий список предложений */
 .suggestions-list {
     position: absolute;
     top: 100%;
@@ -110,10 +114,12 @@
     padding: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    border-radius: 15px;
 }
 
-.suggestion-item:hover {
+.suggestion-item:hover{
     background-color: #f0f0f0;
+    color: #FF6140;
 }
 
 .suggestion-link {
@@ -151,7 +157,6 @@
     display: none;
 }
 
-/* Иконки корзины и аккаунта */
 .cart-icon, .account-icon {
     margin-left: auto;
 }
@@ -161,7 +166,6 @@
     cursor: pointer;
 }
 
-/* Выпадающее меню каталога товаров */
 .menu-item {
     position: relative;
 }
@@ -169,11 +173,13 @@
 .dropdown {
     position: absolute;
     left: 0;
+    top: 100%;
     display: none;
     background-color: #514ED9;
-    border-radius: 15px;
+    border-radius: 0 0 15px 15px;
     width: 165px;
     z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .dropdown.open {
@@ -189,7 +195,7 @@
 .dropdown-content li {
     padding: 15px;
     transition: background-color 0.3s ease, border 0.3s ease;
-    border-radius: 15px;
+    border-radius: 0;
 }
 
 .dropdown-content li a {
@@ -205,5 +211,9 @@
 
 .dropdown-content li:hover {
     background-color: #FF6140;
-    border: 1px solid white;
+}
+
+.dropdown-content li:hover:last-child {
+    background-color: #FF6140;
+    border-radius: 0 0 15px 15px;
 }

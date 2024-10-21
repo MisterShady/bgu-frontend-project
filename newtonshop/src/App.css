@@ -1,4 +1,3 @@
-/* Общие стили */
 .app-container {
   min-height: 100vh;
   display: flex;
@@ -13,7 +12,6 @@
 }
 
 
-/* Карточки товаров */
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -58,7 +56,6 @@
   margin: 10px 0;
 }
 
-/* Кнопки */
 .card button {
   width: 100%;
   margin-bottom: 5px;

@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAirpodsById } from '../../Api';
 import { AirpodsDto } from '../../types';
-import './ProductDetails.css'; // Стили
+import { colorMapping } from './colorMapping';
+import './ProductDetails.css';
 
 const AirpodsProduct: React.FC = () => {
-    const { id } = useParams<{ id: string }>(); // Получаем ID из параметров маршрута
+    const { id } = useParams<{ id: string }>();
     const [airpods, setAirpods] = useState<AirpodsDto | null>(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const getDataOrFallback = (data: any) => (data && data !== 'none' && data.length > 0 ? data : null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -18,7 +20,6 @@ const AirpodsProduct: React.FC = () => {
                     const airpodsData = await getAirpodsById(id);
                     setAirpods(airpodsData);
 
-                    // Устанавливаем первый цвет и изображение по умолчанию
                     const defaultColor = airpodsData.colors[0];
                     setSelectedColor(defaultColor);
                     const firstImageForColor = getImagesByColor(airpodsData.images, defaultColor)[0];
@@ -32,8 +33,6 @@ const AirpodsProduct: React.FC = () => {
         fetchData();
     }, [id]);
 
-    const getDataOrFallback = (data: any) => (data && data.length > 0 ? data : null);
-
     if (error) {
         return <div>Ошибка загрузки данных: {error}</div>;
     }
@@ -45,7 +44,7 @@ const AirpodsProduct: React.FC = () => {
     const handleColorChange = (color: string) => {
         setSelectedColor(color);
         const firstImageForColor = getImagesByColor(airpods.images, color)[0];
-        setSelectedImage(firstImageForColor || airpods.images[0]); // Устанавливаем первое изображение для нового цвета
+        setSelectedImage(firstImageForColor || airpods.images[0]);
     };
 
     return (
@@ -63,23 +62,20 @@ const AirpodsProduct: React.FC = () => {
                             src={image}
                             alt={`AirPods Image ${index + 1}`}
                             className={`thumbnail ${image === selectedImage ? 'selected' : ''}`}
-                            onClick={() => setSelectedImage(image)} // Изменение изображения при клике
+                            onClick={() => setSelectedImage(image)}
                         />
                     ))}
                 </div>
             </div>
 
             <div className="product-info">
-                {/* Добавляем название продукта */}
                 <h1 className="product-title">{airpods.title}</h1>
 
-                {/* Блок с ценой и кнопкой "Купить" */}
                 <div className="price-container">
                     <p className="product-price">${airpods.price}</p>
                     <button className="buy-button">Купить</button>
                 </div>
 
-                {/* Блок с цветами */}
                 <div className="product-colors">
                     <h3>Выберите цвет:</h3>
                     <div className="color-squares">
@@ -87,14 +83,13 @@ const AirpodsProduct: React.FC = () => {
                             <div
                                 key={index}
                                 className={`color-square ${selectedColor === color ? 'selected' : ''}`}
-                                style={{ backgroundColor: getColorHex(color) }}
-                                onClick={() => handleColorChange(color)} // Изменение цвета
+                                style={{ backgroundColor: colorMapping[color] || '#fff4f4' }}
+                                onClick={() => handleColorChange(color)}
                             ></div>
                         ))}
                     </div>
                 </div>
 
-                {/* Блок с характеристиками */}
                 <div className="product-description">
                     {getDataOrFallback(airpods.audioFeatures) && (
                         <div className="description-block">
@@ -187,28 +182,9 @@ const AirpodsProduct: React.FC = () => {
 
 export default AirpodsProduct;
 
-// Функция для фильтрации изображений по цвету
 const getImagesByColor = (images: string[], color: string): string[] => {
-    const normalizedColor = color.replace(/\s+/g, '').toLowerCase(); // Убираем пробелы и делаем цвет строчным
+    const normalizedColor = color.replace(/\s+/g, '').toLowerCase();
     return images.filter(image =>
         image.toLowerCase().includes(normalizedColor)
     );
-};
-
-// Функция для получения цвета в формате HEX
-const getColorHex = (color: string): string => {
-    switch (color.toLowerCase()) {
-        case 'space gray':
-            return '#4B4B4B';
-        case 'pink':
-            return '#FFC0CB';
-        case 'green':
-            return '#32CD32';
-        case 'silver':
-            return '#C0C0C0';
-        case 'sky blue':
-            return '#87CEEB';
-        default:
-            return '#fff4f4';
-    }
 };

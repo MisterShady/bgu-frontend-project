@@ -1,51 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getIphoneById } from '../../Api';
-import { IphoneDto } from '../../types';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import {getIphoneById} from '../../Api';
+import {IphoneDto} from '../../types';
 import './ProductDetails.css';
-
-// Маппинг для цветов
-const colorMapping: { [key: string]: string } = {
-    "Natural Titanium": "#e2d3cc",
-    "Blue Titanium": "#3b8bca",
-    "White Titanium": "#f5f5f5",
-    "Black Titanium": "#313131",
-    "Pink": "#ffb6c1",
-    "Yellow": "#fff700",
-    "Green": "#4caf50",
-    "Blue": "#0000ff",
-    "Black": "#232323",
-    "Deep Purple": "#673ab7",
-    "Gold": "#ffd700",
-    "Silver": "#c0c0c0",
-    "Space Black": "#2c2c2f",
-    "Midnight": "#36363a",
-    "Starlight": "#f2f2f7",
-    "Product Red": "#ce1f1f",
-    "Alpine Green": "#4caf50",
-    "Graphite": "#4b4b4b",
-    "Sierra Blue": "#4b89ac"
-};
+import {colorMapping} from './colorMapping';
 
 const IphoneProduct: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const {id} = useParams<{ id: string }>();
     const [iphone, setIphone] = useState<IphoneDto | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
     const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
+    const getDataOrFallback = (data: any) => data && data.length > 0 ? data : null;
 
-    // useEffect для получения данных телефона
     useEffect(() => {
         const fetchData = async () => {
             try {
                 if (id) {
                     const iphoneData = await getIphoneById(id);
 
-                    // Удаляем пустые строки из массива изображений
                     const validImages = iphoneData.images.filter(img => img && img.trim() !== "");
 
-                    setIphone({ ...iphoneData, images: validImages });
+                    setIphone({...iphoneData, images: validImages});
                     setSelectedImage(validImages[0] || iphoneData.thumbUrl);
                     setSelectedColor(iphoneData.colors[0]);
                     setSelectedStorage(iphoneData.storages[0].size);
@@ -58,7 +35,6 @@ const IphoneProduct: React.FC = () => {
         fetchData();
     }, [id]);
 
-    const getDataOrFallback = (data: any) => data && data.length > 0 ? data : null;
 
     if (error) {
         return <div>Ошибка загрузки данных: {error}</div>;
@@ -73,9 +49,8 @@ const IphoneProduct: React.FC = () => {
 
     return (
         <div className="product-details">
-            {/* Изображения продукта */}
             <div className="product-images">
-                <img src={selectedImage || iphone.thumbUrl} alt={iphone.title} className="main-image" />
+                <img src={selectedImage || iphone.thumbUrl} alt={iphone.title} className="main-image"/>
                 <div className="image-thumbnails">
                     {iphone.images.map((img, index) => (
                         <img
@@ -89,17 +64,14 @@ const IphoneProduct: React.FC = () => {
                 </div>
             </div>
 
-            {/* Информация о продукте */}
             <div className="product-info">
                 <h2>{iphone.title}</h2>
 
-                {/* Блок с ценой и кнопкой */}
                 <div className="price-container">
                     <p className="product-price">${totalPrice}</p>
                     <button className="buy-button">Купить</button>
                 </div>
 
-                {/* Рендерим блок выбора цвета только если больше одного цвета */}
                 {iphone.colors.length > 1 && (
                     <div className="product-colors">
                         <h3>Цвета</h3>
@@ -109,25 +81,29 @@ const IphoneProduct: React.FC = () => {
                                     key={color}
                                     className={`color-square ${color === selectedColor ? 'selected' : ''}`}
                                     onClick={() => setSelectedColor(color)}
-                                    style={{ backgroundColor: colorMapping[color] || 'transparent' }} // Применяем цвет из маппинга
+                                    style={{backgroundColor: colorMapping[color] || 'transparent'}}
                                 />
                             ))}
                         </div>
                     </div>
                 )}
 
-                <div className="product-storage">
-                    <h3>Хранилище</h3>
-                    <select
-                        value={selectedStorage || iphone.storages[0].size}
-                        onChange={(e) => setSelectedStorage(e.target.value)}
-                    >
-                        {iphone.storages.map(storage => (
-                            <option key={storage.size} value={storage.size}>
-                                {storage.size}
-                            </option>
-                        ))}
-                    </select>
+                <div className="product-configuration">
+                    <h3>Выбор конфигурации</h3>
+
+                    <div className="config-option">
+                        <h4>Хранилище</h4>
+                        <select
+                            value={selectedStorage || iphone.storages[0].size}
+                            onChange={(e) => setSelectedStorage(e.target.value)}
+                        >
+                            {iphone.storages.map(storage => (
+                                <option key={storage.size} value={storage.size}>
+                                    {storage.size}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
 
                 <div className="product-description">
@@ -152,6 +128,20 @@ const IphoneProduct: React.FC = () => {
                         </div>
                     )}
 
+                    {getDataOrFallback(iphone.camera.zoomValues) && (
+                        <div className="description-block">
+                            <h3>Зум камер</h3>
+                            <p>{iphone.camera.zoomValues.join('x, ')}x</p>
+                        </div>
+                    )}
+
+                    {iphone.frontCamera && (
+                        <div className="description-block">
+                            <h3>Фронтальная камера</h3>
+                            <p>{iphone.frontCamera.resolution} ({iphone.frontCamera.aperture})</p>
+                        </div>
+                    )}
+
                     {getDataOrFallback(iphone.battery.capacity) && (
                         <div className="description-block">
                             <h3>Аккумулятор</h3>
@@ -163,6 +153,34 @@ const IphoneProduct: React.FC = () => {
                         <div className="description-block">
                             <h3>Память</h3>
                             <p>{iphone.memory} GB</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(iphone.connectivities) && (
+                        <div className="description-block">
+                            <h3>Подключения</h3>
+                            <p>{iphone.connectivities.join(', ')}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(iphone.waterResistance) && (
+                        <div className="description-block">
+                            <h3>Водонепроницаемость</h3>
+                            <p>{iphone.waterResistance}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(iphone.dimensions) && (
+                        <div className="description-block">
+                            <h3>Размеры и вес</h3>
+                            <p>{iphone.dimensions.height} x {iphone.dimensions.width} x {iphone.dimensions.depth}, {iphone.dimensions.weight}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(iphone.battery.chargingCapabilities) && (
+                        <div className="description-block">
+                            <h3>Зарядка</h3>
+                            <p>{iphone.battery.chargingCapabilities.join(', ')}</p>
                         </div>
                     )}
 

@@ -20,13 +20,13 @@ const Navbar: React.FC = () => {
                 try {
                     const filteredSuggestions = await searchProducts(searchTerm, 0, 5);
                     setSuggestions(filteredSuggestions);
-                    setIsSearchActive(true); // Активируем поиск, если есть предложения
+                    setIsSearchActive(true);
                 } catch (error) {
                     console.error('Ошибка при поиске продуктов:', error);
                 }
             } else {
                 setSuggestions([]);
-                setIsSearchActive(false); // Деактивируем поиск, если нет предложений
+                setIsSearchActive(false);
             }
         }, 300);
 
@@ -35,13 +35,11 @@ const Navbar: React.FC = () => {
 
     const clearSuggestions = useCallback(() => {
         setSuggestions([]);
-        setIsSearchActive(false); // Убираем активный поиск
+        setIsSearchActive(false);
     }, []);
-
 
     return (
         <>
-
             <div className={`navigation-wrapper`}>
                 <div className="navbar-center-container">
                     <nav className="navigation">
@@ -52,7 +50,7 @@ const Navbar: React.FC = () => {
                         </div>
 
                         <div className="menu-item">
-                            <button className="menu-button" onClick={toggleMenu}>
+                            <button className={`menu-button ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu}>
                                 Каталог <span className="arrow">▼</span>
                             </button>
                             {isMenuOpen && (
@@ -144,6 +142,5 @@ const Navbar: React.FC = () => {
         </>
     );
 };
-
 
 export default Navbar;

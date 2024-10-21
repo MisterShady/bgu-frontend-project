@@ -11,8 +11,11 @@ const WatchProduct: React.FC = () => {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedBandTypeIndex, setSelectedBandTypeIndex] = useState<number | null>(null);
     const [selectedBandStyleIndex, setSelectedBandStyleIndex] = useState<number | null>(null);
+    const [selectedCaseIndex, setSelectedCaseIndex] = useState<number | null>(null);
+    const [selectedVersionIndex, setSelectedVersionIndex] = useState<number | null>(null);
+    const [selectedSizeIndex, setSelectedSizeIndex] = useState<number | null>(null);
+    const getDataOrFallback = (data: any) => data && data.length > 0 ? data : null;
 
-    // useEffect для получения данных часов
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -25,6 +28,15 @@ const WatchProduct: React.FC = () => {
                         setSelectedBandTypeIndex(0);
                         setSelectedBandStyleIndex(0);
                     }
+                    if (watchData.caseTypes?.length > 0) {
+                        setSelectedCaseIndex(0);
+                    }
+                    if (watchData.versions?.length > 0) {
+                        setSelectedVersionIndex(0);
+                    }
+                    if (watchData.size) {
+                        setSelectedSizeIndex(0);
+                    }
                 }
             } catch (error: any) {
                 setError(error.message || 'Ошибка загрузки данных');
@@ -34,7 +46,6 @@ const WatchProduct: React.FC = () => {
         fetchData();
     }, [id]);
 
-    // useEffect для обновления изображения при выборе стиля ремешка
     useEffect(() => {
         if (watch && selectedBandTypeIndex !== null && selectedBandStyleIndex !== null) {
             const currentBandType = watch.bandTypes[selectedBandTypeIndex];
@@ -44,8 +55,6 @@ const WatchProduct: React.FC = () => {
             }
         }
     }, [watch, selectedBandTypeIndex, selectedBandStyleIndex]);
-
-    const getDataOrFallback = (data: any) => data && data.length > 0 ? data : null;
 
     if (error) {
         return <div>Ошибка загрузки данных: {error}</div>;
@@ -57,7 +66,6 @@ const WatchProduct: React.FC = () => {
 
     return (
         <div className="product-details">
-            {/* Изображения продукта */}
             <div className="product-images">
                 <img src={selectedImage || watch.thumbUrl} alt={watch.title} className="main-image" />
                 <div className="image-thumbnails">
@@ -73,7 +81,6 @@ const WatchProduct: React.FC = () => {
                 </div>
             </div>
 
-            {/* Информация о продукте */}
             <div className="product-info">
                 <h1>{watch.title}</h1>
                 <div className="price-container">
@@ -81,37 +88,77 @@ const WatchProduct: React.FC = () => {
                     <button className="buy-button">Купить</button>
                 </div>
 
-                {/* Выбор конфигурации */}
                 <div className="product-configuration">
                     <h3>Выбор конфигурации</h3>
 
-                    {/* Выбор типа и стиля ремешка */}
-                    <div className="config-option">
-                        <h4>Ремешок</h4>
-                        {watch.bandTypes ? (
-                            <div>
-                                <select onChange={(e) => setSelectedBandTypeIndex(Number(e.target.value))}>
-                                    {watch.bandTypes.map((bandType, index) => (
+                    {watch.bandTypes && (
+                        <div className="config-option">
+                            <h4>Тип ремешка</h4>
+                            <select onChange={(e) => setSelectedBandTypeIndex(Number(e.target.value))}>
+                                {watch.bandTypes.map((bandType, index) => (
+                                    <option key={index} value={index}>
+                                        {bandType.material} ({bandType.description})
+                                    </option>
+                                ))}
+                            </select>
+                            {selectedBandTypeIndex !== null && watch.bandTypes[selectedBandTypeIndex] && (
+                                <select onChange={(e) => setSelectedBandStyleIndex(Number(e.target.value))}>
+                                    {watch.bandTypes[selectedBandTypeIndex].styles.map((style, index) => (
                                         <option key={index} value={index}>
-                                            {bandType.material} ({bandType.description})
+                                            {style.name} ({style.description})
                                         </option>
                                     ))}
                                 </select>
-                                {selectedBandTypeIndex !== null && watch.bandTypes[selectedBandTypeIndex] && (
-                                    <select onChange={(e) => setSelectedBandStyleIndex(Number(e.target.value))}>
-                                        {watch.bandTypes[selectedBandTypeIndex].styles.map((style, index) => (
-                                            <option key={index} value={index}>
-                                                {style.name} ({style.description})
-                                            </option>
-                                        ))}
-                                    </select>
+                            )}
+                        </div>
+                    )}
+
+                    {watch.caseTypes && (
+                        <div className="config-option">
+                            <h4>Материал корпуса</h4>
+                            <select onChange={(e) => setSelectedCaseIndex(Number(e.target.value))}>
+                                {watch.caseTypes.map((caseType, index) => (
+                                    <option key={index} value={index}>
+                                        {caseType.material} ({caseType.description})
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+
+                    {watch.versions && (
+                        <div className="config-option">
+                            <h4>Версия</h4>
+                            <select onChange={(e) => setSelectedVersionIndex(Number(e.target.value))}>
+                                {watch.versions.map((version, index) => (
+                                    <option key={index} value={index}>
+                                        {version.type} ({version.description})
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    )}
+
+                    {watch.size && (
+                        <div className="config-option">
+                            <h4>Размер</h4>
+                            <select onChange={(e) => setSelectedSizeIndex(Number(e.target.value))}>
+                                <option value={0}>
+                                    {watch.size.large.name} (Доплата: ${watch.size.large.additionalPrice})
+                                </option>
+                                {watch.size.small && typeof watch.size.small !== 'string' && (
+                                    <option value={1}>
+                                        {watch.size.small.name} (Доплата: ${watch.size.small.additionalPrice})
+                                    </option>
                                 )}
-                            </div>
-                        ) : null}
-                    </div>
+                                {typeof watch.size.small === 'string' && (
+                                    <option value={1}>{watch.size.small}</option>
+                                )}
+                            </select>
+                        </div>
+                    )}
                 </div>
 
-                {/* Характеристики продукта */}
                 <div className="product-description">
                     {getDataOrFallback(watch.display.type) && (
                         <div className="description-block">
@@ -142,7 +189,6 @@ const WatchProduct: React.FC = () => {
                         </div>
                     )}
 
-                    {/* Новые характеристики с использованием getDataOrFallback */}
                     {getDataOrFallback(watch.resistance?.water) && (
                         <div className="description-block">
                             <h3>Водонепроницаемость и пылезащита</h3>

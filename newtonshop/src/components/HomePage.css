@@ -1,4 +1,3 @@
-/* Стили для карусели */
 .slick-slider {
     max-width: 800px;
     margin: 0 auto;
@@ -11,7 +10,6 @@
     object-fit: cover;
 }
 
-/* Стили для точек (полосок) */
 .slick-dots {
     position: absolute;
     display: block;
@@ -69,8 +67,6 @@
     opacity: 1;
 }
 
-
-/* Стили для популярных товаров */
 .popular-products {
     margin-top: 20px;
     text-align: left;
@@ -124,7 +120,6 @@
     text-decoration: none;
 }
 
-/* Стили для контейнера цены и корзины */
 .price-container1 {
     display: flex;
     justify-content: space-between;
@@ -160,7 +155,6 @@
     background-color: #FF6140;
 }
 
-/* Стили для быстрого поиска */
 .quick-search {
     margin-bottom: 40px;
 }

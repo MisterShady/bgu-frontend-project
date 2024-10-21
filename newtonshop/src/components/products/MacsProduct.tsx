@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getMacById } from '../../Api';
-import { MacDto } from '../../types';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import {getMacById} from '../../Api';
+import {MacDto} from '../../types';
 import './ProductDetails.css';
+import {colorMapping} from './colorMapping';
 
-const colorMapping: { [key: string]: string } = {
-    "Space Black": "#000000",
-    "Silver": "#c0c0c0",
-    "Space Grey": "#757575",
-    "Gold": "#FFD700",
-    "Midnight": "#1A1A1A",
-    "Starlight": "#F5DEB3",
+const getDataOrFallback = (obj: any, key: string, fallback: any) => {
+    return obj && obj[key] !== undefined ? obj[key] : fallback;
 };
 
 const MacsProduct: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const {id} = useParams<{ id: string }>();
     const [mac, setMac] = useState<MacDto | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -27,10 +23,9 @@ const MacsProduct: React.FC = () => {
             try {
                 if (id) {
                     const macData = await getMacById(id);
-
                     const validImages = macData.images?.filter(img => img?.trim()) || [];
 
-                    setMac({ ...macData, images: validImages });
+                    setMac({...macData, images: validImages});
                     setSelectedImage(validImages[0] || macData.thumbUrl);
                     setSelectedColor(macData.colors?.[0] || null);
                     setSelectedStorage(macData.storages?.[0]?.size || null);
@@ -52,14 +47,14 @@ const MacsProduct: React.FC = () => {
         return <div>Загрузка...</div>;
     }
 
-    const selectedStoragePrice = mac.storages?.find(storage => storage.size === selectedStorage)?.additionalPrice || 0;
-    const selectedRamPrice = mac.ramMemories?.find(ram => ram.size === selectedRam)?.additionalPrice || 0;
+    const selectedStoragePrice = getDataOrFallback(mac.storages?.find(storage => storage.size === selectedStorage), 'additionalPrice', 0);
+    const selectedRamPrice = getDataOrFallback(mac.ramMemories?.find(ram => ram.size === selectedRam), 'additionalPrice', 0);
     const totalPrice = mac.price + selectedStoragePrice + selectedRamPrice;
 
     return (
         <div className="product-details">
             <div className="product-images">
-                <img src={selectedImage || mac.thumbUrl} alt={mac.title} className="main-image" />
+                <img src={selectedImage || mac.thumbUrl} alt={mac.title} className="main-image"/>
                 <div className="image-thumbnails">
                     {mac.images?.map((img, index) => (
                         <img
@@ -81,7 +76,7 @@ const MacsProduct: React.FC = () => {
                     <button className="buy-button">Купить</button>
                 </div>
 
-                {mac.colors?.length > 1 && (
+                {getDataOrFallback(mac.colors, 'length', 0) > 1 && (
                     <div className="product-colors">
                         <h3>Цвета</h3>
                         <div className="color-squares">
@@ -90,74 +85,81 @@ const MacsProduct: React.FC = () => {
                                     key={color}
                                     className={`color-square ${color === selectedColor ? 'selected' : ''}`}
                                     onClick={() => setSelectedColor(color)}
-                                    style={{ backgroundColor: colorMapping[color] || 'transparent' }}
+                                    style={{backgroundColor: colorMapping[color] || 'transparent'}}
                                 />
                             ))}
                         </div>
                     </div>
                 )}
 
-                <div className="product-ram">
-                    <h3>Память</h3>
-                    <select
-                        value={selectedRam || ''}
-                        onChange={(e) => setSelectedRam(e.target.value)}
-                    >
-                        {mac.ramMemories?.map(ram => (
-                            <option key={ram.size} value={ram.size}>
-                                {ram.size} GB (Дополнительно: ${ram.additionalPrice})
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                <div className="product-configuration">
+                    <h3>Выбор конфигурации</h3>
 
-                <div className="product-storage">
-                    <h3>Хранилище</h3>
-                    <select
-                        value={selectedStorage || ''}
-                        onChange={(e) => setSelectedStorage(e.target.value)}
-                    >
-                        {mac.storages?.map(storage => (
-                            <option key={storage.size} value={storage.size}>
-                                {storage.size} GB (Дополнительно: ${storage.additionalPrice})
-                            </option>
-                        ))}
-                    </select>
+                    <div className="config-option">
+                        <h4>Память</h4>
+                        <select
+                            value={selectedRam || ''}
+                            onChange={(e) => setSelectedRam(e.target.value)}
+                        >
+                            {mac.ramMemories?.map(ram => (
+                                <option key={ram.size} value={ram.size}>
+                                    {ram.size} GB (Дополнительно: ${ram.additionalPrice})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="config-option">
+                        <h4>Хранилище</h4>
+                        <select
+                            value={selectedStorage || ''}
+                            onChange={(e) => setSelectedStorage(e.target.value)}
+                        >
+                            {mac.storages?.map(storage => (
+                                <option key={storage.size} value={storage.size}>
+                                    {storage.size} GB (Дополнительно: ${storage.additionalPrice})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
 
                 <div className="product-description">
-                    {mac.display?.smallScreen?.size && (
+                    {getDataOrFallback(mac.display, 'size', '') && (
                         <div className="description-block">
                             <h3>Экран</h3>
-                            <p>{mac.display.smallScreen.size} дюймов, {mac.display.smallScreen.resolution}, {mac.display.brightness} nits</p>
+                            <p>{mac.display.size} дюймов, {mac.display.resolution}, {mac.display.brightness} nits, {mac.display.refreshRate}Hz,
+                                PPI: {mac.display.ppi}</p>
                         </div>
                     )}
 
-                    {mac.processor?.name && (
+                    {getDataOrFallback(mac.processor, 'name', '') && (
                         <div className="description-block">
                             <h3>Процессор</h3>
-                            <p>{mac.processor.name}, CPU: {mac.processor.cpu}, GPU: {mac.processor.gpu}</p>
+                            <p>{mac.processor.name}, {mac.processor.cpu}, GPU: {mac.processor.gpu},
+                                Скорость: {mac.processor.speed}</p>
                         </div>
                     )}
 
-                    {mac.connectivity?.wifi && (
-                        <div className="description-block">
-                            <h3>Подключения</h3>
-                            <p>Wi-Fi: {mac.connectivity.wifi}, Bluetooth: {mac.connectivity.bluetooth}</p>
-                        </div>
-                    )}
-
-                    {mac.battery?.lifetime && (
+                    {getDataOrFallback(mac.battery, 'life', '') && (
                         <div className="description-block">
                             <h3>Аккумулятор</h3>
-                            <p>Время работы: {mac.battery.lifetime}</p>
+                            <p>Тип: {mac.battery.type}, Время работы: {mac.battery.life}</p>
                         </div>
                     )}
 
-                    {mac.dimensions?.height && (
+                    {getDataOrFallback(mac.operatingSystem, 'initial', '') && (
+                        <div className="description-block">
+                            <h3>Операционная система</h3>
+                            <p>Начальная: {mac.operatingSystem.initial}, Последняя: {mac.operatingSystem.latest}</p>
+                        </div>
+                    )}
+
+                    {getDataOrFallback(mac.dimensions, 'height', '') && (
                         <div className="description-block">
                             <h3>Габариты и вес</h3>
-                            <p>Высота: {mac.dimensions.height}, Ширина: {mac.dimensions.width}, Глубина: {mac.dimensions.depth}, Вес: {mac.dimensions.weight}</p>
+                            <p>Высота: {mac.dimensions.height}, Ширина: {mac.dimensions.width},
+                                Глубина: {mac.dimensions.depth}, Вес: {mac.dimensions.weight}</p>
                         </div>
                     )}
                 </div>
