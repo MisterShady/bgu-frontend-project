@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getAirpodsById } from '../../Api';
 import { AirpodsDto } from '../../types';
+import { AxiosError } from 'axios';
 import { colorMapping } from './colorMapping';
 import './ProductDetails.css';
 
-const AirpodsProduct: React.FC = () => {
+const AirpodsProduct = () => {
     const { id } = useParams<{ id: string }>();
     const [airpods, setAirpods] = useState<AirpodsDto | null>(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -25,12 +26,19 @@ const AirpodsProduct: React.FC = () => {
                     const firstImageForColor = getImagesByColor(airpodsData.images, defaultColor)[0];
                     setSelectedImage(firstImageForColor || airpodsData.images[0]);
                 }
-            } catch (error: any) {
-                setError(error.message || 'Ошибка загрузки данных');
+            } catch (error) {
+                if (error instanceof AxiosError) {
+                    setError(error.message || 'Ошибка загрузки данных');
+                } else {
+                    setError('Неизвестная ошибка');
+                }
             }
         };
 
-        fetchData();
+        fetchData().catch(error => {
+            const axiosError = error as AxiosError;
+            setError(axiosError.message || 'Ошибка загрузки данных');
+        });
     }, [id]);
 
     if (error) {
@@ -58,7 +66,7 @@ const AirpodsProduct: React.FC = () => {
                 <div className="image-thumbnails">
                     {airpods.images.map((image, index) => (
                         <img
-                            key={index}
+                            key={image}
                             src={image}
                             alt={`AirPods Image ${index + 1}`}
                             className={`thumbnail ${image === selectedImage ? 'selected' : ''}`}
@@ -79,9 +87,9 @@ const AirpodsProduct: React.FC = () => {
                 <div className="product-colors">
                     <h3>Выберите цвет:</h3>
                     <div className="color-squares">
-                        {airpods.colors.map((color, index) => (
+                        {airpods.colors.map((color) => (
                             <div
-                                key={index}
+                                key={color}
                                 className={`color-square ${selectedColor === color ? 'selected' : ''}`}
                                 style={{ backgroundColor: colorMapping[color] || '#fff4f4' }}
                                 onClick={() => handleColorChange(color)}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const QuickSearch: React.FC = () => {
+const QuickSearch = () => {
     const products = [
         { id: 1, name: '15 Pro', link: '/iphones/iphone-15-pro' },
         { id: 2, name: 'AirPods Max', link: '/airpods/airpods-max' },

@@ -3,8 +3,9 @@ import { useParams } from 'react-router-dom';
 import { getWatchById } from '../../Api';
 import { WatchDto } from '../../types';
 import './ProductDetails.css';
+import { AxiosError } from "axios";
 
-const WatchProduct: React.FC = () => {
+const WatchProduct = () => {
     const { id } = useParams<{ id: string }>();
     const [watch, setWatch] = useState<WatchDto | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -38,12 +39,16 @@ const WatchProduct: React.FC = () => {
                         setSelectedSizeIndex(0);
                     }
                 }
-            } catch (error: any) {
-                setError(error.message || 'Ошибка загрузки данных');
+            } catch (error) {
+                const axiosError = error as AxiosError;
+                setError(axiosError.message || 'Ошибка загрузки данных');
             }
         };
 
-        fetchData();
+        fetchData().catch(error => {
+            const axiosError = error as AxiosError;
+            setError(axiosError.message || 'Ошибка загрузки данных');
+        });
     }, [id]);
 
     useEffect(() => {
@@ -69,11 +74,11 @@ const WatchProduct: React.FC = () => {
             <div className="product-images">
                 <img src={selectedImage || watch.thumbUrl} alt={watch.title} className="main-image" />
                 <div className="image-thumbnails">
-                    {watch.images.map((img, index) => (
+                    {watch.images.map((img) => (
                         <img
-                            key={index}
+                            key={img}
                             src={img}
-                            alt={`Image ${index + 1}`}
+                            alt={`Image`}
                             className={`thumbnail ${img === selectedImage ? 'selected' : ''}`}
                             onClick={() => setSelectedImage(img)}
                         />
@@ -95,16 +100,16 @@ const WatchProduct: React.FC = () => {
                         <div className="config-option">
                             <h4>Тип ремешка</h4>
                             <select onChange={(e) => setSelectedBandTypeIndex(Number(e.target.value))}>
-                                {watch.bandTypes.map((bandType, index) => (
-                                    <option key={index} value={index}>
+                                {watch.bandTypes.map((bandType) => (
+                                    <option key={bandType.material} value={watch.bandTypes.indexOf(bandType)}>
                                         {bandType.material} ({bandType.description})
                                     </option>
                                 ))}
                             </select>
                             {selectedBandTypeIndex !== null && watch.bandTypes[selectedBandTypeIndex] && (
                                 <select onChange={(e) => setSelectedBandStyleIndex(Number(e.target.value))}>
-                                    {watch.bandTypes[selectedBandTypeIndex].styles.map((style, index) => (
-                                        <option key={index} value={index}>
+                                    {watch.bandTypes[selectedBandTypeIndex].styles.map((style) => (
+                                        <option key={style.name} value={watch.bandTypes[selectedBandTypeIndex].styles.indexOf(style)}>
                                             {style.name} ({style.description})
                                         </option>
                                     ))}
@@ -117,8 +122,8 @@ const WatchProduct: React.FC = () => {
                         <div className="config-option">
                             <h4>Материал корпуса</h4>
                             <select onChange={(e) => setSelectedCaseIndex(Number(e.target.value))}>
-                                {watch.caseTypes.map((caseType, index) => (
-                                    <option key={index} value={index}>
+                                {watch.caseTypes.map((caseType) => (
+                                    <option key={caseType.material} value={watch.caseTypes.indexOf(caseType)}>
                                         {caseType.material} ({caseType.description})
                                     </option>
                                 ))}
@@ -130,8 +135,8 @@ const WatchProduct: React.FC = () => {
                         <div className="config-option">
                             <h4>Версия</h4>
                             <select onChange={(e) => setSelectedVersionIndex(Number(e.target.value))}>
-                                {watch.versions.map((version, index) => (
-                                    <option key={index} value={index}>
+                                {watch.versions.map((version) => (
+                                    <option key={version.type} value={watch.versions.indexOf(version)}>
                                         {version.type} ({version.description})
                                     </option>
                                 ))}
@@ -209,8 +214,8 @@ const WatchProduct: React.FC = () => {
                     {getDataOrFallback(watch.sensors) && (
                         <div className="description-block">
                             <h3>Датчики</h3>
-                            {watch.sensors.map((sensor, index) => (
-                                <p key={index}>{sensor.name}: {sensor.spec}</p>
+                            {watch.sensors.map((sensor) => (
+                                <p key={sensor.name}>{sensor.name}: {sensor.spec}</p>
                             ))}
                         </div>
                     )}

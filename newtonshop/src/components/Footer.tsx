@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import './Footer.css';
 
-const Footer: React.FC = () => {
+const Footer = () => {
     const audioRefLeft = useRef<HTMLAudioElement>(null);
     const audioRefRight = useRef<HTMLAudioElement>(null);
     const audioRefAlien = useRef<HTMLAudioElement>(null);

@@ -4,8 +4,9 @@ import { IpadDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import ImageWrapper from "../handler/ImageWrapper";
+import { AxiosError } from "axios";
 
-const Ipads: React.FC = () => {
+const Ipads = () => {
     const [ipads, setIpads] = useState<IpadDto[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -14,12 +15,16 @@ const Ipads: React.FC = () => {
             try {
                 const ipadsData = await getIpads();
                 setIpads(ipadsData);
-            } catch (error: any) {
-                setError(error.message || 'Ошибка загрузки данных');
+            } catch (error) {
+                const axiosError = error as AxiosError;
+                setError(axiosError.message || 'Ошибка загрузки данных');
             }
         };
 
-        fetchData();
+        fetchData().catch(error => {
+            const axiosError = error as AxiosError;
+            setError(axiosError.message || 'Ошибка загрузки данных');
+        });
     }, []);
 
     if (error) {
@@ -28,7 +33,6 @@ const Ipads: React.FC = () => {
 
     return (
         <div className="card-container">
-
             {ipads.map((item) => (
                 <motion.div className="card" key={item.id} whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
                     <ImageWrapper src={item.thumbUrl} alt={item.title} className="card-image" />

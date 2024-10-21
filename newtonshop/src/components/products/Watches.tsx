@@ -3,8 +3,9 @@ import { getWatches } from '../../Api';
 import { WatchDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
-const Watches: React.FC = () => {
+const Watches = () => {
     const [watches, setWatches] = useState<WatchDto[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -13,12 +14,16 @@ const Watches: React.FC = () => {
             try {
                 const watchesData = await getWatches();
                 setWatches(watchesData);
-            } catch (error: any) {
-                setError(error.message || 'Ошибка загрузки данных');
+            } catch (error) {
+                const axiosError = error as AxiosError;
+                setError(axiosError.message || 'Ошибка загрузки данных');
             }
         };
 
-        fetchData();
+        fetchData().catch(error => {
+            const axiosError = error as AxiosError;
+            setError(axiosError.message || 'Ошибка загрузки данных');
+        });
     }, []);
 
     if (error) {

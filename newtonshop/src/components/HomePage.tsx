@@ -4,7 +4,7 @@ import PopularProducts from './PopularProducts';
 import QuickSearch from './QuickSearch';
 import './HomePage.css';
 
-const HomePage: React.FC = () => {
+const HomePage = () => {
     return (
         <div>
             <Carousel />

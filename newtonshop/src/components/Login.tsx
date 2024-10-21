@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
 
-const Login: React.FC = () => {
+const Login = () => {
     const navigate = useNavigate();
 
     const handleLogin = (e: React.FormEvent) => {

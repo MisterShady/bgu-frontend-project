@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
-import {getIphoneById} from '../../Api';
-import {IphoneDto} from '../../types';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getIphoneById } from '../../Api';
+import { IphoneDto } from '../../types';
 import './ProductDetails.css';
-import {colorMapping} from './colorMapping';
+import { colorMapping } from './colorMapping';
+import { AxiosError } from "axios";
 
-const IphoneProduct: React.FC = () => {
-    const {id} = useParams<{ id: string }>();
+const IphoneProduct = () => {
+    const { id } = useParams<{ id: string }>();
     const [iphone, setIphone] = useState<IphoneDto | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -22,19 +23,22 @@ const IphoneProduct: React.FC = () => {
 
                     const validImages = iphoneData.images.filter(img => img && img.trim() !== "");
 
-                    setIphone({...iphoneData, images: validImages});
+                    setIphone({ ...iphoneData, images: validImages });
                     setSelectedImage(validImages[0] || iphoneData.thumbUrl);
                     setSelectedColor(iphoneData.colors[0]);
                     setSelectedStorage(iphoneData.storages[0].size);
                 }
-            } catch (error: any) {
-                setError(error.message || 'Ошибка загрузки данных');
+            } catch (error) {
+                const axiosError = error as AxiosError;
+                setError(axiosError.message || 'Ошибка загрузки данных');
             }
         };
 
-        fetchData();
+        fetchData().catch(error => {
+            const axiosError = error as AxiosError;
+            setError(axiosError.message || 'Ошибка загрузки данных');
+        });
     }, [id]);
-
 
     if (error) {
         return <div>Ошибка загрузки данных: {error}</div>;
@@ -50,11 +54,11 @@ const IphoneProduct: React.FC = () => {
     return (
         <div className="product-details">
             <div className="product-images">
-                <img src={selectedImage || iphone.thumbUrl} alt={iphone.title} className="main-image"/>
+                <img src={selectedImage || iphone.thumbUrl} alt={iphone.title} className="main-image" />
                 <div className="image-thumbnails">
                     {iphone.images.map((img, index) => (
                         <img
-                            key={index}
+                            key={img}
                             src={img}
                             alt={`Image ${index + 1}`}
                             className={`thumbnail ${img === selectedImage ? 'selected' : ''}`}
@@ -81,7 +85,7 @@ const IphoneProduct: React.FC = () => {
                                     key={color}
                                     className={`color-square ${color === selectedColor ? 'selected' : ''}`}
                                     onClick={() => setSelectedColor(color)}
-                                    style={{backgroundColor: colorMapping[color] || 'transparent'}}
+                                    style={{ backgroundColor: colorMapping[color] || 'transparent' }}
                                 />
                             ))}
                         </div>

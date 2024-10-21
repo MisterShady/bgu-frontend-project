@@ -4,7 +4,7 @@ import { searchProducts, ProductDto } from '../Api';
 import { toPlural } from '../utils';
 import './Navbar.css';
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [suggestions, setSuggestions] = useState<ProductDto[]>([]);

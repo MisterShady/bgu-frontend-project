@@ -18,7 +18,7 @@ import Register from './components/Register';
 import HomePage from './components/HomePage';
 import ProfileForm from "./components/ProfileForm";
 
-const App: React.FC = () => {
+const App = () => {
     return (
         <Router>
             <div className="app-container">

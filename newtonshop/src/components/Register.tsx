@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Auth.css';
 
-const Register: React.FC = () => {
+const Register = () => {
     return (
         <div className="auth-container">
             <Link to="/" className="back-button">←</Link>

@@ -1,22 +1,23 @@
-import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
-import {getMacById} from '../../Api';
-import {MacDto} from '../../types';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getMacById } from '../../Api';
+import { MacDto } from '../../types';
 import './ProductDetails.css';
-import {colorMapping} from './colorMapping';
+import { colorMapping } from './colorMapping';
+import { AxiosError } from "axios";
 
-const getDataOrFallback = (obj: any, key: string, fallback: any) => {
-    return obj && obj[key] !== undefined ? obj[key] : fallback;
-};
-
-const MacsProduct: React.FC = () => {
-    const {id} = useParams<{ id: string }>();
+const MacsProduct = () => {
+    const { id } = useParams<{ id: string }>();
     const [mac, setMac] = useState<MacDto | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [selectedColor, setSelectedColor] = useState<string | null>(null);
     const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
     const [selectedRam, setSelectedRam] = useState<string | null>(null);
+
+    const getDataOrFallback = (obj: any, key: string, fallback: any) => {
+        return obj && obj[key] !== undefined ? obj[key] : fallback;
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -25,18 +26,22 @@ const MacsProduct: React.FC = () => {
                     const macData = await getMacById(id);
                     const validImages = macData.images?.filter(img => img?.trim()) || [];
 
-                    setMac({...macData, images: validImages});
+                    setMac({ ...macData, images: validImages });
                     setSelectedImage(validImages[0] || macData.thumbUrl);
                     setSelectedColor(macData.colors?.[0] || null);
                     setSelectedStorage(macData.storages?.[0]?.size || null);
                     setSelectedRam(macData.ramMemories?.[0]?.size || null);
                 }
-            } catch (error: any) {
-                setError(error.message || 'Ошибка загрузки данных');
+            } catch (error) {
+                const axiosError = error as AxiosError;
+                setError(axiosError.message || 'Ошибка загрузки данных');
             }
         };
 
-        fetchData();
+        fetchData().catch(error => {
+            const axiosError = error as AxiosError;
+            setError(axiosError.message || 'Ошибка загрузки данных');
+        });
     }, [id]);
 
     if (error) {
@@ -54,13 +59,13 @@ const MacsProduct: React.FC = () => {
     return (
         <div className="product-details">
             <div className="product-images">
-                <img src={selectedImage || mac.thumbUrl} alt={mac.title} className="main-image"/>
+                <img src={selectedImage || mac.thumbUrl} alt={mac.title} className="main-image" />
                 <div className="image-thumbnails">
-                    {mac.images?.map((img, index) => (
+                    {mac.images?.map(img => (
                         <img
-                            key={index}
+                            key={img}
                             src={img}
-                            alt={`Image ${index + 1}`}
+                            alt={`Image ${img}`}
                             className={`thumbnail ${img === selectedImage ? 'selected' : ''}`}
                             onClick={() => setSelectedImage(img)}
                         />
@@ -85,7 +90,7 @@ const MacsProduct: React.FC = () => {
                                     key={color}
                                     className={`color-square ${color === selectedColor ? 'selected' : ''}`}
                                     onClick={() => setSelectedColor(color)}
-                                    style={{backgroundColor: colorMapping[color] || 'transparent'}}
+                                    style={{ backgroundColor: colorMapping[color] || 'transparent' }}
                                 />
                             ))}
                         </div>

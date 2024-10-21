@@ -3,8 +3,9 @@ import { getMacs } from '../../Api';
 import { MacDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
-const Macs: React.FC = () => {
+const Macs = () => {
     const [macs, setMacs] = useState<MacDto[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -13,12 +14,16 @@ const Macs: React.FC = () => {
             try {
                 const macsData = await getMacs();
                 setMacs(macsData);
-            } catch (error: any) {
-                setError(error.message || 'Ошибка загрузки данных');
+            } catch (error) {
+                const axiosError = error as AxiosError;
+                setError(axiosError.message || 'Ошибка загрузки данных');
             }
         };
 
-        fetchData();
+        fetchData().catch(error => {
+            const axiosError = error as AxiosError;
+            setError(axiosError.message || 'Ошибка загрузки данных');
+        });
     }, []);
 
     if (error) {

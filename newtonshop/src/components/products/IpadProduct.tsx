@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
-import {getIpadById} from '../../Api';
-import {IpadDto} from '../../types';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios, {AxiosError} from 'axios';
+import { getIpadById } from '../../Api';
+import { IpadDto } from '../../types';
 import './ProductDetails.css';
 import ImageWrapper from "../handler/ImageWrapper";
-import {colorMapping} from './colorMapping';
+import { colorMapping } from './colorMapping';
 
-const IpadProduct: React.FC = () => {
-    const {id} = useParams<{ id: string }>();
+const IpadProduct = () => {
+    const { id } = useParams<{ id: string }>();
     const [ipad, setIpad] = useState<IpadDto | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -26,7 +27,7 @@ const IpadProduct: React.FC = () => {
 
                     const validImages = ipadData.images.filter(img => img && img.trim() !== "");
 
-                    setIpad({...ipadData, images: validImages});
+                    setIpad({ ...ipadData, images: validImages });
                     setSelectedImage(validImages[0] || ipadData.thumbUrl);
                     setSelectedColor(ipadData.colors[0]);
                     setSelectedStorage(ipadData.storages[0].size);
@@ -34,14 +35,20 @@ const IpadProduct: React.FC = () => {
                     setSelectedApplePencil(ipadData.applePencils[0].type);
                     setSelectedSmartKeyboard(ipadData.smartKeyboards[0].type);
                 }
-            } catch (error: any) {
-                setError(error.message || 'Ошибка загрузки данных');
+            } catch (error) {
+                if (axios.isAxiosError(error)) {
+                    setError(error.message || 'Ошибка загрузки данных');
+                } else {
+                    setError('Неизвестная ошибка');
+                }
             }
         };
 
-        fetchData();
+        fetchData().catch(error => {
+            const axiosError = error as AxiosError;
+            setError(axiosError.message || 'Ошибка загрузки данных');
+        });
     }, [id]);
-
 
     if (error) {
         return <div>Ошибка загрузки данных: {error}</div>;
@@ -57,13 +64,13 @@ const IpadProduct: React.FC = () => {
     return (
         <div className="product-details">
             <div className="product-images">
-                <ImageWrapper src={selectedImage || ipad.thumbUrl} alt={ipad.title} className="main-image"/>
+                <ImageWrapper src={selectedImage || ipad.thumbUrl} alt={ipad.title} className="main-image" />
                 <div className="image-thumbnails">
-                    {ipad.images.map((img, index) => (
+                    {ipad.images.map((img) => (
                         <img
-                            key={index}
+                            key={img}
                             src={img}
-                            alt={`Image ${index + 1}`}
+                            alt={`Image ${img + 1}`}
                             className={`thumbnail ${img === selectedImage ? 'selected' : ''}`}
                             onClick={() => setSelectedImage(img)}
                         />
@@ -88,7 +95,7 @@ const IpadProduct: React.FC = () => {
                                     key={color}
                                     className={`color-square ${color === selectedColor ? 'selected' : ''}`}
                                     onClick={() => setSelectedColor(color)}
-                                    style={{backgroundColor: colorMapping[color] || 'transparent'}} // Применяем цвет из маппинга
+                                    style={{ backgroundColor: colorMapping[color] || 'transparent' }} // Применяем цвет из маппинга
                                 />
                             ))}
                         </div>
@@ -173,10 +180,8 @@ const IpadProduct: React.FC = () => {
                     {getDataOrFallback(ipad.camera.rearCameras) && (
                         <div className="description-block">
                             <h3>Камеры</h3>
-                            <p>Основные
-                                камеры: {ipad.camera.rearCameras.map(cam => `${cam.resolution} (${cam.type})`).join(', ')}</p>
-                            <p>Фронтальная
-                                камера: {ipad.camera.frontCamera.resolution} ({ipad.camera.frontCamera.aperture})</p>
+                            <p>Основные камеры: {ipad.camera.rearCameras.map(cam => `${cam.resolution} (${cam.type})`).join(', ')}</p>
+                            <p>Фронтальная камера: {ipad.camera.frontCamera.resolution} ({ipad.camera.frontCamera.aperture})</p>
                         </div>
                     )}
 
@@ -197,8 +202,7 @@ const IpadProduct: React.FC = () => {
                     {getDataOrFallback(ipad.dimensions.height) && (
                         <div className="description-block">
                             <h3>Габариты и вес</h3>
-                            <p>Высота: {ipad.dimensions.height}, Ширина: {ipad.dimensions.width},
-                                Глубина: {ipad.dimensions.depth}, Вес: {ipad.dimensions.weight}</p>
+                            <p>Высота: {ipad.dimensions.height}, Ширина: {ipad.dimensions.width}, Глубина: {ipad.dimensions.depth}, Вес: {ipad.dimensions.weight}</p>
                         </div>
                     )}
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, SyntheticEvent } from 'react';
 import Placeholder from './Placeholder';
 
 interface ImageWrapperProps {
@@ -7,11 +7,12 @@ interface ImageWrapperProps {
     className?: string;
 }
 
-const ImageWrapper: React.FC<ImageWrapperProps> = ({ src, alt, className }) => {
+const ImageWrapper = ({ src, alt, className }: ImageWrapperProps) => {
     const [isError, setIsError] = useState(false);
 
-    const handleImageError = () => {
+    const handleImageError = (event: SyntheticEvent<HTMLImageElement, Event>) => {
         setIsError(true);
+        console.error('Image loading error:', event);
     };
 
     return (

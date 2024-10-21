@@ -3,7 +3,7 @@ import { getPopularProducts, ProductDto } from '../Api';
 import ImageWrapper from './handler/ImageWrapper';
 import { Link } from 'react-router-dom';
 
-const PopularProducts: React.FC = () => {
+const PopularProducts = () => {
     const [products, setProducts] = useState<ProductDto[]>([]);
     const [loading, setLoading] = useState(true);
 

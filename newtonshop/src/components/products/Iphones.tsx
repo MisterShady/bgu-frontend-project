@@ -3,8 +3,9 @@ import { getIphones } from '../../Api';
 import { IphoneDto } from '../../types';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
-const Iphones: React.FC = () => {
+const Iphones = () => {
     const [iphones, setIphones] = useState<IphoneDto[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -13,12 +14,16 @@ const Iphones: React.FC = () => {
             try {
                 const iphonesData = await getIphones();
                 setIphones(iphonesData);
-            } catch (error: any) {
-                setError(error.message || 'Ошибка загрузки данных');
+            } catch (error) {
+                const axiosError = error as AxiosError;
+                setError(axiosError.message || 'Ошибка загрузки данных');
             }
         };
 
-        fetchData();
+        fetchData().catch(error => {
+            const axiosError = error as AxiosError;
+            setError(axiosError.message || 'Ошибка загрузки данных');
+        });
     }, []);
 
     if (error) {

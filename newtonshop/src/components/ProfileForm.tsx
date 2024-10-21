@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Profile.css';
 
-const ProfileForm: React.FC = () => {
+const ProfileForm = () => {
     const [avatar, setAvatar] = useState<string>('/image/account.png');
     // const [profilePicture, setProfilePicture] = useState<string | null>(null);
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
