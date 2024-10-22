@@ -36,27 +36,27 @@ export const searchProducts = async (name: string, page = 0, size = 0): Promise<
 };
 
 export const getAirpods = async (): Promise<AirpodsDto[]> => {
-  const response = await axios.get<AirpodsDto[]>(`${BASE_URL}/categories/airpods`);
+  const response = await axios.get<AirpodsDto[]>(`${BASE_URL}/products/airpods`);
   return response.data;
 };
 
 export const getWatches = async (): Promise<WatchDto[]> => {
-  const response = await axios.get<WatchDto[]>(`${BASE_URL}/categories/watches`);
+  const response = await axios.get<WatchDto[]>(`${BASE_URL}/products/watches`);
   return response.data;
 };
 
 export const getIpads = async (): Promise<IpadDto[]> => {
-  const response = await axios.get<IpadDto[]>(`${BASE_URL}/categories/ipads`);
+  const response = await axios.get<IpadDto[]>(`${BASE_URL}/products/ipads`);
   return response.data;
 };
 
 export const getIphones = async (): Promise<IphoneDto[]> => {
-  const response = await axios.get<IphoneDto[]>(`${BASE_URL}/categories/iphones`);
+  const response = await axios.get<IphoneDto[]>(`${BASE_URL}/products/iphones`);
   return response.data;
 };
 
 export const getMacs = async (): Promise<MacDto[]> => {
-  const response = await axios.get<MacDto[]>(`${BASE_URL}/categories/macs`);
+  const response = await axios.get<MacDto[]>(`${BASE_URL}/products/macs`);
   return response.data;
 };
 
