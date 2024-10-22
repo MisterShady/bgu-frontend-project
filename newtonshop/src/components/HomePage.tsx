@@ -1,6 +1,6 @@
 import React from "react";
 import Carousel from "./Carousel";
-import PopularProducts from "./PopularProducts";
+import NewProducts from "./NewProducts";
 import QuickSearch from "./QuickSearch";
 import "./HomePage.css";
 
@@ -8,7 +8,7 @@ const HomePage = () => {
   return (
     <div>
       <Carousel />
-      <PopularProducts />
+      <NewProducts />
       <QuickSearch />
     </div>
   );

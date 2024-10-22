@@ -35,13 +35,12 @@ const Ipads = () => {
     <div className="card-container">
       {ipads.map((item) => (
         <motion.div className="card" key={item.id} whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+          <Link to={`/ipads/${item.id}`}>
           <ImageWrapper src={item.thumbUrl} alt={item.title} className="card-image" />
+          </Link>
           <h2>{item.title}</h2>
           <p className="price">{item.price}$</p>
-          <button className="view-button">
-            <Link to={`/ipads/${item.id}`}>Посмотреть характеристики</Link>
-          </button>
-          <button className="buy-button">Купить</button>
+          <button className="buy-button">В корзину</button>
         </motion.div>
       ))}
     </div>

@@ -17,6 +17,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import HomePage from "./components/HomePage";
 import ProfileForm from "./components/ProfileForm";
+import AboutUs from "./components/AboutUs"; // Импортируем компонент "О нас"
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<ProfileForm />} />
+            <Route path="/about-us" element={<AboutUs />} />
           </Routes>
         </div>
         <Footer />

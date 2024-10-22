@@ -1,23 +1,27 @@
-import React, { useState, SyntheticEvent } from "react";
-import Placeholder from "./Placeholder";
+import React, { CSSProperties, useState } from "react";
+import Placeholder1 from "./LargePlaceholder";
 
 interface ImageWrapperProps {
   src: string;
   alt: string;
   className?: string;
+  style?: CSSProperties;
 }
 
-const ImageWrapper = ({ src, alt, className }: ImageWrapperProps) => {
+const ImageWrapper = ({ src, alt, className, style }: ImageWrapperProps) => {
   const [isError, setIsError] = useState(false);
 
-  const handleImageError = (event: SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleImageError = () => {
     setIsError(true);
-    console.error("Image loading error:", event);
   };
 
   return (
     <div>
-      {isError ? <Placeholder /> : <img src={src} alt={alt} className={className} onError={handleImageError} />}
+      {isError ? (
+        <Placeholder1 />
+      ) : (
+        <img src={src} alt={alt} className={className} onError={handleImageError} style={style} />
+      )}
     </div>
   );
 };
