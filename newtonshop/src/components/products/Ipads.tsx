@@ -36,7 +36,7 @@ const Ipads = () => {
       {ipads.map((item) => (
         <motion.div className="card" key={item.id} whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
           <Link to={`/ipads/${item.id}`}>
-          <ImageWrapper src={item.thumbUrl} alt={item.title} className="card-image" />
+            <ImageWrapper src={item.thumbUrl} alt={item.title} className="card-image" />
           </Link>
           <h2>{item.title}</h2>
           <p className="price">{item.price}$</p>

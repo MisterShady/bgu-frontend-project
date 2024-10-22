@@ -1,5 +1,5 @@
-import React from 'react';
-import './AboutUs.css';
+import React from "react";
+import "./AboutUs.css";
 
 interface TeamMember {
   image: string;
@@ -8,10 +8,10 @@ interface TeamMember {
 }
 
 const teamMembers: TeamMember[] = [
-  { image: 'https://avatars.githubusercontent.com/u/124059586?v=4', role: 'Аналитик: Ковалев А.Л.', gitlabIssues: 'https://github.com/sereraguy' },
-  { image: 'https://avatars.githubusercontent.com/u/81161586?v=4', role: 'Бэкендер: Головков И.Е.', gitlabIssues: 'https://github.com/iggosha' },
-  { image: 'https://avatars.githubusercontent.com/u/124059455?v=4', role: 'Фронтендер: Виноходов Д.А.', gitlabIssues: 'https://github.com/Vawlik' },
-  { image: 'https://avatars.githubusercontent.com/u/121055448?v=4', role: 'Фронтендер: Еременко В.А.', gitlabIssues: 'https://github.com/MisterShady' },
+  { image: "https://avatars.githubusercontent.com/u/124059586?v=4", role: "Аналитик: Ковалев А.Л.", gitlabIssues: "https://github.com/sereraguy" },
+  { image: "https://avatars.githubusercontent.com/u/81161586?v=4", role: "Бэкендер: Головков И.Е.", gitlabIssues: "https://github.com/iggosha" },
+  { image: "https://avatars.githubusercontent.com/u/124059455?v=4", role: "Фронтендер: Виноходов Д.А.", gitlabIssues: "https://github.com/Vawlik" },
+  { image: "https://avatars.githubusercontent.com/u/121055448?v=4", role: "Фронтендер: Еременко В.А.", gitlabIssues: "https://github.com/MisterShady" },
 ];
 
 const AboutUs = () => {
@@ -32,7 +32,7 @@ const AboutUs = () => {
           <div key={index} className="team-member">
             <img src={member.image} alt={member.role} />
             <p>{member.role}</p>
-            <a href={member.gitlabIssues} target="_blank" rel="noopener noreferrer" className="link" style={{ textDecoration: 'none' }}>GitHub </a>
+            <a href={member.gitlabIssues} target="_blank" rel="noopener noreferrer" className="link" style={{ textDecoration: "none" }}>GitHub </a>
           </div>
         ))}
       </div>

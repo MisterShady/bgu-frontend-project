@@ -78,7 +78,7 @@ const WatchProduct = () => {
             <img
               key={img}
               src={img}
-              alt={`Image`}
+              alt={"Image"}
               className={`thumbnail ${img === selectedImage ? "selected" : ""}`}
               onClick={() => setSelectedImage(img)}
             />

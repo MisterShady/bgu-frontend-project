@@ -35,7 +35,7 @@ const Airpods = () => {
       {airpods.map((item) => (
         <motion.div className="card" key={item.id} whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
           <Link to={`/airpods/${item.id}`}>
-          <img src={item.thumbUrl} alt={item.title} className="card-image" />
+            <img src={item.thumbUrl} alt={item.title} className="card-image" />
           </Link>
           <h2>{item.title}</h2>
           <p className="price">{item.price}$</p>
