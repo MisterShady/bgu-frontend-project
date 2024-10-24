@@ -300,3 +300,4 @@ export interface MacDto {
     latest: string;
   };
 }
+

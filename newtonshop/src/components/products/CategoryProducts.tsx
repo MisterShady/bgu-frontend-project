@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { getIpads } from "../../Api";
-import { IpadDto } from "../../types";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import ImageWrapper from "../handler/ImageWrapper";
 import { AxiosError } from "axios";
+import { getProductsByCategory } from "../../Api";
+import { ProductDto } from "../../Api";
+import ImageWrapper from "../handler/ImageWrapper";
 
-const Ipads = () => {
-  const [ipads, setIpads] = useState<IpadDto[]>([]);
+interface ProductProps {
+  category: string;
+}
+
+const CategoryProducts = ({ category }: ProductProps) => {
+  const [products, setProducts] = useState<ProductDto[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const ipadsData = await getIpads();
-        setIpads(ipadsData);
+        const productsData = await getProductsByCategory(category);
+        setProducts(productsData);
       } catch (error) {
         const axiosError = error as AxiosError;
         setError(axiosError.message || "Ошибка загрузки данных");
@@ -25,7 +29,7 @@ const Ipads = () => {
       const axiosError = error as AxiosError;
       setError(axiosError.message || "Ошибка загрузки данных");
     });
-  }, []);
+  }, [category]);
 
   if (error) {
     return <div>Ошибка загрузки данных: {error}</div>;
@@ -33,9 +37,9 @@ const Ipads = () => {
 
   return (
     <div className="card-container">
-      {ipads.map((item) => (
+      {products.map((item) => (
         <motion.div className="card" key={item.id} whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
-          <Link to={`/ipads/${item.id}`}>
+          <Link to={`/${category}/${item.id}`}>
             <ImageWrapper src={item.thumbUrl} alt={item.title} className="card-image" />
           </Link>
           <h2>{item.title}</h2>
@@ -47,4 +51,4 @@ const Ipads = () => {
   );
 };
 
-export default Ipads;
+export default CategoryProducts;
