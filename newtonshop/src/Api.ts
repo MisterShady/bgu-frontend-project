@@ -12,14 +12,8 @@ export interface ProductDto {
   type: string;
 }
 
-export const getPopularProducts = async (page = 0, size = 0): Promise<ProductDto[]> => {
-  const response = await axios.get<ProductDto[]>(`${BASE_URL}/products/catalog-pages`, {
-    params: {
-      page,
-      size,
-      sort: "title,Asc",
-    },
-  });
+export const getPopularProducts = async (): Promise<ProductDto[]> => {
+  const response = await axios.get<ProductDto[]>(`${BASE_URL}/products/brand-new`);
   return response.data;
 };
 

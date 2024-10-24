@@ -40,7 +40,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className={`navigation-wrapper`}>
+      <div className={"navigation-wrapper"}>
         <div className="navbar-center-container">
           <nav className="navigation">
             <div className="logo">
@@ -56,31 +56,31 @@ const Navbar = () => {
               {isMenuOpen && (
                 <div className="dropdown open">
                   <ul className="dropdown-content">
-                    <li>
-                      <Link to="/macs">
+                    <Link to="/macs" style={{ textDecoration: "none" }}>
+                      <li>
                         <img src="/image/device/mac.svg" alt="MacBook" /> MacBook
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/ipads">
+                      </li>
+                    </Link>
+                    <Link to="/ipads" style={{ textDecoration: "none" }}>
+                      <li>
                         <img src="/image/device/ipad.svg" alt="iPad" /> iPad
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/iphones">
+                      </li>
+                    </Link>
+                    <Link to="/iphones" style={{ textDecoration: "none" }}>
+                      <li>
                         <img src="/image/device/iphone.svg" alt="iPhone" /> iPhone
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/watches">
+                      </li>
+                    </Link>
+                    <Link to="/watches" style={{ textDecoration: "none" }}>
+                      <li>
                         <img src="/image/device/watch.svg" alt="Watch" /> Watch
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="/airpods">
+                      </li>
+                    </Link>
+                    <Link to="/airpods" style={{ textDecoration: "none" }}>
+                      <li style={{ borderRadius: "0 0 15px 15px" }}>
                         <img src="/image/device/airpods.svg" alt="Airpods" /> Airpods
-                      </Link>
-                    </li>
+                      </li>
+                    </Link>
                   </ul>
                 </div>
               )}
@@ -106,9 +106,21 @@ const Navbar = () => {
                       <Link
                         to={`/${toPlural(suggestion.type)}/${suggestion.id}`}
                         onClick={clearSuggestions}
-                        className="suggestion-link"
-                      >
-                        <img src={suggestion.thumbUrl} alt={suggestion.title} className="suggestion-thumb" />
+                        className="suggestion-link">
+                        {suggestion.type === "ipad" ? (
+                          <img
+                            src="/image/placeholder.svg"
+                            alt={suggestion.title}
+                            className="suggestion-thumb"
+                            style={{ width: "50px", height: "50px" }}
+                          />
+                        ) : (
+                          <img
+                            src={suggestion.thumbUrl}
+                            alt={suggestion.title}
+                            className="suggestion-thumb"
+                          />
+                        )}
                         <div className="suggestion-info">
                           <span className="suggestion-title">{suggestion.title}</span>
                           <span className="suggestion-price">{suggestion.price}$</span>

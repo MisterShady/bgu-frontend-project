@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { Link } from "react-router-dom"; // Импортируем Link из react-router-dom
 import "./Footer.css";
 
 const Footer = () => {
@@ -40,9 +41,9 @@ const Footer = () => {
           <p>Адрес: г. Москва, ул. Примерная, д. 1</p>
           <p>Телефон: +7 (999) 123-45-67</p>
           <p>Email: example@apple.com</p>
-          <a href="/about-us" className="about-link">
+          <Link to="/about-us" className="about-link"> {/* Используем Link для ссылки на "О нас" */}
             О нас
-          </a>
+          </Link>
         </div>
         <img src="/image/skeleton.gif" alt="Skeleton GIF" className="footer-image" onClick={handleLeftGifClick} />
         <audio ref={audioRefLeft}>

@@ -65,7 +65,7 @@
 .search-bar {
   position: relative;
   flex-grow: 0.8;
-  margin-left: 40px;
+  margin-left: 20px;
   display: flex;
   align-items: center;
   border-radius: 15px;
@@ -134,6 +134,7 @@
   width: 50px;
   height: 50px;
   margin-right: 10px;
+  object-fit: cover;
 }
 
 .suggestion-info {
@@ -197,15 +198,15 @@
 .dropdown-content li {
   padding: 15px;
   transition:
-    background-color 0.3s ease,
-    border 0.3s ease;
-  border-radius: 0;
-}
-
-.dropdown-content li a {
+          background-color 0.3s ease,
+          border 0.3s ease;
   color: white;
   font-family: "Arial", sans-serif;
-  text-decoration: none;
+}
+
+.dropdown-content li:hover {
+  color: white;
+  background-color: #ff6140;
 }
 
 .dropdown-content img {
@@ -213,11 +214,3 @@
   margin-right: 10px;
 }
 
-.dropdown-content li:hover {
-  background-color: #ff6140;
-}
-
-.dropdown-content li:hover:last-child {
-  background-color: #ff6140;
-  border-radius: 0 0 15px 15px;
-}
