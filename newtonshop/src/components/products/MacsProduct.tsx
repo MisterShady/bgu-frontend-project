@@ -15,7 +15,7 @@ const MacsProduct = () => {
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
   const [selectedRam, setSelectedRam] = useState<string | null>(null);
 
-  const getDataOrFallback = (obj: any, key: string, fallback: any) => {
+  const getDataOrFallback = <T, K extends keyof T>(obj: T | null | undefined, key: K, fallback: T[K]): T[K] => {
     return obj && obj[key] !== undefined ? obj[key] : fallback;
   };
 

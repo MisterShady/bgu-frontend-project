@@ -5,7 +5,6 @@ import './NotFound.css';
 const NotFound = () => {
   const [soundPlayed, setSoundPlayed] = useState(false);
 
-  // Загрузите звуковой файл
   const sound = new Audio('/image/mememe.mp3');
 
   const handleClick = () => {

@@ -18,7 +18,8 @@ const IpadProduct = () => {
   const [selectedApplePencil, setSelectedApplePencil] = useState<string | null>(null);
   const [selectedSmartKeyboard, setSelectedSmartKeyboard] = useState<string | null>(null);
 
-  const getDataOrFallback = (data: any) => (data && data.length > 0 ? data : null);
+  const getDataOrFallback = (data: string | number | (string | number)[] | null): string | number | (string | number)[] | null =>
+    data && (Array.isArray(data) ? data.length > 0 : true) ? data : null;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -195,7 +196,7 @@ const IpadProduct = () => {
             </div>
           )}
 
-          {getDataOrFallback(ipad.camera.rearCameras) && (
+          {getDataOrFallback(ipad.camera.rearCameras?.map(cam => `${cam.resolution} (${cam.type})`)) && (
             <div className="description-block">
               <h3>Камеры</h3>
               <p>

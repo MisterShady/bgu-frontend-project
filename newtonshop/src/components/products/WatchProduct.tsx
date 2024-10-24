@@ -16,7 +16,8 @@ const WatchProduct = () => {
   const [selectedVersionIndex, setSelectedVersionIndex] = useState<number | null>(null);
   const [selectedSizeIndex, setSelectedSizeIndex] = useState<number | null>(null);
 
-  const getDataOrFallback = (data: any) => (data && data.length > 0 ? data : null);
+  const getDataOrFallback = (data: string | number | (string | number)[] | null): string | number | (string | number)[] | null =>
+    data && (Array.isArray(data) ? data.length > 0 : true) ? data : null;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -207,7 +208,7 @@ const WatchProduct = () => {
             </div>
           )}
 
-          {getDataOrFallback(watch.caseTypes) && watch.caseTypes[0]?.material && (
+          {(watch.caseTypes) && watch.caseTypes[0]?.material && (
             <div className="description-block">
               <h3>Материал корпуса</h3>
               <p>{watch.caseTypes[0].material}</p>
@@ -231,7 +232,7 @@ const WatchProduct = () => {
             </div>
           )}
 
-          {getDataOrFallback(watch.sensors) && (
+          {(watch.sensors) && (
             <div className="description-block">
               <h3>Датчики</h3>
               {watch.sensors.map((sensor) => (
@@ -242,7 +243,7 @@ const WatchProduct = () => {
             </div>
           )}
 
-          {getDataOrFallback(watch.dimensions) && (
+          {(watch.dimensions) && (
             <div className="description-block">
               <h3>Размеры и вес</h3>
               <p>
