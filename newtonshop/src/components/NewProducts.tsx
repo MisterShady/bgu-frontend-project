@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getPopularProducts, ProductDto } from "../Api";
+import LazyLoad from 'react-lazyload';
 import ImageWrapper from "./handler/ImageWrapper";
 import { Link } from "react-router-dom";
 
@@ -30,18 +31,18 @@ const NewProducts = () => {
 
   const getProductLink = (product: ProductDto) => {
     switch (product.type) {
-    case "airpods":
-      return `/airpods/${product.id}`;
-    case "iphone":
-      return `/iphones/${product.id}`;
-    case "ipad":
-      return `/ipads/${product.id}`;
-    case "watch":
-      return `/watches/${product.id}`;
-    case "mac":
-      return `/macs/${product.id}`;
-    default:
-      return `/brand-new/${product.id}`;
+      case "airpods":
+        return `/airpods/${product.id}`;
+      case "iphone":
+        return `/iphones/${product.id}`;
+      case "ipad":
+        return `/ipads/${product.id}`;
+      case "watch":
+        return `/watches/${product.id}`;
+      case "mac":
+        return `/macs/${product.id}`;
+      default:
+        return `/brand-new/${product.id}`;
     }
   };
 
@@ -52,7 +53,9 @@ const NewProducts = () => {
         {products.map((product) => (
           <div key={product.id} className="product-item">
             <Link to={getProductLink(product)} className="product-item-link">
-              <ImageWrapper src={product.thumbUrl} alt={product.title} className="product-image" />
+              <LazyLoad height={200} offset={100}>
+                <ImageWrapper src={product.thumbUrl} alt={product.title} className="product-image" />
+              </LazyLoad>
             </Link>
             <h3>{product.title}</h3>
             <div className="price-container1">

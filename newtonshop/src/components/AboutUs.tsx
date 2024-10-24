@@ -1,4 +1,5 @@
 import React from "react";
+import LazyLoad from 'react-lazyload';
 import "./AboutUs.css";
 
 interface TeamMember {
@@ -30,7 +31,9 @@ const AboutUs = () => {
       <div className="team">
         {teamMembers.map((member, index) => (
           <div key={index} className="team-member">
-            <img src={member.image} alt={member.role} />
+            <LazyLoad height={200} offset={100}>
+              <img src={member.image} alt={member.role} />
+            </LazyLoad>
             <p>{member.role}</p>
             <a href={member.gitlabIssues} target="_blank" rel="noopener noreferrer" className="link" style={{ textDecoration: "none" }}>GitHub </a>
           </div>

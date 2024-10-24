@@ -1,5 +1,6 @@
 import React, { CSSProperties, useState } from "react";
 import Placeholder1 from "./LargePlaceholder";
+import LazyLoad from "react-lazyload";
 
 interface ImageWrapperProps {
   src: string;
@@ -20,7 +21,9 @@ const ImageWrapper = ({ src, alt, className, style }: ImageWrapperProps) => {
       {isError ? (
         <Placeholder1 />
       ) : (
-        <img src={src} alt={alt} className={className} onError={handleImageError} style={style} />
+        <LazyLoad>
+          <img src={src} alt={alt} className={className} onError={handleImageError} style={style} />
+        </LazyLoad>
       )}
     </div>
   );

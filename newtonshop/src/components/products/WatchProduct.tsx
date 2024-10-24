@@ -4,6 +4,7 @@ import { getWatchById } from "../../Api";
 import { WatchDto } from "../../types";
 import "./ProductDetails.css";
 import { AxiosError } from "axios";
+import LazyLoad from 'react-lazyload';
 
 const WatchProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -86,20 +87,22 @@ const WatchProduct = () => {
 
   const totalPrice = watch.price + selectedBandTypePrice + selectedCasePrice + selectedVersionPrice + selectedSizePrice;
 
-
   return (
     <div className="product-details">
       <div className="product-images">
-        <img src={selectedImage || watch.thumbUrl} alt={watch.title} className="main-image" />
+        <LazyLoad>
+          <img src={selectedImage || watch.thumbUrl} alt={watch.title} className="main-image" />
+        </LazyLoad>
         <div className="image-thumbnails">
           {watch.images.map((img) => (
-            <img
-              key={img}
-              src={img}
-              alt={"Image"}
-              className={`thumbnail ${img === selectedImage ? "selected" : ""}`}
-              onClick={() => setSelectedImage(img)}
-            />
+            <LazyLoad key={img}>
+              <img
+                src={img}
+                alt={"Image"}
+                className={`thumbnail ${img === selectedImage ? "selected" : ""}`}
+                onClick={() => setSelectedImage(img)}
+              />
+            </LazyLoad>
           ))}
         </div>
       </div>

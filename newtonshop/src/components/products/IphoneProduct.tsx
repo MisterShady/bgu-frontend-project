@@ -5,6 +5,7 @@ import { IphoneDto } from "../../types";
 import "./ProductDetails.css";
 import { colorMapping } from "./colorMapping";
 import { AxiosError } from "axios";
+import LazyLoad from 'react-lazyload';
 
 const IphoneProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -56,16 +57,19 @@ const IphoneProduct = () => {
   return (
     <div className="product-details">
       <div className="product-images">
-        <img src={selectedImage || iphone.thumbUrl} alt={iphone.title} className="main-image" />
+        <LazyLoad>
+          <img src={selectedImage || iphone.thumbUrl} alt={iphone.title} className="main-image" />
+        </LazyLoad>
         <div className="image-thumbnails">
           {iphone.images.map((img) => (
-            <img
-              key={img}
-              src={img}
-              alt={`Image ${img + 1}`}
-              className={`thumbnail ${img === selectedImage ? "selected" : ""}`}
-              onClick={() => setSelectedImage(img)}
-            />
+            <LazyLoad key={img}>
+              <img
+                src={img}
+                alt={`Image ${img + 1}`}
+                className={`thumbnail ${img === selectedImage ? "selected" : ""}`}
+                onClick={() => setSelectedImage(img)}
+              />
+            </LazyLoad>
           ))}
         </div>
       </div>

@@ -4,6 +4,7 @@ import { getAirpodsById } from "../../Api";
 import { AirpodsDto } from "../../types";
 import { AxiosError } from "axios";
 import { colorMapping } from "./colorMapping";
+import LazyLoad from "react-lazyload";
 import "./ProductDetails.css";
 
 const AirpodsProduct = () => {
@@ -64,16 +65,19 @@ const AirpodsProduct = () => {
   return (
     <div className="product-details">
       <div className="product-images">
-        <img src={selectedImage || airpods.thumbUrl} alt={airpods.title} className="main-image" />
+        <LazyLoad height={200} offset={100}>
+          <img src={selectedImage || airpods.thumbUrl} alt={airpods.title} className="main-image" />
+        </LazyLoad>
         <div className="image-thumbnails">
           {airpods.images.map((image, index) => (
-            <img
-              key={image}
-              src={image}
-              alt={`AirPods Image ${index + 1}`}
-              className={`thumbnail ${image === selectedImage ? "selected" : ""}`}
-              onClick={() => setSelectedImage(image)}
-            />
+            <LazyLoad key={image} height={50} offset={100}>
+              <img
+                src={image}
+                alt={`AirPods Image ${index + 1}`}
+                className={`thumbnail ${image === selectedImage ? "selected" : ""}`}
+                onClick={() => setSelectedImage(image)}
+              />
+            </LazyLoad>
           ))}
         </div>
       </div>
@@ -97,11 +101,13 @@ const AirpodsProduct = () => {
                   onClick={() => handleColorChange(color)}
                 ></div>
                 <div className="color-tooltip">
-                  <img
-                    src={getImagesByColor(airpods.images, color)[0] || airpods.thumbUrl}
-                    alt={color}
-                    style={{ width: "100px", height: "100px" }}
-                  />
+                  <LazyLoad height={100} offset={100}>
+                    <img
+                      src={getImagesByColor(airpods.images, color)[0] || airpods.thumbUrl}
+                      alt={color}
+                      style={{ width: "100px", height: "100px" }}
+                    />
+                  </LazyLoad>
                   <p>{color}</p>
                 </div>
               </div>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { searchProducts, ProductDto } from "../Api";
 import { toPlural } from "../utils";
 import "./Navbar.css";
+import LazyLoad from "react-lazyload";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,7 +42,9 @@ const Navbar = () => {
           <nav className="navigation">
             <div className="logo">
               <Link to="/">
-                <img src="/image/logo.png" alt="Apple Store" />
+                <LazyLoad>
+                  <img src="/image/logo.png" alt="Apple Store" />
+                </LazyLoad>
               </Link>
             </div>
 

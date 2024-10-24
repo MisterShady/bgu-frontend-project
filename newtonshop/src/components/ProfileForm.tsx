@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./Profile.css";
+import LazyLoad from "react-lazyload";
 
 const ProfileForm = () => {
   const [avatar, setAvatar] = useState<string>("/image/account.png");
@@ -32,7 +33,9 @@ const ProfileForm = () => {
           onMouseLeave={() => setIsMenuOpen(false)}
           onClick={handleAvatarClick}
         >
-          <img src={avatar} alt="Avatar" className="avatar" />
+         <LazyLoad>
+           <img src={avatar} alt="Avatar" className="avatar" />
+         </LazyLoad>
           {isMenuOpen && (
             <div>
               <input

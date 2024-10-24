@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { Link } from "react-router-dom"; // Импортируем Link из react-router-dom
 import "./Footer.css";
+import LazyLoad from "react-lazyload";
 
 const Footer = () => {
   const audioRefLeft = useRef<HTMLAudioElement>(null);
@@ -36,7 +37,9 @@ const Footer = () => {
   return (
     <div className="footer-wrapper">
       <footer className="footer">
-        <img src="/image/alien.gif" alt="Alien GIF" className="footer-image" onClick={handleRightGifClick} />
+        <LazyLoad>
+          <img src="/image/alien.gif" alt="Alien GIF" className="footer-image" onClick={handleRightGifClick} />
+        </LazyLoad>
         <div className="footer-content">
           <p>Адрес: г. Москва, ул. Примерная, д. 1</p>
           <p>Телефон: +7 (999) 123-45-67</p>
@@ -45,18 +48,17 @@ const Footer = () => {
             О нас
           </Link>
         </div>
-        <img src="/image/skeleton.gif" alt="Skeleton GIF" className="footer-image" onClick={handleLeftGifClick} />
+        <LazyLoad>
+          <img src="/image/skeleton.gif" alt="Skeleton GIF" className="footer-image" onClick={handleLeftGifClick} />
+        </LazyLoad>
         <audio ref={audioRefLeft}>
           <source src="/image/igor.ogg" type="audio/ogg" />
-          Ваш браузер не поддерживает аудио.
         </audio>
         <audio ref={audioRefRight}>
           <source src="/image/shimi.ogg" type="audio/ogg" />
-          Ваш браузер не поддерживает аудио.
         </audio>
         <audio ref={audioRefAlien}>
           <source src="/image/alien%20zip.mp3" type="audio/ogg" />
-          Ваш браузер не поддерживает аудио.
         </audio>
       </footer>
     </div>

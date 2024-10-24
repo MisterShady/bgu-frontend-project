@@ -2,6 +2,7 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import LazyLoad from "react-lazyload";
 
 const Carousel = () => {
   const settings = {
@@ -17,13 +18,19 @@ const Carousel = () => {
   return (
     <Slider {...settings}>
       <div>
-        <img src="/image/carousel/slide1.png" alt="Slide 1" />
+        <LazyLoad>
+          <img src="/image/carousel/slide1.png" alt="Slide 1" />
+        </LazyLoad>
       </div>
       <div>
-        <img src="/image/carousel/slide2.png" alt="Slide 2" />
+        <LazyLoad>
+          <img src="/image/carousel/slide2.png" alt="Slide 2" />
+        </LazyLoad>
       </div>
       <div>
-        <img src="/image/carousel/slide3.png" alt="Slide 3" />
+        <LazyLoad>
+          <img src="/image/carousel/slide3.png" alt="Slide 3" />
+        </LazyLoad>
       </div>
     </Slider>
   );

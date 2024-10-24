@@ -5,6 +5,7 @@ import { MacDto } from "../../types";
 import "./ProductDetails.css";
 import { colorMapping } from "./colorMapping";
 import { AxiosError } from "axios";
+import LazyLoad from 'react-lazyload';
 
 const MacsProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -67,16 +68,19 @@ const MacsProduct = () => {
   return (
     <div className="product-details">
       <div className="product-images">
-        <img src={selectedImage || mac.thumbUrl} alt={mac.title} className="main-image" />
+        <LazyLoad height={200} offset={100}>
+          <img src={selectedImage || mac.thumbUrl} alt={mac.title} className="main-image" />
+        </LazyLoad>
         <div className="image-thumbnails">
           {mac.images?.map((img) => (
-            <img
-              key={img}
-              src={img}
-              alt={`Image ${img}`}
-              className={`thumbnail ${img === selectedImage ? "selected" : ""}`}
-              onClick={() => setSelectedImage(img)}
-            />
+            <LazyLoad key={img} height={50} offset={100}>
+              <img
+                src={img}
+                alt={`Image ${img}`}
+                className={`thumbnail ${img === selectedImage ? "selected" : ""}`}
+                onClick={() => setSelectedImage(img)}
+              />
+            </LazyLoad>
           ))}
         </div>
       </div>

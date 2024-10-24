@@ -6,6 +6,7 @@ import { IpadDto } from "../../types";
 import "./ProductDetails.css";
 import ImageWrapper from "../handler/ImageWrapper";
 import { colorMapping } from "./colorMapping";
+import LazyLoad from 'react-lazyload';
 
 const IpadProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,13 @@ const IpadProduct = () => {
   const [selectedConnectivity, setSelectedConnectivity] = useState<string | null>(null);
   const [selectedApplePencil, setSelectedApplePencil] = useState<string | null>(null);
   const [selectedSmartKeyboard, setSelectedSmartKeyboard] = useState<string | null>(null);
+
+  const selectedStoragePrice = ipad?.storages.find((storage) => storage.size === selectedStorage)?.additionalPrice || 0;
+  const selectedConnectivityPrice = ipad?.connectivities.find((conn) => conn.type === selectedConnectivity)?.additionalPrice || 0;
+  const selectedApplePencilPrice = ipad?.applePencils.find((pencil) => pencil.type === selectedApplePencil)?.additionalPrice || 0;
+  const selectedSmartKeyboardPrice = ipad?.smartKeyboards.find((keyboard) => keyboard.type === selectedSmartKeyboard)?.additionalPrice || 0;
+
+  const totalPrice = ipad ? ipad.price + selectedStoragePrice + selectedConnectivityPrice + selectedApplePencilPrice + selectedSmartKeyboardPrice : 0;
 
   const getDataOrFallback = (data: string | number | (string | number)[] | null): string | number | (string | number)[] | null =>
     data && (Array.isArray(data) ? data.length > 0 : true) ? data : null;
@@ -60,30 +68,22 @@ const IpadProduct = () => {
     return <div>Загрузка...</div>;
   }
 
-  const selectedStoragePrice = ipad.storages.find((storage) => storage.size === selectedStorage)?.additionalPrice || 0;
-  const selectedConnectivityPrice =
-    ipad.connectivities.find((conn) => conn.type === selectedConnectivity)?.additionalPrice || 0;
-  const selectedApplePencilPrice =
-    ipad.applePencils.find((pencil) => pencil.type === selectedApplePencil)?.additionalPrice || 0;
-  const selectedSmartKeyboardPrice =
-    ipad.smartKeyboards.find((keyboard) => keyboard.type === selectedSmartKeyboard)?.additionalPrice || 0;
-
-  const totalPrice =
-    ipad.price + selectedStoragePrice + selectedConnectivityPrice + selectedApplePencilPrice + selectedSmartKeyboardPrice;
-
   return (
     <div className="product-details">
       <div className="product-images">
-        <ImageWrapper src={selectedImage || ipad.thumbUrl} alt={ipad.title} className="main-image" />
+        <LazyLoad height={200} offset={100}>
+          <ImageWrapper src={selectedImage || ipad.thumbUrl} alt={ipad.title} className="main-image" />
+        </LazyLoad>
         <div className="image-thumbnails">
           {ipad.images.map((img) => (
-            <img
-              key={img}
-              src={img}
-              alt={`Image ${img + 1}`}
-              className={`thumbnail ${img === selectedImage ? "selected" : ""}`}
-              onClick={() => setSelectedImage(img)}
-            />
+            <LazyLoad key={img} height={50} offset={100}>
+              <img
+                src={img}
+                alt={`Image ${img + 1}`}
+                className={`thumbnail ${img === selectedImage ? "selected" : ""}`}
+                onClick={() => setSelectedImage(img)}
+              />
+            </LazyLoad>
           ))}
         </div>
       </div>
