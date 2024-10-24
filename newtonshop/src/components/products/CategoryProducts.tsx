@@ -11,7 +11,7 @@ interface ProductProps {
   category: string;
 }
 
-const CategoryProducts: React.FC<ProductProps> = ({ category }) => {
+const CategoryProducts = ({ category }: ProductProps) => {
   const [products, setProducts] = useState<ProductDto[]>([]);
   const [error, setError] = useState<string | null>(null);
 
