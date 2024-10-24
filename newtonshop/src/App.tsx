@@ -17,7 +17,8 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import HomePage from "./components/HomePage";
 import ProfileForm from "./components/ProfileForm";
-import AboutUs from "./components/AboutUs"; // Импортируем компонент "О нас"
+import AboutUs from "./components/AboutUs";
+import NotFound from "./components/NotFound";
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<ProfileForm />} />
             <Route path="/about-us" element={<AboutUs />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
         <Footer />

@@ -8,7 +8,6 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<ProductDto[]>([]);
-  const [isSearchActive, setIsSearchActive] = useState(false);
 
   const toggleMenu = useCallback(() => {
     setIsMenuOpen((prev) => !prev);
@@ -20,13 +19,11 @@ const Navbar = () => {
         try {
           const filteredSuggestions = await searchProducts(searchTerm, 0, 5);
           setSuggestions(filteredSuggestions);
-          setIsSearchActive(true);
         } catch (error) {
           console.error("Ошибка при поиске продуктов:", error);
         }
       } else {
         setSuggestions([]);
-        setIsSearchActive(false);
       }
     }, 300);
 
@@ -35,7 +32,6 @@ const Navbar = () => {
 
   const clearSuggestions = useCallback(() => {
     setSuggestions([]);
-    setIsSearchActive(false);
   }, []);
 
   return (
@@ -86,7 +82,7 @@ const Navbar = () => {
               )}
             </div>
 
-            <div className={`search-bar ${isSearchActive ? "active" : ""}`}>
+            <div className={`search-bar ${suggestions.length > 0 ? "active" : ""}`}>
               <input
                 type="text"
                 placeholder="Поиск товаров..."

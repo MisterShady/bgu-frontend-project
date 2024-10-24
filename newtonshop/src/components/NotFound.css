@@ -1,0 +1,34 @@
+.not-found-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+h1 {
+    font-size: 5rem;
+    color: #dc3545;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.not-found-gif {
+    width: 300px;
+    height: auto;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.back-home-link {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 1.2rem;
+}
+
+.back-home-link:hover {
+    text-decoration: underline;
+}

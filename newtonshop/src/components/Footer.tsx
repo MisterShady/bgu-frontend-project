@@ -41,7 +41,7 @@ const Footer = () => {
           <p>Адрес: г. Москва, ул. Примерная, д. 1</p>
           <p>Телефон: +7 (999) 123-45-67</p>
           <p>Email: example@apple.com</p>
-          <Link to="/about-us" className="about-link"> {/* Используем Link для ссылки на "О нас" */}
+          <Link to="/about-us" className="about-link">
             О нас
           </Link>
         </div>

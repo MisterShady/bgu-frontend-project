@@ -83,19 +83,28 @@ const AirpodsProduct = () => {
 
         <div className="price-container">
           <p className="product-price">${airpods.price}</p>
-          <button className="buy-button">Купить</button>
+          <button className="buy-button">В корзину</button>
         </div>
 
         <div className="product-colors">
           <h3>Выберите цвет:</h3>
           <div className="color-squares">
             {airpods.colors.map((color) => (
-              <div
-                key={color}
-                className={`color-square ${selectedColor === color ? "selected" : ""}`}
-                style={{ backgroundColor: colorMapping[color] || "#fff4f4" }}
-                onClick={() => handleColorChange(color)}
-              ></div>
+              <div key={color} className="color-square-container">
+                <div
+                  className={`color-square ${selectedColor === color ? "selected" : ""}`}
+                  style={{ backgroundColor: colorMapping[color] || "#fff4f4" }}
+                  onClick={() => handleColorChange(color)}
+                ></div>
+                <div className="color-tooltip">
+                  <img
+                    src={getImagesByColor(airpods.images, color)[0] || airpods.thumbUrl}
+                    alt={color}
+                    style={{ width: "100px", height: "100px" }}
+                  />
+                  <p>{color}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>

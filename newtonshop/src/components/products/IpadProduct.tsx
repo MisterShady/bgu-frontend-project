@@ -60,7 +60,15 @@ const IpadProduct = () => {
   }
 
   const selectedStoragePrice = ipad.storages.find((storage) => storage.size === selectedStorage)?.additionalPrice || 0;
-  const totalPrice = ipad.price + selectedStoragePrice;
+  const selectedConnectivityPrice =
+    ipad.connectivities.find((conn) => conn.type === selectedConnectivity)?.additionalPrice || 0;
+  const selectedApplePencilPrice =
+    ipad.applePencils.find((pencil) => pencil.type === selectedApplePencil)?.additionalPrice || 0;
+  const selectedSmartKeyboardPrice =
+    ipad.smartKeyboards.find((keyboard) => keyboard.type === selectedSmartKeyboard)?.additionalPrice || 0;
+
+  const totalPrice =
+    ipad.price + selectedStoragePrice + selectedConnectivityPrice + selectedApplePencilPrice + selectedSmartKeyboardPrice;
 
   return (
     <div className="product-details">
@@ -84,20 +92,24 @@ const IpadProduct = () => {
 
         <div className="price-container">
           <p className="product-price">${totalPrice}</p>
-          <button className="buy-button">Купить</button>
+          <button className="buy-button">В корзину</button>
         </div>
 
         {ipad.colors.length > 1 && (
           <div className="product-colors">
-            <h3>Цвета</h3>
+            <h3>Выберите цвет</h3>
             <div className="color-squares">
               {ipad.colors.map((color) => (
-                <div
-                  key={color}
-                  className={`color-square ${color === selectedColor ? "selected" : ""}`}
-                  onClick={() => setSelectedColor(color)}
-                  style={{ backgroundColor: colorMapping[color] || "transparent" }}
-                />
+                <div key={color} className="color-square-container">
+                  <div
+                    className={`color-square ${color === selectedColor ? "selected" : ""}`}
+                    onClick={() => setSelectedColor(color)}
+                    style={{ backgroundColor: colorMapping[color] || "transparent" }}
+                  />
+                  <div className="color-tooltip">
+                    <p>{color}</p>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -114,7 +126,7 @@ const IpadProduct = () => {
             >
               {ipad.storages.map((storage) => (
                 <option key={storage.size} value={storage.size}>
-                  {storage.size} GB (Дополнительно: ${storage.additionalPrice})
+                  {storage.size} GB {storage.additionalPrice > 0 ? `(Дополнительно: $${storage.additionalPrice})` : ""}
                 </option>
               ))}
             </select>
@@ -128,7 +140,7 @@ const IpadProduct = () => {
             >
               {ipad.connectivities.map((conn) => (
                 <option key={conn.type} value={conn.type}>
-                  {conn.type} (Дополнительно: ${conn.additionalPrice})
+                  {conn.type} {conn.additionalPrice > 0 ? `(Дополнительно: $${conn.additionalPrice})` : ""}
                 </option>
               ))}
             </select>
@@ -142,7 +154,7 @@ const IpadProduct = () => {
             >
               {ipad.applePencils.map((pencil) => (
                 <option key={pencil.type} value={pencil.type}>
-                  {pencil.type} (Дополнительно: ${pencil.additionalPrice})
+                  {pencil.type} {pencil.additionalPrice > 0 ? `(Дополнительно: $${pencil.additionalPrice})` : ""}
                 </option>
               ))}
             </select>
@@ -156,7 +168,7 @@ const IpadProduct = () => {
             >
               {ipad.smartKeyboards.map((keyboard) => (
                 <option key={keyboard.type} value={keyboard.type}>
-                  {keyboard.type} (Дополнительно: ${keyboard.additionalPrice})
+                  {keyboard.type} {keyboard.additionalPrice > 0 ? `(Дополнительно: $${keyboard.additionalPrice})` : ""}
                 </option>
               ))}
             </select>
@@ -168,7 +180,7 @@ const IpadProduct = () => {
             <div className="description-block">
               <h3>Экран</h3>
               <p>
-                {ipad.display.size} дюймов, {ipad.display.type}, {ipad.display.resolution}, {ipad.display.ppi} PPI,{" "}
+                {ipad.display.size}, {ipad.display.type}, {ipad.display.resolution}, {ipad.display.ppi} PPI,{" "}
                 {ipad.display.refreshRate}Hz
               </p>
             </div>
@@ -213,37 +225,9 @@ const IpadProduct = () => {
             <div className="description-block">
               <h3>Габариты и вес</h3>
               <p>
-                Высота: {ipad.dimensions.height}, Ширина: {ipad.dimensions.width}, Глубина: {ipad.dimensions.depth},
-                Вес: {ipad.dimensions.weight}
+                Высота: {ipad.dimensions.height}, ширина: {ipad.dimensions.width}, толщина: {ipad.dimensions.depth}, вес:{" "}
+                {ipad.dimensions.weight}
               </p>
-            </div>
-          )}
-
-          {getDataOrFallback(ipad.operatingSystem ? [ipad.operatingSystem] : null) && (
-            <div className="description-block">
-              <h3>Операционная система</h3>
-              <p>{ipad.operatingSystem}</p>
-            </div>
-          )}
-
-          {getDataOrFallback(ipad.connectivities) && (
-            <div className="description-block">
-              <h3>Подключение</h3>
-              <p>{ipad.connectivities.map((conn) => conn.type).join(", ")}</p>
-            </div>
-          )}
-
-          {getDataOrFallback(ipad.applePencils) && (
-            <div className="description-block">
-              <h3>Поддержка Apple Pencil</h3>
-              <p>{ipad.applePencils.map((pencil) => pencil.type).join(", ")}</p>
-            </div>
-          )}
-
-          {getDataOrFallback(ipad.smartKeyboards) && (
-            <div className="description-block">
-              <h3>Поддержка Smart Keyboard</h3>
-              <p>{ipad.smartKeyboards.map((keyboard) => keyboard.type).join(", ")}</p>
             </div>
           )}
         </div>

@@ -43,11 +43,6 @@
   margin-bottom: 1rem;
 }
 
-.product-price {
-  font-size: 1.5rem;
-  color: #333;
-}
-
 .product-colors ul {
   list-style-type: none;
   padding: 0;
@@ -117,6 +112,37 @@
 
 .color-square.selected {
   border: 2px solid #000;
+}
+
+.color-square-container {
+  position: relative;
+  display: inline-block;
+}
+
+
+.color-tooltip {
+  visibility: hidden;
+  background-color: #fff;
+  padding: 5px;
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  width: 100px;
+  text-align: center;
+  font-size: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.color-tooltip img {
+  width: 60px;
+  height: 60px;
+}
+
+.color-square-container:hover .color-tooltip {
+  visibility: visible;
 }
 
 .product-description {

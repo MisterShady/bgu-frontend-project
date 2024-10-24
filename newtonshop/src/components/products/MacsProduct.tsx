@@ -86,20 +86,24 @@ const MacsProduct = () => {
 
         <div className="price-container">
           <p className="product-price">${totalPrice}</p>
-          <button className="buy-button">Купить</button>
+          <button className="buy-button">В корзину</button>
         </div>
 
         {getDataOrFallback(mac.colors, "length", 0) > 1 && (
           <div className="product-colors">
-            <h3>Цвета</h3>
+            <h3>Выберите цвет</h3>
             <div className="color-squares">
               {mac.colors.map((color) => (
-                <div
-                  key={color}
-                  className={`color-square ${color === selectedColor ? "selected" : ""}`}
-                  onClick={() => setSelectedColor(color)}
-                  style={{ backgroundColor: colorMapping[color] || "transparent" }}
-                />
+                <div key={color} className="color-square-container">
+                  <div
+                    className={`color-square ${color === selectedColor ? "selected" : ""}`}
+                    onClick={() => setSelectedColor(color)}
+                    style={{ backgroundColor: colorMapping[color] || "transparent" }}
+                  />
+                  <div className="color-tooltip">
+                    <p>{color}</p>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -113,7 +117,8 @@ const MacsProduct = () => {
             <select value={selectedRam || ""} onChange={(e) => setSelectedRam(e.target.value)}>
               {mac.ramMemories?.map((ram) => (
                 <option key={ram.size} value={ram.size}>
-                  {ram.size} GB (Дополнительно: ${ram.additionalPrice})
+                  {ram.size} GB
+                  {ram.additionalPrice > 0 && ` (Дополнительно: $${ram.additionalPrice})`}
                 </option>
               ))}
             </select>
@@ -124,7 +129,8 @@ const MacsProduct = () => {
             <select value={selectedStorage || ""} onChange={(e) => setSelectedStorage(e.target.value)}>
               {mac.storages?.map((storage) => (
                 <option key={storage.size} value={storage.size}>
-                  {storage.size} GB (Дополнительно: ${storage.additionalPrice})
+                  {storage.size} GB
+                  {storage.additionalPrice > 0 && ` (Дополнительно: $${storage.additionalPrice})`}
                 </option>
               ))}
             </select>
@@ -136,7 +142,7 @@ const MacsProduct = () => {
             <div className="description-block">
               <h3>Экран</h3>
               <p>
-                {mac.display.size} дюймов, {mac.display.resolution}, {mac.display.brightness} nits,{" "}
+                {mac.display.size}, {mac.display.resolution}, {mac.display.brightness} nits,{" "}
                 {mac.display.refreshRate}Hz, PPI: {mac.display.ppi}
               </p>
             </div>

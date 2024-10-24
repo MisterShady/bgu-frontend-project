@@ -74,20 +74,24 @@ const IphoneProduct = () => {
 
         <div className="price-container">
           <p className="product-price">${totalPrice}</p>
-          <button className="buy-button">Купить</button>
+          <button className="buy-button">В корзину</button>
         </div>
 
         {iphone.colors.length > 1 && (
           <div className="product-colors">
-            <h3>Цвета</h3>
+            <h3>Выберите цвет</h3>
             <div className="color-squares">
               {iphone.colors.map((color) => (
-                <div
-                  key={color}
-                  className={`color-square ${color === selectedColor ? "selected" : ""}`}
-                  onClick={() => setSelectedColor(color)}
-                  style={{ backgroundColor: colorMapping[color] || "transparent" }}
-                />
+                <div key={color} className="color-square-container">
+                  <div
+                    className={`color-square ${color === selectedColor ? "selected" : ""}`}
+                    onClick={() => setSelectedColor(color)}
+                    style={{ backgroundColor: colorMapping[color] || "transparent" }}
+                  />
+                  <div className="color-tooltip">
+                    <p>{color}</p>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -116,7 +120,7 @@ const IphoneProduct = () => {
             <div className="description-block">
               <h3>Экран</h3>
               <p>
-                {iphone.display.size} дюймов, {iphone.display.resolution}
+                {iphone.display.size}, {iphone.display.resolution}
               </p>
             </div>
           )}
@@ -154,7 +158,7 @@ const IphoneProduct = () => {
           {getDataOrFallback(iphone.battery.capacity) && (
             <div className="description-block">
               <h3>Аккумулятор</h3>
-              <p>{iphone.battery.capacity} мАч</p>
+              <p>{iphone.battery.capacity}</p>
             </div>
           )}
 

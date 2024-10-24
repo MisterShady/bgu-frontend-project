@@ -15,6 +15,7 @@ const WatchProduct = () => {
   const [selectedCaseIndex, setSelectedCaseIndex] = useState<number | null>(null);
   const [selectedVersionIndex, setSelectedVersionIndex] = useState<number | null>(null);
   const [selectedSizeIndex, setSelectedSizeIndex] = useState<number | null>(null);
+
   const getDataOrFallback = (data: any) => (data && data.length > 0 ? data : null);
 
   useEffect(() => {
@@ -69,6 +70,22 @@ const WatchProduct = () => {
     return <div>Загрузка...</div>;
   }
 
+  const selectedBandType = watch.bandTypes[selectedBandTypeIndex || 0];
+  const selectedBandStyle = selectedBandType?.styles[selectedBandStyleIndex || 0];
+  const selectedBandTypePrice = selectedBandStyle?.additionalPrice || 0;
+
+  const selectedCasePrice = watch.caseTypes[selectedCaseIndex || 0]?.additionalPrice || 0;
+  const selectedVersionPrice = watch.versions[selectedVersionIndex || 0]?.additionalPrice || 0;
+
+  const selectedSizePrice = selectedSizeIndex === 0
+    ? watch.size.large.additionalPrice
+    : (typeof watch.size.small === "object" && watch.size.small !== null
+      ? watch.size.small.additionalPrice
+      : 0);
+
+  const totalPrice = watch.price + selectedBandTypePrice + selectedCasePrice + selectedVersionPrice + selectedSizePrice;
+
+
   return (
     <div className="product-details">
       <div className="product-images">
@@ -89,8 +106,8 @@ const WatchProduct = () => {
       <div className="product-info">
         <h1>{watch.title}</h1>
         <div className="price-container">
-          <p className="product-price">${watch.price}</p>
-          <button className="buy-button">Купить</button>
+          <p className="product-price">${totalPrice}</p>
+          <button className="buy-button">В корзину</button>
         </div>
 
         <div className="product-configuration">
@@ -111,6 +128,7 @@ const WatchProduct = () => {
                   {watch.bandTypes[selectedBandTypeIndex].styles.map((style) => (
                     <option key={style.name} value={watch.bandTypes[selectedBandTypeIndex].styles.indexOf(style)}>
                       {style.name} ({style.description})
+                      {style.additionalPrice > 0 && ` (Дополнительно: $${style.additionalPrice})`}
                     </option>
                   ))}
                 </select>
@@ -125,6 +143,7 @@ const WatchProduct = () => {
                 {watch.caseTypes.map((caseType) => (
                   <option key={caseType.material} value={watch.caseTypes.indexOf(caseType)}>
                     {caseType.material} ({caseType.description})
+                    {caseType.additionalPrice > 0 && ` (Дополнительно: $${caseType.additionalPrice})`}
                   </option>
                 ))}
               </select>
@@ -138,6 +157,7 @@ const WatchProduct = () => {
                 {watch.versions.map((version) => (
                   <option key={version.type} value={watch.versions.indexOf(version)}>
                     {version.type} ({version.description})
+                    {version.additionalPrice > 0 && ` (Дополнительно: $${version.additionalPrice})`}
                   </option>
                 ))}
               </select>
@@ -149,11 +169,13 @@ const WatchProduct = () => {
               <h4>Размер</h4>
               <select onChange={(e) => setSelectedSizeIndex(Number(e.target.value))}>
                 <option value={0}>
-                  {watch.size.large.name} (Доплата: ${watch.size.large.additionalPrice})
+                  {watch.size.large.name}
+                  {watch.size.large.additionalPrice > 0 && ` (Дополнительно: $${watch.size.large.additionalPrice})`}
                 </option>
                 {watch.size.small && typeof watch.size.small !== "string" && (
                   <option value={1}>
-                    {watch.size.small.name} (Доплата: ${watch.size.small.additionalPrice})
+                    {watch.size.small.name}
+                    {watch.size.small.additionalPrice > 0 && ` (Дополнительно: $${watch.size.small.additionalPrice})`}
                   </option>
                 )}
                 {typeof watch.size.small === "string" && <option value={1}>{watch.size.small}</option>}
