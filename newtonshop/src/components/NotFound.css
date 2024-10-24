@@ -6,12 +6,12 @@
     text-align: center;
 }
 
-h1 {
+.not-found-container h1 {
     font-size: 5rem;
     color: #dc3545;
 }
 
-h2 {
+.not-found-container h2 {
     font-size: 2rem;
     margin-bottom: 20px;
 }
