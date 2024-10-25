@@ -78,6 +78,9 @@
   flex-direction: column;
   align-items: center;
 }
+.new-products h3 {
+  color: black;
+}
 
 .product-list {
   display: flex;
@@ -98,6 +101,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100%;
 }
 
 .product-item:hover {
@@ -164,6 +168,7 @@
 }
 
 .quick-search {
+  margin-top: 60px;
   margin-bottom: 40px;
 }
 

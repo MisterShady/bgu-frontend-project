@@ -31,18 +31,18 @@ const NewProducts = () => {
 
   const getProductLink = (product: ProductDto) => {
     switch (product.type) {
-    case "airpods":
-      return `/airpods/${product.id}`;
-    case "iphone":
-      return `/iphones/${product.id}`;
-    case "ipad":
-      return `/ipads/${product.id}`;
-    case "watch":
-      return `/watches/${product.id}`;
-    case "mac":
-      return `/macs/${product.id}`;
-    default:
-      return `/brand-new/${product.id}`;
+      case "airpods":
+        return `/airpods/${product.id}`;
+      case "iphone":
+        return `/iphones/${product.id}`;
+      case "ipad":
+        return `/ipads/${product.id}`;
+      case "watch":
+        return `/watches/${product.id}`;
+      case "mac":
+        return `/macs/${product.id}`;
+      default:
+        return `/brand-new/${product.id}`;
     }
   };
 
@@ -51,20 +51,21 @@ const NewProducts = () => {
       <h2>Новинки в продаже </h2>
       <div className="product-list">
         {products.map((product) => (
-          <div key={product.id} className="product-item">
-            <Link to={getProductLink(product)} className="product-item-link">
+          <Link key={product.id} to={getProductLink(product)} className="product-item-link"
+                style={{ textDecoration: "none" }}>
+            <div className="product-item">
               <LazyLoad height={200} offset={100}>
                 <ImageWrapper src={product.thumbUrl} alt={product.title} className="product-image" />
               </LazyLoad>
-            </Link>
-            <h3>{product.title}</h3>
-            <div className="price-container1">
-              <span className="price-box">{product.price}$</span>
-              <button className="cart-icon-container">
-                <img src="/image/cart-white.png" alt="Cart" className="cart-icon-popular" />
-              </button>
+              <h3>{product.title}</h3>
+              <div className="price-container1">
+                <span className="price-box">{product.price}$</span>
+                <button className="cart-icon-container">
+                  <img src="/image/cart-white.png" alt="Cart" className="cart-icon-popular" />
+                </button>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

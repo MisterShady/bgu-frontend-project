@@ -36,16 +36,16 @@ const CategoryProducts = ({ category }: ProductProps) => {
   const productList = useMemo(
     () => products.map((item) => (
       <LazyLoad key={item.id} height={200} offset={100}>
-        <motion.div className="card" whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
-          <Link to={`/${category}/${item.id}`}>
+        <Link to={`/${category}/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <motion.div className="card" whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
             <LazyLoad>
               <ImageWrapper src={item.thumbUrl} alt={item.title} className="card-image" />
             </LazyLoad>
-          </Link>
-          <h2>{item.title}</h2>
-          <p className="price">{item.price}$</p>
-          <button className="buy-button">В корзину</button>
-        </motion.div>
+            <h2>{item.title}</h2>
+            <p className="price">{item.price}$</p>
+            <button className="buy-button">В корзину</button>
+          </motion.div>
+        </Link>
       </LazyLoad>
     )),
     [products, category],
