@@ -6,7 +6,7 @@ const Placeholder1 = () => {
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
       <LazyLoad>
         <img src="/image/placeholder.svg" alt="Placeholder"
-                     style={{ width: "100%", height: "100%" }} />
+          style={{ width: "100%", height: "100%" }} />
       </LazyLoad>
     </div>
   );

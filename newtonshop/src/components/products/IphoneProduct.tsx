@@ -5,7 +5,7 @@ import { IphoneDto } from "../../types";
 import "./ProductDetails.css";
 import { colorMapping } from "./colorMapping";
 import { AxiosError } from "axios";
-import LazyLoad from 'react-lazyload';
+import LazyLoad from "react-lazyload";
 
 const IphoneProduct = () => {
   const { id } = useParams<{ id: string }>();

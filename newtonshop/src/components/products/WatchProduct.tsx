@@ -4,7 +4,7 @@ import { getWatchById } from "../../Api";
 import { WatchDto } from "../../types";
 import "./ProductDetails.css";
 import { AxiosError } from "axios";
-import LazyLoad from 'react-lazyload';
+import LazyLoad from "react-lazyload";
 
 const WatchProduct = () => {
   const { id } = useParams<{ id: string }>();

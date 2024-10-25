@@ -6,7 +6,7 @@ import { IpadDto } from "../../types";
 import "./ProductDetails.css";
 import ImageWrapper from "../handler/ImageWrapper";
 import { colorMapping } from "./colorMapping";
-import LazyLoad from 'react-lazyload';
+import LazyLoad from "react-lazyload";
 
 const IpadProduct = () => {
   const { id } = useParams<{ id: string }>();
