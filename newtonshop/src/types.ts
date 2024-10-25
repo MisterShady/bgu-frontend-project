@@ -300,4 +300,24 @@ export interface MacDto {
     latest: string;
   };
 }
+export interface UserDto {
+  id: number;
+  email: string | null;
+  phoneNumber: string;
+  fullName: string;
+  dateOfBirth: string | null;
+  username: string;
+  password: string;
+  role: string;
+  credentialsNonExpired: boolean;
+  accountNonExpired: boolean;
+  accountNonLocked: boolean;
+  authorities: {
+    authority: string;
+  }[];
+  enabled: boolean;
+}
+export interface TokenDto {
+  token: string;
+}
 

@@ -1,14 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { postSignIn } from "../Api";
 import "./Auth.css";
 
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Здесь будет логика авторизации
-    navigate("/profile");
+
+    try {
+      const userData = {
+        username,
+        password,
+      };
+
+      const response = await postSignIn(userData);
+      const { token } = response;
+
+      localStorage.setItem("token", token);
+
+      navigate("/profile");
+    } catch (error) {
+      console.error("Ошибка авторизации:", error);
+      alert("Ошибка авторизации");
+    }
   };
 
   return (
@@ -19,12 +37,26 @@ const Login = () => {
       <h2>Авторизация</h2>
       <form onSubmit={handleLogin}>
         <div className="auth-input-container">
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" required className="auth-input-container input" />
+          <label htmlFor="username">Логин:</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            className="auth-input-container input"
+          />
         </div>
         <div className="auth-input-container">
           <label htmlFor="password">Пароль:</label>
-          <input type="password" id="password" required className="auth-input-container input" />
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="auth-input-container input"
+          />
         </div>
         <button type="submit" className="submit-button">
           Войти

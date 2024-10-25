@@ -1,12 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Profile.css";
 import LazyLoad from "react-lazyload";
+import { getCurrentProfile } from '../Api';
+import { UserDto } from "../types";
 
 const ProfileForm = () => {
   const [avatar, setAvatar] = useState<string>("/image/account.png");
-  // const [profilePicture, setProfilePicture] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [orders] = useState<string[]>([]);
+  const [userData, setUserData] = useState<UserDto | null>(null);
+  const [formData, setFormData] = useState<UserDto>({
+    id: 0,
+    email: '',
+    phoneNumber: '',
+    fullName: '',
+    dateOfBirth: '',
+    username: '',
+    password: '',
+    role: '',
+    credentialsNonExpired: true,
+    accountNonExpired: true,
+    accountNonLocked: true,
+    authorities: [],
+    enabled: true,
+  });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const data = await getCurrentProfile(token);
+          setUserData(data);
+          setFormData(data);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -14,14 +48,16 @@ const ProfileForm = () => {
     }
   };
 
-  // const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     if (e.target.files) {
-  //         setProfilePicture(URL.createObjectURL(e.target.files[0]));
-  //     }
-  // };
-
   const handleAvatarClick = () => {
     document.getElementById("avatar-upload")?.click();
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   return (
@@ -33,9 +69,9 @@ const ProfileForm = () => {
           onMouseLeave={() => setIsMenuOpen(false)}
           onClick={handleAvatarClick}
         >
-         <LazyLoad>
-           <img src={avatar} alt="Avatar" className="avatar" />
-         </LazyLoad>
+          <LazyLoad>
+            <img src={avatar} alt="Avatar" className="avatar" />
+          </LazyLoad>
           {isMenuOpen && (
             <div>
               <input
@@ -53,31 +89,31 @@ const ProfileForm = () => {
           <div className="input-row">
             <div className="profile-input-container">
               <label htmlFor="email">Email:</label>
-              <input type="email" id="email" required className="profile-input" />
+              <input type="email" id="email" name="email" value={formData.email || ''} onChange={handleChange} required className="profile-input" />
             </div>
             <div className="profile-input-container">
               <label htmlFor="phone">Номер телефона:</label>
-              <input type="tel" id="phone" required className="profile-input" />
+              <input type="tel" id="phone" name="phoneNumber" value={formData.phoneNumber || ''} onChange={handleChange} required className="profile-input" />
             </div>
           </div>
           <div className="input-row">
             <div className="profile-input-container">
               <label htmlFor="firstName">Имя:</label>
-              <input type="text" id="firstName" required className="profile-input" />
+              <input type="text" id="firstName" name="fullName" value={formData.fullName.split(' ')[0] || ''} onChange={handleChange} required className="profile-input" />
             </div>
             <div className="profile-input-container">
               <label htmlFor="lastName">Фамилия:</label>
-              <input type="text" id="lastName" required className="profile-input" />
+              <input type="text" id="lastName" name="fullName" value={formData.fullName.split(' ')[1] || ''} onChange={handleChange} required className="profile-input" />
             </div>
           </div>
           <div className="input-row">
             <div className="profile-input-container">
               <label htmlFor="birthdate">Дата рождения:</label>
-              <input type="date" id="birthdate" required className="profile-input" />
+              <input type="date" id="birthdate" name="dateOfBirth" value={formData.dateOfBirth || ''} onChange={handleChange} required className="profile-input" />
             </div>
             <div className="profile-input-container">
               <label htmlFor="username">Логин:</label>
-              <input type="text" id="username" required className="profile-input" />
+              <input type="text" id="username" name="username" value={formData.username || ''} onChange={handleChange} required className="profile-input" />
             </div>
           </div>
           <div className="button-container">

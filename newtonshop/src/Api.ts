@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AirpodsDto, IpadDto, IphoneDto, MacDto, WatchDto } from "./types";
+import { AirpodsDto, IpadDto, IphoneDto, MacDto, TokenDto, UserDto, WatchDto } from "./types";
 
 const BASE_URL = "http://localhost:9000/api/v1";
 
@@ -11,6 +11,28 @@ export interface ProductDto {
   images: string[];
   type: string;
 }
+
+export const postSignUp = async (userData: Partial<UserDto>): Promise<UserDto> => {
+  const response = await axios.post<UserDto>(`${BASE_URL}/users/sign-up`, {}, {
+    params: userData,
+  });
+  return response.data;
+};
+export const postSignIn = async (userData: Partial<UserDto>): Promise<TokenDto> => {
+  const response = await axios.post<TokenDto>(`${BASE_URL}/users/sign-in`, {}, {
+    params: userData,
+  });
+  return response.data;
+};
+
+export const getCurrentProfile = async (token: string): Promise<UserDto> => {
+  const response = await axios.get<UserDto>(`${BASE_URL}/users/secured/get-current`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
 
 export const getProductsByCategory = async (category: string): Promise<ProductDto[]> => {
   const response = await axios.get<ProductDto[]>(`${BASE_URL}/products/${category}`);
