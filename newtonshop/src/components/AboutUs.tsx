@@ -1,5 +1,4 @@
 import React from "react";
-import LazyLoad from "react-lazyload";
 import "./AboutUs.css";
 
 interface TeamMember {
@@ -9,33 +8,54 @@ interface TeamMember {
 }
 
 const teamMembers: TeamMember[] = [
-  { image: "https://avatars.githubusercontent.com/u/124059586?v=4", role: "Аналитик: Ковалев А.Л.", gitlabIssues: "https://github.com/sereraguy" },
-  { image: "https://avatars.githubusercontent.com/u/81161586?v=4", role: "Бэкендер: Головков И.Е.", gitlabIssues: "https://github.com/iggosha" },
-  { image: "https://avatars.githubusercontent.com/u/124059455?v=4", role: "Фронтендер: Виноходов Д.А.", gitlabIssues: "https://github.com/Vawlik" },
-  { image: "https://avatars.githubusercontent.com/u/121055448?v=4", role: "Фронтендер: Еременко В.А.", gitlabIssues: "https://github.com/MisterShady" },
+  {
+    image: "https://avatars.githubusercontent.com/u/124059586?v=4",
+    role: "Аналитик: Ковалев А.Л.",
+    gitlabIssues: "https://github.com/sereraguy",
+  },
+  {
+    image: "https://avatars.githubusercontent.com/u/81161586?v=4",
+    role: "Бэкендер: Головков И.Е.",
+    gitlabIssues: "https://github.com/iggosha",
+  },
+  {
+    image: "https://avatars.githubusercontent.com/u/124059455?v=4",
+    role: "Фронтендер: Виноходов Д.А.",
+    gitlabIssues: "https://github.com/Vawlik",
+  },
+  {
+    image: "https://avatars.githubusercontent.com/u/121055448?v=4",
+    role: "Фронтендер: Еременко В.А.",
+    gitlabIssues: "https://github.com/MisterShady",
+  },
 ];
 
 const AboutUs = () => {
   return (
     <div className="about-us">
       <h1>О нас</h1>
-      <p>Мы рады приветствовать вас на нашем сайте, где вы можете приобрести продукцию компании Apple. Наш ассортимент включает в себя новейшие модели iPhone, iPad, MacBook, Apple Watch и множество других устройств и аксессуаров. Мы стремимся предоставить вам лучший выбор и качество, чтобы вы могли наслаждаться технологиями Apple в полной мере.</p>
-      <p>Наша команда состоит из профессионалов, которые готовы помочь вам с выбором и консультацией по любым вопросам. Мы ценим каждого клиента и стремимся сделать ваш опыт покупок максимально комфортным и приятным.</p>
+      <p>Мы рады приветствовать вас на нашем сайте, где вы можете приобрести продукцию компании Apple. Наш ассортимент
+        включает в себя новейшие модели iPhone, iPad, MacBook, Apple Watch и множество других устройств и аксессуаров.
+        Мы стремимся предоставить вам лучший выбор и качество, чтобы вы могли наслаждаться технологиями Apple в полной
+        мере.</p>
+      <p>Наша команда состоит из профессионалов, которые готовы помочь вам с выбором и консультацией по любым вопросам.
+        Мы ценим каждого клиента и стремимся сделать ваш опыт покупок максимально комфортным и приятным.</p>
 
       <div className="links">
-        <a href="https://github.com/MisterShady/bgu-frontend-project/" target="_blank" rel="noopener noreferrer" className="link">Проект на GitHub</a>
-        <a href="https://gitlab.com/newtonshoppers/newtonshop" target="_blank" rel="noopener noreferrer" className="link">Проект на GitLab</a>
+        <a href="https://github.com/MisterShady/bgu-frontend-project/" target="_blank" rel="noopener noreferrer"
+           className="link">Проект на GitHub</a>
+        <a href="https://gitlab.com/newtonshoppers/newtonshop" target="_blank" rel="noopener noreferrer"
+           className="link">Проект на GitLab</a>
       </div>
 
       <h2>Наши сотрудники</h2>
       <div className="team">
         {teamMembers.map((member, index) => (
           <div key={index} className="team-member">
-            <LazyLoad height={200} offset={100}>
-              <img src={member.image} alt={member.role} />
-            </LazyLoad>
+            <img src={member.image} alt={member.role} />
             <p>{member.role}</p>
-            <a href={member.gitlabIssues} target="_blank" rel="noopener noreferrer" className="link" style={{ textDecoration: "none" }}>GitHub </a>
+            <a href={member.gitlabIssues} target="_blank" rel="noopener noreferrer" className="link"
+               style={{ textDecoration: "none" }}>GitHub </a>
           </div>
         ))}
       </div>

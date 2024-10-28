@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./Profile.css";
-import LazyLoad from "react-lazyload";
 import { getCurrentProfile } from "../Api";
 import { UserDto } from "../types";
 
@@ -69,9 +68,7 @@ const ProfileForm = () => {
           onMouseLeave={() => setIsMenuOpen(false)}
           onClick={handleAvatarClick}
         >
-          <LazyLoad>
-            <img src={avatar} alt="Avatar" className="avatar" />
-          </LazyLoad>
+          <img src={avatar} alt="Avatar" className="avatar" />
           {isMenuOpen && (
             <div>
               <input
@@ -89,31 +86,37 @@ const ProfileForm = () => {
           <div className="input-row">
             <div className="profile-input-container">
               <label htmlFor="email">Email:</label>
-              <input type="email" id="email" name="email" value={formData.email || ""} onChange={handleChange} required className="profile-input" />
+              <input type="email" id="email" name="email" value={formData.email || ""} onChange={handleChange} required
+                     className="profile-input" />
             </div>
             <div className="profile-input-container">
               <label htmlFor="phone">Номер телефона:</label>
-              <input type="tel" id="phone" name="phoneNumber" value={formData.phoneNumber || ""} onChange={handleChange} required className="profile-input" />
+              <input type="tel" id="phone" name="phoneNumber" value={formData.phoneNumber || ""} onChange={handleChange}
+                     required className="profile-input" />
             </div>
           </div>
           <div className="input-row">
             <div className="profile-input-container">
               <label htmlFor="firstName">Имя:</label>
-              <input type="text" id="firstName" name="fullName" value={formData.fullName.split(" ")[0] || ""} onChange={handleChange} required className="profile-input" />
+              <input type="text" id="firstName" name="fullName" value={formData.fullName.split(" ")[0] || ""}
+                     onChange={handleChange} required className="profile-input" />
             </div>
             <div className="profile-input-container">
               <label htmlFor="lastName">Фамилия:</label>
-              <input type="text" id="lastName" name="fullName" value={formData.fullName.split(" ")[1] || ""} onChange={handleChange} required className="profile-input" />
+              <input type="text" id="lastName" name="fullName" value={formData.fullName.split(" ")[1] || ""}
+                     onChange={handleChange} required className="profile-input" />
             </div>
           </div>
           <div className="input-row">
             <div className="profile-input-container">
               <label htmlFor="birthdate">Дата рождения:</label>
-              <input type="date" id="birthdate" name="dateOfBirth" value={formData.dateOfBirth || ""} onChange={handleChange} required className="profile-input" />
+              <input type="date" id="birthdate" name="dateOfBirth" value={formData.dateOfBirth || ""}
+                     onChange={handleChange} required className="profile-input" />
             </div>
             <div className="profile-input-container">
               <label htmlFor="username">Логин:</label>
-              <input type="text" id="username" name="username" value={formData.username || ""} onChange={handleChange} required className="profile-input" />
+              <input type="text" id="username" name="username" value={formData.username || ""} onChange={handleChange}
+                     required className="profile-input" />
             </div>
           </div>
           <div className="button-container">

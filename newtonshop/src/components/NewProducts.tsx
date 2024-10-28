@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { getPopularProducts, ProductDto } from "../Api";
-import LazyLoad from "react-lazyload";
 import ImageWrapper from "./handler/ImageWrapper";
 import { Link } from "react-router-dom";
 
@@ -54,9 +53,7 @@ const NewProducts = () => {
           <Link key={product.id} to={getProductLink(product)} className="product-item-link"
                 style={{ textDecoration: "none" }}>
             <div className="product-item">
-              <LazyLoad height={200} offset={100}>
-                <ImageWrapper src={product.thumbUrl} alt={product.title} className="product-image" />
-              </LazyLoad>
+              <ImageWrapper src={product.thumbUrl} alt={product.title} className="product-image" />
               <h3>{product.title}</h3>
               <div className="price-container1">
                 <span className="price-box">{product.price}$</span>
