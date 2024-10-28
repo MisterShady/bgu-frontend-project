@@ -102,7 +102,8 @@ const Navbar = () => {
                       <Link
                         to={`/${toPlural(suggestion.type)}/${suggestion.id}`}
                         onClick={clearSuggestions}
-                        className="suggestion-link">
+                        className="suggestion-link"
+                      >
                         {suggestion.type === "ipad" ? (
                           <img
                             src="/image/placeholder.svg"
@@ -111,11 +112,7 @@ const Navbar = () => {
                             style={{ width: "50px", height: "50px" }}
                           />
                         ) : (
-                          <img
-                            src={suggestion.thumbUrl}
-                            alt={suggestion.title}
-                            className="suggestion-thumb"
-                          />
+                          <img src={suggestion.thumbUrl} alt={suggestion.title} className="suggestion-thumb" />
                         )}
                         <div className="suggestion-info">
                           <span className="suggestion-title">{suggestion.title}</span>

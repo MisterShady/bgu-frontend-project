@@ -50,8 +50,12 @@ const NewProducts = () => {
       <h2>Новинки в продаже </h2>
       <div className="product-list">
         {products.map((product) => (
-          <Link key={product.id} to={getProductLink(product)} className="product-item-link"
-                style={{ textDecoration: "none" }}>
+          <Link
+            key={product.id}
+            to={getProductLink(product)}
+            className="product-item-link"
+            style={{ textDecoration: "none" }}
+          >
             <div className="product-item">
               <ImageWrapper src={product.thumbUrl} alt={product.title} className="product-image" />
               <h3>{product.title}</h3>

@@ -7,7 +7,6 @@ const ProfileForm = () => {
   const [avatar, setAvatar] = useState<string>("/image/account.png");
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [orders] = useState<string[]>([]);
-  const [userData, setUserData] = useState<UserDto | null>(null);
   const [formData, setFormData] = useState<UserDto>({
     id: 0,
     email: "",
@@ -30,7 +29,6 @@ const ProfileForm = () => {
         const token = localStorage.getItem("token");
         if (token) {
           const data = await getCurrentProfile(token);
-          setUserData(data);
           setFormData(data);
         }
       } catch (error) {
@@ -53,7 +51,7 @@ const ProfileForm = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
@@ -86,37 +84,79 @@ const ProfileForm = () => {
           <div className="input-row">
             <div className="profile-input-container">
               <label htmlFor="email">Email:</label>
-              <input type="email" id="email" name="email" value={formData.email || ""} onChange={handleChange} required
-                     className="profile-input" />
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email || ""}
+                onChange={handleChange}
+                required
+                className="profile-input"
+              />
             </div>
             <div className="profile-input-container">
               <label htmlFor="phone">Номер телефона:</label>
-              <input type="tel" id="phone" name="phoneNumber" value={formData.phoneNumber || ""} onChange={handleChange}
-                     required className="profile-input" />
+              <input
+                type="tel"
+                id="phone"
+                name="phoneNumber"
+                value={formData.phoneNumber || ""}
+                onChange={handleChange}
+                required
+                className="profile-input"
+              />
             </div>
           </div>
           <div className="input-row">
             <div className="profile-input-container">
               <label htmlFor="firstName">Имя:</label>
-              <input type="text" id="firstName" name="fullName" value={formData.fullName.split(" ")[0] || ""}
-                     onChange={handleChange} required className="profile-input" />
+              <input
+                type="text"
+                id="firstName"
+                name="fullName"
+                value={formData.fullName.split(" ")[0] || ""}
+                onChange={handleChange}
+                required
+                className="profile-input"
+              />
             </div>
             <div className="profile-input-container">
               <label htmlFor="lastName">Фамилия:</label>
-              <input type="text" id="lastName" name="fullName" value={formData.fullName.split(" ")[1] || ""}
-                     onChange={handleChange} required className="profile-input" />
+              <input
+                type="text"
+                id="lastName"
+                name="fullName"
+                value={formData.fullName.split(" ")[1] || ""}
+                onChange={handleChange}
+                required
+                className="profile-input"
+              />
             </div>
           </div>
           <div className="input-row">
             <div className="profile-input-container">
               <label htmlFor="birthdate">Дата рождения:</label>
-              <input type="date" id="birthdate" name="dateOfBirth" value={formData.dateOfBirth || ""}
-                     onChange={handleChange} required className="profile-input" />
+              <input
+                type="date"
+                id="birthdate"
+                name="dateOfBirth"
+                value={formData.dateOfBirth || ""}
+                onChange={handleChange}
+                required
+                className="profile-input"
+              />
             </div>
             <div className="profile-input-container">
               <label htmlFor="username">Логин:</label>
-              <input type="text" id="username" name="username" value={formData.username || ""} onChange={handleChange}
-                     required className="profile-input" />
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value={formData.username || ""}
+                onChange={handleChange}
+                required
+                className="profile-input"
+              />
             </div>
           </div>
           <div className="button-container">

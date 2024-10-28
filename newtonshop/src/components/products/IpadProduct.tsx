@@ -20,13 +20,24 @@ const IpadProduct = () => {
   const [selectedSmartKeyboard, setSelectedSmartKeyboard] = useState<string | null>(null);
 
   const selectedStoragePrice = ipad?.storages.find((storage) => storage.size === selectedStorage)?.additionalPrice || 0;
-  const selectedConnectivityPrice = ipad?.connectivities.find((conn) => conn.type === selectedConnectivity)?.additionalPrice || 0;
-  const selectedApplePencilPrice = ipad?.applePencils.find((pencil) => pencil.type === selectedApplePencil)?.additionalPrice || 0;
-  const selectedSmartKeyboardPrice = ipad?.smartKeyboards.find((keyboard) => keyboard.type === selectedSmartKeyboard)?.additionalPrice || 0;
+  const selectedConnectivityPrice =
+    ipad?.connectivities.find((conn) => conn.type === selectedConnectivity)?.additionalPrice || 0;
+  const selectedApplePencilPrice =
+    ipad?.applePencils.find((pencil) => pencil.type === selectedApplePencil)?.additionalPrice || 0;
+  const selectedSmartKeyboardPrice =
+    ipad?.smartKeyboards.find((keyboard) => keyboard.type === selectedSmartKeyboard)?.additionalPrice || 0;
 
-  const totalPrice = ipad ? ipad.price + selectedStoragePrice + selectedConnectivityPrice + selectedApplePencilPrice + selectedSmartKeyboardPrice : 0;
+  const totalPrice = ipad
+    ? ipad.price +
+      selectedStoragePrice +
+      selectedConnectivityPrice +
+      selectedApplePencilPrice +
+      selectedSmartKeyboardPrice
+    : 0;
 
-  const getDataOrFallback = (data: string | number | (string | number)[] | null): string | number | (string | number)[] | null =>
+  const getDataOrFallback = (
+    data: string | number | (string | number)[] | null
+  ): string | number | (string | number)[] | null =>
     data && (Array.isArray(data) ? data.length > 0 : true) ? data : null;
 
   useEffect(() => {
@@ -196,7 +207,7 @@ const IpadProduct = () => {
             </div>
           )}
 
-          {getDataOrFallback(ipad.camera.rearCameras?.map(cam => `${cam.resolution} (${cam.type})`)) && (
+          {getDataOrFallback(ipad.camera.rearCameras?.map((cam) => `${cam.resolution} (${cam.type})`)) && (
             <div className="description-block">
               <h3>Камеры</h3>
               <p>
@@ -226,8 +237,8 @@ const IpadProduct = () => {
             <div className="description-block">
               <h3>Габариты и вес</h3>
               <p>
-                Высота: {ipad.dimensions.height}, ширина: {ipad.dimensions.width}, толщина: {ipad.dimensions.depth}, вес:{" "}
-                {ipad.dimensions.weight}
+                Высота: {ipad.dimensions.height}, ширина: {ipad.dimensions.width}, толщина: {ipad.dimensions.depth},
+                вес: {ipad.dimensions.weight}
               </p>
             </div>
           )}

@@ -146,8 +146,8 @@ const MacsProduct = () => {
             <div className="description-block">
               <h3>Экран</h3>
               <p>
-                {mac.display.size}, {mac.display.resolution}, {mac.display.brightness} nits,{" "}
-                {mac.display.refreshRate}Hz, PPI: {mac.display.ppi}
+                {mac.display.size}, {mac.display.resolution}, {mac.display.brightness} nits, {mac.display.refreshRate}
+                Hz, PPI: {mac.display.ppi}
               </p>
             </div>
           )}

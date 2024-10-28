@@ -17,7 +17,9 @@ const WatchProduct = () => {
   const [selectedVersionIndex, setSelectedVersionIndex] = useState<number | null>(null);
   const [selectedSizeIndex, setSelectedSizeIndex] = useState<number | null>(null);
 
-  const getDataOrFallback = (data: string | number | (string | number)[] | null): string | number | (string | number)[] | null =>
+  const getDataOrFallback = (
+    data: string | number | (string | number)[] | null
+  ): string | number | (string | number)[] | null =>
     data && (Array.isArray(data) ? data.length > 0 : true) ? data : null;
 
   useEffect(() => {
@@ -79,11 +81,12 @@ const WatchProduct = () => {
   const selectedCasePrice = watch.caseTypes[selectedCaseIndex || 0]?.additionalPrice || 0;
   const selectedVersionPrice = watch.versions[selectedVersionIndex || 0]?.additionalPrice || 0;
 
-  const selectedSizePrice = selectedSizeIndex === 0
-    ? watch.size.large.additionalPrice
-    : (typeof watch.size.small === "object" && watch.size.small !== null
-      ? watch.size.small.additionalPrice
-      : 0);
+  const selectedSizePrice =
+    selectedSizeIndex === 0
+      ? watch.size.large.additionalPrice
+      : typeof watch.size.small === "object" && watch.size.small !== null
+        ? watch.size.small.additionalPrice
+        : 0;
 
   const totalPrice = watch.price + selectedBandTypePrice + selectedCasePrice + selectedVersionPrice + selectedSizePrice;
 
@@ -211,7 +214,7 @@ const WatchProduct = () => {
             </div>
           )}
 
-          {(watch.caseTypes) && watch.caseTypes[0]?.material && (
+          {watch.caseTypes && watch.caseTypes[0]?.material && (
             <div className="description-block">
               <h3>Материал корпуса</h3>
               <p>{watch.caseTypes[0].material}</p>
@@ -235,7 +238,7 @@ const WatchProduct = () => {
             </div>
           )}
 
-          {(watch.sensors) && (
+          {watch.sensors && (
             <div className="description-block">
               <h3>Датчики</h3>
               {watch.sensors.map((sensor) => (
@@ -246,7 +249,7 @@ const WatchProduct = () => {
             </div>
           )}
 
-          {(watch.dimensions) && (
+          {watch.dimensions && (
             <div className="description-block">
               <h3>Размеры и вес</h3>
               <p>

@@ -320,4 +320,3 @@ export interface UserDto {
 export interface TokenDto {
   token: string;
 }
-

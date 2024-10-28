@@ -14,7 +14,9 @@ const IphoneProduct = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
-  const getDataOrFallback = (data: string | number | (string | number)[] | null): string | number | (string | number)[] | null =>
+  const getDataOrFallback = (
+    data: string | number | (string | number)[] | null
+  ): string | number | (string | number)[] | null =>
     data && (Array.isArray(data) ? data.length > 0 : true) ? data : null;
 
   useEffect(() => {
@@ -140,9 +142,7 @@ const IphoneProduct = () => {
           {iphone.camera.rearCameras && iphone.camera.rearCameras.length > 0 && (
             <div className="description-block">
               <h3>Камеры</h3>
-              <p>
-                {iphone.camera.rearCameras.map((cam) => `${cam.resolution} (${cam.type})`).join(", ")}
-              </p>
+              <p>{iphone.camera.rearCameras.map((cam) => `${cam.resolution} (${cam.type})`).join(", ")}</p>
             </div>
           )}
 

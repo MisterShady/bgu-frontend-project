@@ -13,15 +13,23 @@ export interface ProductDto {
 }
 
 export const postSignUp = async (userData: Partial<UserDto>): Promise<UserDto> => {
-  const response = await axios.post<UserDto>(`${BASE_URL}/users/sign-up`, {}, {
-    params: userData,
-  });
+  const response = await axios.post<UserDto>(
+    `${BASE_URL}/users/sign-up`,
+    {},
+    {
+      params: userData,
+    }
+  );
   return response.data;
 };
 export const postSignIn = async (userData: Partial<UserDto>): Promise<TokenDto> => {
-  const response = await axios.post<TokenDto>(`${BASE_URL}/users/sign-in`, {}, {
-    params: userData,
-  });
+  const response = await axios.post<TokenDto>(
+    `${BASE_URL}/users/sign-in`,
+    {},
+    {
+      params: userData,
+    }
+  );
   return response.data;
 };
 
