@@ -74,8 +74,10 @@
 }
 
 .product-price {
-  font-size: 1.8rem;
-  color: #333;
+  color: #514ed9;
+  font-size: 1.8em;
+  font-weight: bold;
+  text-decoration: none;
 }
 
 .buy-button {
@@ -111,12 +113,12 @@
 }
 
 .color-square.selected {
-  border: 2px solid #000;
+  padding: 5px;
 }
 
 .color-square-container {
-  position: relative;
-  display: inline-block;
+  display: flex;
+  align-items: center;
 }
 
 .color-tooltip {
