@@ -1,23 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { postSignIn } from "../Api";
 import "./Auth.css";
 
+type FormData = {
+  username: string;
+  password: string;
+};
+
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const { register, handleSubmit } = useForm<FormData>();
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const onSubmit = async (data: FormData) => {
     try {
-      const userData = {
-        username,
-        password,
-      };
-
-      const response = await postSignIn(userData);
+      const response = await postSignIn(data);
       const { token } = response;
 
       localStorage.setItem("token", token);
@@ -35,15 +33,13 @@ const Login = () => {
         ←
       </Link>
       <h2>Авторизация</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="auth-input-container">
           <label htmlFor="username">Логин:</label>
           <input
             type="text"
             id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
+            {...register("username", { required: true })}
             className="auth-input-container input"
           />
         </div>
@@ -52,9 +48,7 @@ const Login = () => {
           <input
             type="password"
             id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+            {...register("password", { required: true })}
             className="auth-input-container input"
           />
         </div>

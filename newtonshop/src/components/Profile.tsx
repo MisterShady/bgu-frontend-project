@@ -3,7 +3,7 @@ import "./Profile.css";
 import { getCurrentProfile } from "../Api";
 import { UserDto } from "../types";
 
-const ProfileForm = () => {
+const Profile = () => {
   const [avatar, setAvatar] = useState<string>("/image/account.png");
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [orders] = useState<string[]>([]);
@@ -191,4 +191,4 @@ const ProfileForm = () => {
   );
 };
 
-export default ProfileForm;
+export default Profile;

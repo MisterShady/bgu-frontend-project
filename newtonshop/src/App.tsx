@@ -7,7 +7,7 @@ import "./App.css";
 import HomePage from "./components/HomePage";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import ProfileForm from "./components/ProfileForm";
+import Profile from "./components/Profile";
 import AboutUs from "./components/AboutUs";
 import NotFound from "./components/NotFound";
 import AirpodsProduct from "./components/products/AirpodsProduct";
@@ -36,7 +36,7 @@ const App = () => {
             <Route path="/macs/:id" element={<MacProduct />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<ProfileForm />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
