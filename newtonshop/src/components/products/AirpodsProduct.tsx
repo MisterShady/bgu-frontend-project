@@ -2,58 +2,33 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getAirpodsById } from "../../Api";
 import { AirpodsDto } from "../../types";
-import { AxiosError } from "axios";
 import { colorMapping } from "./colorMapping";
 import LazyLoad from "react-lazyload";
 import "./ProductDetails.css";
+import { useFetch } from "../hooks/useFetch";
+import { getDataOrFallback } from "../../utils";
 
 const AirpodsProduct = () => {
   const { id } = useParams<{ id: string }>();
-  const [airpods, setAirpods] = useState<AirpodsDto | null>(null);
+  const { data: airpods, error, loading } = useFetch<AirpodsDto>(() => getAirpodsById(id!));
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  type DataType = string | string[] | { [key: string]: string } | null | undefined;
-
-  const getDataOrFallback = (data: DataType) =>
-    data && data !== "none" && (typeof data === "string" ? data.length > 0 : Object.keys(data).length > 0)
-      ? data
-      : null;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (id) {
-          const airpodsData = await getAirpodsById(id);
-          setAirpods(airpodsData);
+    if (airpods && !selectedImage) {
+      const defaultColor = airpods.colors[0];
+      setSelectedColor(defaultColor);
+      const firstImageForColor = getImagesByColor(airpods.images, defaultColor)[0];
+      setSelectedImage(firstImageForColor || airpods.images[0]);
+    }
+  }, [airpods]);
 
-          const defaultColor = airpodsData.colors[0];
-          setSelectedColor(defaultColor);
-          const firstImageForColor = getImagesByColor(airpodsData.images, defaultColor)[0];
-          setSelectedImage(firstImageForColor || airpodsData.images[0]);
-        }
-      } catch (error) {
-        if (error instanceof AxiosError) {
-          setError(error.message || "Ошибка загрузки данных");
-        } else {
-          setError("Неизвестная ошибка");
-        }
-      }
-    };
-
-    fetchData().catch((error) => {
-      const axiosError = error as AxiosError;
-      setError(axiosError.message || "Ошибка загрузки данных");
-    });
-  }, [id]);
+  if (loading || !airpods) {
+    return <div>Загрузка...</div>;
+  }
 
   if (error) {
     return <div>Ошибка загрузки данных: {error}</div>;
-  }
-
-  if (!airpods) {
-    return <div>Загрузка...</div>;
   }
 
   const handleColorChange = (color: string) => {
@@ -116,89 +91,89 @@ const AirpodsProduct = () => {
         </div>
 
         <div className="product-description">
-          {getDataOrFallback(airpods.audioFeatures) && (
+          {getDataOrFallback(airpods, "audioFeatures", []).length > 0 && (
             <div className="description-block">
-              <h3>Аудио функции</h3>
+              <h3>Audio Features</h3>
               <p>{airpods.audioFeatures.join(", ")}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods.mic) && (
+          {getDataOrFallback(airpods, "mic", "").length > 0 && (
             <div className="description-block">
-              <h3>Микрофон</h3>
+              <h3>Microphone</h3>
               <p>{airpods.mic}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods.chip) && (
+          {getDataOrFallback(airpods, "chip", "").length > 0 && (
             <div className="description-block">
-              <h3>Чип</h3>
+              <h3>Chip</h3>
               <p>{airpods.chip}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods.controls) && (
+          {getDataOrFallback(airpods, "controls", []).length > 0 && (
             <div className="description-block">
-              <h3>Управление</h3>
+              <h3>Controls</h3>
               <p>{airpods.controls.join(", ")}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods.size) && (
+          {airpods.size && (
             <div className="description-block">
-              <h3>Размеры</h3>
+              <h3>Size</h3>
               <p>
-                Высота: {airpods.size.height}, Ширина: {airpods.size.width}, Глубина: {airpods.size.depth}, Вес:{" "}
+                Height: {airpods.size.height}, Width: {airpods.size.width}, Depth: {airpods.size.depth}, Weight:{" "}
                 {airpods.size.weight}
               </p>
             </div>
           )}
 
-          {getDataOrFallback(airpods.battery) && (
+          {getDataOrFallback(airpods, "battery", "").length > 0 && (
             <div className="description-block">
-              <h3>Аккумулятор</h3>
+              <h3>Battery</h3>
               <p>{airpods.battery}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods.connectivity) && (
+          {getDataOrFallback(airpods, "connectivity", "").length > 0 && (
             <div className="description-block">
-              <h3>Подключение</h3>
+              <h3>Connectivity</h3>
               <p>{airpods.connectivity}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods.resistance) && (
+          {getDataOrFallback(airpods, "resistance", "").length > 0 && (
             <div className="description-block">
-              <h3>Сопротивление</h3>
+              <h3>Resistance</h3>
               <p>{airpods.resistance}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods.sensors) && (
+          {getDataOrFallback(airpods, "sensors", []).length > 0 && (
             <div className="description-block">
-              <h3>Сенсоры</h3>
+              <h3>Sensors</h3>
               <p>{airpods.sensors.join(", ")}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods.packageEquipments) && (
+          {getDataOrFallback(airpods, "packageEquipments", []).length > 0 && (
             <div className="description-block">
-              <h3>Комплектация</h3>
+              <h3>Package Equipments</h3>
               <p>{airpods.packageEquipments.join(", ")}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods.accessibilities) && (
+          {getDataOrFallback(airpods, "accessibilities", []).length > 0 && (
             <div className="description-block">
-              <h3>Возможности</h3>
+              <h3>Accessibilities</h3>
               <p>{airpods.accessibilities.join(", ")}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods.caseType) && (
+          {getDataOrFallback(airpods, "caseType", "").length > 0 && (
             <div className="description-block">
-              <h3>Тип кейса</h3>
+              <h3>Case Type</h3>
               <p>{airpods.caseType}</p>
             </div>
           )}

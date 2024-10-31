@@ -4,52 +4,32 @@ import { getIphoneById } from "../../Api";
 import { IphoneDto } from "../../types";
 import "./ProductDetails.css";
 import { colorMapping } from "./colorMapping";
-import { AxiosError } from "axios";
 import LazyLoad from "react-lazyload";
+import { useFetch } from "../hooks/useFetch";
+import { getDataOrFallback } from "../../utils";
 
 const IphoneProduct = () => {
   const { id } = useParams<{ id: string }>();
-  const [iphone, setIphone] = useState<IphoneDto | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { data: iphone, error, loading } = useFetch<IphoneDto>(() => getIphoneById(id!));
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
-  const getDataOrFallback = (
-    data: string | number | (string | number)[] | null
-  ): string | number | (string | number)[] | null =>
-    data && (Array.isArray(data) ? data.length > 0 : true) ? data : null;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (id) {
-          const iphoneData = await getIphoneById(id);
+    if (iphone && !selectedImage) {
+      const defaultColor = iphone.colors[0];
+      setSelectedColor(defaultColor);
+      setSelectedImage(iphone.images[0]);
+      setSelectedStorage(iphone.storages[0].size);
+    }
+  }, [iphone]);
 
-          const validImages = iphoneData.images.filter((img) => img && img.trim() !== "");
-
-          setIphone({ ...iphoneData, images: validImages });
-          setSelectedImage(validImages[0] || iphoneData.thumbUrl);
-          setSelectedColor(iphoneData.colors[0]);
-          setSelectedStorage(iphoneData.storages[0].size);
-        }
-      } catch (error) {
-        const axiosError = error as AxiosError;
-        setError(axiosError.message || "Ошибка загрузки данных");
-      }
-    };
-
-    fetchData().catch((error) => {
-      const axiosError = error as AxiosError;
-      setError(axiosError.message || "Ошибка загрузки данных");
-    });
-  }, [id]);
+  if (loading || !iphone) {
+    return <div>Загрузка...</div>;
+  }
 
   if (error) {
     return <div>Ошибка загрузки данных: {error}</div>;
-  }
-
-  if (!iphone) {
-    return <div>Загрузка...</div>;
   }
 
   const selectedStoragePrice =
@@ -60,20 +40,26 @@ const IphoneProduct = () => {
     <div className="product-details">
       <div className="product-images">
         <LazyLoad>
-          <img src={selectedImage || iphone.thumbUrl} alt={iphone.title} className="main-image" />
+          <img
+            src={selectedImage || getDataOrFallback(iphone, "thumbUrl", "default-image-url")}
+            alt={iphone.title}
+            className="main-image"
+          />
         </LazyLoad>
-        <div className="image-thumbnails">
-          {iphone.images.map((img) => (
-            <LazyLoad key={img}>
-              <img
-                src={img}
-                alt={`Image ${img + 1}`}
-                className={`thumbnail ${img === selectedImage ? "selected" : ""}`}
-                onClick={() => setSelectedImage(img)}
-              />
-            </LazyLoad>
-          ))}
-        </div>
+        {getDataOrFallback(iphone, "images", []).length > 0 && (
+          <div className="image-thumbnails">
+            {iphone.images.map((image, index) => (
+              <LazyLoad key={image} height={50} offset={100}>
+                <img
+                  src={image}
+                  alt={`IPhone Image ${index + 1}`}
+                  className={`thumbnail ${image === selectedImage ? "selected" : ""}`}
+                  onClick={() => setSelectedImage(image)}
+                />
+              </LazyLoad>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="product-info">
@@ -91,12 +77,13 @@ const IphoneProduct = () => {
               {iphone.colors.map((color) => (
                 <div key={color} className="color-square-container">
                   <div
-                    className={`color-square ${color === selectedColor ? "selected" : ""}`}
+                    className={`color-square ${selectedColor === color ? "selected" : ""}`}
                     onClick={() => setSelectedColor(color)}
                     style={{ backgroundColor: colorMapping[color] || "transparent" }}
-                  />
-                  <div className="color-tooltip">
-                    <p>{color}</p>
+                  >
+                    <div className="color-tooltip">
+                      <p>{color}</p>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -123,21 +110,17 @@ const IphoneProduct = () => {
         </div>
 
         <div className="product-description">
-          {getDataOrFallback(iphone.display.size) && (
-            <div className="description-block">
-              <h3>Экран</h3>
-              <p>
-                {iphone.display.size}, {iphone.display.resolution}
-              </p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Экран</h3>
+            <p>
+              {getDataOrFallback(iphone.display, "size", "")}, {getDataOrFallback(iphone.display, "resolution", "")}
+            </p>
+          </div>
 
-          {getDataOrFallback(iphone.processor.chip) && (
-            <div className="description-block">
-              <h3>Процессор</h3>
-              <p>{iphone.processor.chip}</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Процессор</h3>
+            <p>{getDataOrFallback(iphone.processor, "chip", "")}</p>
+          </div>
 
           {iphone.camera.rearCameras && iphone.camera.rearCameras.length > 0 && (
             <div className="description-block">
@@ -146,73 +129,62 @@ const IphoneProduct = () => {
             </div>
           )}
 
-          {getDataOrFallback(iphone.camera.zoomValues) && (
-            <div className="description-block">
-              <h3>Зум камер</h3>
-              <p>{iphone.camera.zoomValues.join("x, ")}x</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Зум камер</h3>
+            <p>{getDataOrFallback(iphone.camera, "zoomValues", []).join("x, ")}x</p>
+          </div>
 
           {iphone.frontCamera && (
             <div className="description-block">
               <h3>Фронтальная камера</h3>
               <p>
-                {iphone.frontCamera.resolution} ({iphone.frontCamera.aperture})
+                {getDataOrFallback(iphone.frontCamera, "resolution", "")} (
+                {getDataOrFallback(iphone.frontCamera, "aperture", "")})
               </p>
             </div>
           )}
 
-          {getDataOrFallback(iphone.battery.capacity) && (
-            <div className="description-block">
-              <h3>Аккумулятор</h3>
-              <p>{iphone.battery.capacity}</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Аккумулятор</h3>
+            <p>{getDataOrFallback(iphone.battery, "capacity", "")}</p>
+          </div>
 
-          {getDataOrFallback(iphone.memory) && (
-            <div className="description-block">
-              <h3>Память</h3>
-              <p>{iphone.memory} GB</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Память</h3>
+            <p>{getDataOrFallback(iphone, "memory", "")} GB</p>
+          </div>
 
-          {getDataOrFallback(iphone.connectivities) && (
-            <div className="description-block">
-              <h3>Подключения</h3>
-              <p>{iphone.connectivities.join(", ")}</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Подключения</h3>
+            <p>{getDataOrFallback(iphone, "connectivities", []).join(", ")}</p>
+          </div>
 
-          {getDataOrFallback(iphone.waterResistance) && (
-            <div className="description-block">
-              <h3>Водонепроницаемость</h3>
-              <p>{iphone.waterResistance}</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Водонепроницаемость</h3>
+            <p>{getDataOrFallback(iphone, "waterResistance", "")}</p>
+          </div>
 
           {iphone.dimensions && (
             <div className="description-block">
               <h3>Размеры и вес</h3>
               <p>
-                {iphone.dimensions.height} x {iphone.dimensions.width} x {iphone.dimensions.depth},{" "}
-                {iphone.dimensions.weight}
+                {getDataOrFallback(iphone.dimensions, "height", "")} x{" "}
+                {getDataOrFallback(iphone.dimensions, "width", "")} x{" "}
+                {getDataOrFallback(iphone.dimensions, "depth", "")},{" "}
+                {getDataOrFallback(iphone.dimensions, "weight", "")}
               </p>
             </div>
           )}
 
-          {getDataOrFallback(iphone.battery.chargingCapabilities) && (
-            <div className="description-block">
-              <h3>Зарядка</h3>
-              <p>{iphone.battery.chargingCapabilities.join(", ")}</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Зарядка</h3>
+            <p>{getDataOrFallback(iphone.battery, "chargingCapabilities", []).join(", ")}</p>
+          </div>
 
-          {getDataOrFallback(iphone.operatingSystem) && (
-            <div className="description-block">
-              <h3>Операционная система</h3>
-              <p>{iphone.operatingSystem}</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Операционная система</h3>
+            <p>{getDataOrFallback(iphone, "operatingSystem", "")}</p>
+          </div>
         </div>
       </div>
     </div>

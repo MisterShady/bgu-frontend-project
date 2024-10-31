@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios, { AxiosError } from "axios";
 import { getIpadById } from "../../Api";
 import { IpadDto } from "../../types";
 import "./ProductDetails.css";
 import ImageWrapper from "../handler/ImageWrapper";
 import { colorMapping } from "./colorMapping";
 import LazyLoad from "react-lazyload";
+import { useFetch } from "../hooks/useFetch";
+import { getDataOrFallback } from "../../utils";
 
 const IpadProduct = () => {
   const { id } = useParams<{ id: string }>();
-  const [ipad, setIpad] = useState<IpadDto | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { data: ipad, error, loading } = useFetch<IpadDto>(() => getIpadById(id!));
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
@@ -35,48 +35,24 @@ const IpadProduct = () => {
       selectedSmartKeyboardPrice
     : 0;
 
-  const getDataOrFallback = (
-    data: string | number | (string | number)[] | null
-  ): string | number | (string | number)[] | null =>
-    data && (Array.isArray(data) ? data.length > 0 : true) ? data : null;
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (id) {
-          const ipadData = await getIpadById(id);
+    if (ipad && !selectedImage) {
+      const defaultColor = ipad.colors[0];
+      setSelectedColor(defaultColor);
+      setSelectedImage(ipad.images[0]);
+      setSelectedStorage(ipad.storages[0].size);
+      setSelectedConnectivity(ipad.connectivities[0].type);
+      setSelectedApplePencil(ipad.applePencils[0].type);
+      setSelectedSmartKeyboard(ipad.smartKeyboards[0].type);
+    }
+  }, [ipad]);
 
-          const validImages = ipadData.images.filter((img) => img && img.trim() !== "");
-
-          setIpad({ ...ipadData, images: validImages });
-          setSelectedImage(validImages[0] || ipadData.thumbUrl);
-          setSelectedColor(ipadData.colors[0]);
-          setSelectedStorage(ipadData.storages[0].size);
-          setSelectedConnectivity(ipadData.connectivities[0].type);
-          setSelectedApplePencil(ipadData.applePencils[0].type);
-          setSelectedSmartKeyboard(ipadData.smartKeyboards[0].type);
-        }
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          setError(error.message || "Ошибка загрузки данных");
-        } else {
-          setError("Неизвестная ошибка");
-        }
-      }
-    };
-
-    fetchData().catch((error) => {
-      const axiosError = error as AxiosError;
-      setError(axiosError.message || "Ошибка загрузки данных");
-    });
-  }, [id]);
+  if (!ipad || loading) {
+    return <div>Загрузка...</div>;
+  }
 
   if (error) {
     return <div>Ошибка загрузки данных: {error}</div>;
-  }
-
-  if (!ipad) {
-    return <div>Загрузка...</div>;
   }
 
   return (
@@ -114,12 +90,13 @@ const IpadProduct = () => {
               {ipad.colors.map((color) => (
                 <div key={color} className="color-square-container">
                   <div
-                    className={`color-square ${color === selectedColor ? "selected" : ""}`}
+                    className={`color-square ${selectedColor === color ? "selected" : ""}`}
                     onClick={() => setSelectedColor(color)}
                     style={{ backgroundColor: colorMapping[color] || "transparent" }}
-                  />
-                  <div className="color-tooltip">
-                    <p>{color}</p>
+                  >
+                    <div className="color-tooltip">
+                      <p>{color}</p>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -138,7 +115,7 @@ const IpadProduct = () => {
             >
               {ipad.storages.map((storage) => (
                 <option key={storage.size} value={storage.size}>
-                  {storage.size} GB {storage.additionalPrice > 0 ? `(Дополнительно: $${storage.additionalPrice})` : ""}
+                  {storage.size} {storage.additionalPrice > 0 ? `(Дополнительно: $${storage.additionalPrice})` : ""}
                 </option>
               ))}
             </select>
@@ -188,60 +165,50 @@ const IpadProduct = () => {
         </div>
 
         <div className="product-description">
-          {getDataOrFallback(ipad.display.size ? [ipad.display.size] : null) && (
-            <div className="description-block">
-              <h3>Экран</h3>
-              <p>
-                {ipad.display.size}, {ipad.display.type}, {ipad.display.resolution}, {ipad.display.ppi} PPI,{" "}
-                {ipad.display.refreshRate}Hz
-              </p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Экран</h3>
+            <p>
+              {getDataOrFallback(ipad.display, "size", "")}, {getDataOrFallback(ipad.display, "type", "")},{" "}
+              {getDataOrFallback(ipad.display, "resolution", "")}, {getDataOrFallback(ipad.display, "ppi", "")} PPI,{" "}
+              {getDataOrFallback(ipad.display, "refreshRate", "")}
+            </p>
+          </div>
 
-          {getDataOrFallback(ipad.processor.chip ? [ipad.processor.chip] : null) && (
-            <div className="description-block">
-              <h3>Процессор</h3>
-              <p>
-                {ipad.processor.chip}, CPU: {ipad.processor.cpu}, GPU: {ipad.processor.gpu}
-              </p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Процессор</h3>
+            <p>
+              {getDataOrFallback(ipad.processor, "chip", "")}, CPU: {getDataOrFallback(ipad.processor, "cpu", "")}, GPU:{" "}
+              {getDataOrFallback(ipad.processor, "gpu", "")}
+            </p>
+          </div>
 
-          {getDataOrFallback(ipad.camera.rearCameras?.map((cam) => `${cam.resolution} (${cam.type})`)) && (
-            <div className="description-block">
-              <h3>Камеры</h3>
-              <p>
-                Основные камеры: {ipad.camera.rearCameras.map((cam) => `${cam.resolution} (${cam.type})`).join(", ")}
-              </p>
-              <p>
-                Фронтальная камера: {ipad.camera.frontCamera.resolution} ({ipad.camera.frontCamera.aperture})
-              </p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Камеры</h3>
+            <p>Основные камеры: {ipad.camera.rearCameras.map((cam) => `${cam.resolution} (${cam.type})`).join(", ")}</p>
+            <p>
+              Фронтальная камера: {getDataOrFallback(ipad.camera.frontCamera, "resolution", "")} (
+              {getDataOrFallback(ipad.camera.frontCamera, "aperture", "")})
+            </p>
+          </div>
 
-          {getDataOrFallback(ipad.memory ? [ipad.memory] : null) && (
-            <div className="description-block">
-              <h3>Память</h3>
-              <p>{ipad.memory} GB</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Память</h3>
+            <p>{getDataOrFallback(ipad, "memory", "")}</p>
+          </div>
 
-          {getDataOrFallback(ipad.battery.capacity ? [ipad.battery.capacity] : null) && (
-            <div className="description-block">
-              <h3>Аккумулятор</h3>
-              <p>Емкость: {ipad.battery.capacity}</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Аккумулятор</h3>
+            <p>Емкость: {getDataOrFallback(ipad.battery, "capacity", "")}</p>
+          </div>
 
-          {getDataOrFallback(ipad.dimensions.height ? [ipad.dimensions.height] : null) && (
-            <div className="description-block">
-              <h3>Габариты и вес</h3>
-              <p>
-                Высота: {ipad.dimensions.height}, ширина: {ipad.dimensions.width}, толщина: {ipad.dimensions.depth},
-                вес: {ipad.dimensions.weight}
-              </p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Габариты и вес</h3>
+            <p>
+              Высота: {getDataOrFallback(ipad.dimensions, "height", "")}, ширина:{" "}
+              {getDataOrFallback(ipad.dimensions, "width", "")}, толщина:{" "}
+              {getDataOrFallback(ipad.dimensions, "depth", "")}, вес: {getDataOrFallback(ipad.dimensions, "weight", "")}
+            </p>
+          </div>
         </div>
       </div>
     </div>

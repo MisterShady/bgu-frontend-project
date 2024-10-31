@@ -14,7 +14,7 @@ import AirpodsProduct from "./components/products/AirpodsProduct";
 import WatchProduct from "./components/products/WatchProduct";
 import IpadProduct from "./components/products/IpadProduct";
 import IphoneProduct from "./components/products/IphoneProduct";
-import MacsProduct from "./components/products/MacsProduct";
+import MacProduct from "./components/products/MacProduct";
 
 const App = () => {
   return (
@@ -33,13 +33,12 @@ const App = () => {
             <Route path="/watches/:id" element={<WatchProduct />} />
             <Route path="/ipads/:id" element={<IpadProduct />} />
             <Route path="/iphones/:id" element={<IphoneProduct />} />
-            <Route path="/macs/:id" element={<MacsProduct />} />
+            <Route path="/macs/:id" element={<MacProduct />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/profile" element={<ProfileForm />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/" element={<HomePage />} />
           </Routes>
         </div>
         <Footer />

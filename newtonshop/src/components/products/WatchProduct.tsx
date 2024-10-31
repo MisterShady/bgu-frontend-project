@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getWatchById } from "../../Api";
 import { WatchDto } from "../../types";
 import "./ProductDetails.css";
-import { AxiosError } from "axios";
 import LazyLoad from "react-lazyload";
+import { useFetch } from "../hooks/useFetch";
+import { getDataOrFallback } from "../../utils";
 
 const WatchProduct = () => {
   const { id } = useParams<{ id: string }>();
-  const [watch, setWatch] = useState<WatchDto | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { data: watch, error, loading } = useFetch<WatchDto>(() => getWatchById(id!));
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedBandTypeIndex, setSelectedBandTypeIndex] = useState<number | null>(null);
   const [selectedBandStyleIndex, setSelectedBandStyleIndex] = useState<number | null>(null);
@@ -17,60 +17,29 @@ const WatchProduct = () => {
   const [selectedVersionIndex, setSelectedVersionIndex] = useState<number | null>(null);
   const [selectedSizeIndex, setSelectedSizeIndex] = useState<number | null>(null);
 
-  const getDataOrFallback = (
-    data: string | number | (string | number)[] | null
-  ): string | number | (string | number)[] | null =>
-    data && (Array.isArray(data) ? data.length > 0 : true) ? data : null;
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (id) {
-          const watchData = await getWatchById(id);
-          setWatch(watchData);
-          setSelectedImage(watchData.thumbUrl);
+    if (watch) {
+      if (!selectedImage) {
+        setSelectedImage(watch.images[0]);
+      }
 
-          if (watchData.bandTypes?.length > 0) {
-            setSelectedBandTypeIndex(0);
-            setSelectedBandStyleIndex(0);
-          }
-          if (watchData.caseTypes?.length > 0) {
-            setSelectedCaseIndex(0);
-          }
-          if (watchData.versions?.length > 0) {
-            setSelectedVersionIndex(0);
-          }
-          if (watchData.size) {
-            setSelectedSizeIndex(0);
+      if (selectedBandTypeIndex !== null && selectedBandStyleIndex !== null) {
+        const currentBandType = watch.bandTypes[selectedBandTypeIndex];
+        if (currentBandType && selectedBandStyleIndex < currentBandType.styles.length) {
+          const currentBandStyle = currentBandType.styles[selectedBandStyleIndex];
+          if (currentBandStyle) {
+            setSelectedImage(currentBandStyle.image);
           }
         }
-      } catch (error) {
-        const axiosError = error as AxiosError;
-        setError(axiosError.message || "Ошибка загрузки данных");
-      }
-    };
-
-    fetchData().catch((error) => {
-      const axiosError = error as AxiosError;
-      setError(axiosError.message || "Ошибка загрузки данных");
-    });
-  }, [id]);
-
-  useEffect(() => {
-    if (watch && selectedBandTypeIndex !== null && selectedBandStyleIndex !== null) {
-      const currentBandType = watch.bandTypes[selectedBandTypeIndex];
-      const currentBandStyle = currentBandType?.styles[selectedBandStyleIndex];
-      if (currentBandStyle) {
-        setSelectedImage(currentBandStyle.image);
       }
     }
-  }, [watch, selectedBandTypeIndex, selectedBandStyleIndex]);
+  }, [watch, selectedImage, selectedBandTypeIndex, selectedBandStyleIndex]);
 
   if (error) {
     return <div>Ошибка загрузки данных: {error}</div>;
   }
 
-  if (!watch) {
+  if (!watch || loading) {
     return <div>Загрузка...</div>;
   }
 
@@ -93,9 +62,7 @@ const WatchProduct = () => {
   return (
     <div className="product-details">
       <div className="product-images">
-        <LazyLoad>
-          <img src={selectedImage || watch.thumbUrl} alt={watch.title} className="main-image" />
-        </LazyLoad>
+        <img src={selectedImage || watch.thumbUrl} alt={watch.title} className="main-image" />
         <div className="image-thumbnails">
           {watch.images.map((img) => (
             <LazyLoad key={img}>
@@ -192,27 +159,21 @@ const WatchProduct = () => {
         </div>
 
         <div className="product-description">
-          {getDataOrFallback(watch.display.type) && (
-            <div className="description-block">
-              <h3>Экран</h3>
-              <p>Тип: {watch.display.type}</p>
-              <p>Яркость: {watch.display.brightness} нитов</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Экран</h3>
+            <p>Тип: {getDataOrFallback(watch.display, "type", "")}</p>
+            <p>Яркость: {getDataOrFallback(watch.display, "brightness", "")} нитов</p>
+          </div>
 
-          {getDataOrFallback(watch.chipset.cpu) && (
-            <div className="description-block">
-              <h3>Процессор</h3>
-              <p>Модель: {watch.chipset.cpu}</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Процессор</h3>
+            <p>Модель: {getDataOrFallback(watch.chipset, "cpu", "")}</p>
+          </div>
 
-          {getDataOrFallback(watch.battery.lifetime) && (
-            <div className="description-block">
-              <h3>Аккумулятор</h3>
-              <p>Время работы: {watch.battery.lifetime}</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Аккумулятор</h3>
+            <p>Время работы: {getDataOrFallback(watch.battery, "lifetime", "")}</p>
+          </div>
 
           {watch.caseTypes && watch.caseTypes[0]?.material && (
             <div className="description-block">
@@ -221,22 +182,18 @@ const WatchProduct = () => {
             </div>
           )}
 
-          {getDataOrFallback(watch.resistance?.water) && (
-            <div className="description-block">
-              <h3>Водонепроницаемость и пылезащита</h3>
-              <p>Водонепроницаемость: {watch.resistance.water}</p>
-              <p>Пылезащита: {watch.resistance.dust}</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Водонепроницаемость и пылезащита</h3>
+            <p>Водонепроницаемость: {getDataOrFallback(watch.resistance, "water", "")}</p>
+            <p>Пылезащита: {getDataOrFallback(watch.resistance, "dust", "")}</p>
+          </div>
 
-          {getDataOrFallback(watch.connectivity?.wifi) && (
-            <div className="description-block">
-              <h3>Связь</h3>
-              <p>Wi-Fi: {watch.connectivity.wifi}</p>
-              <p>Bluetooth: {watch.connectivity.bluetooth}</p>
-              <p>Чип ультраширокополосной связи: {watch.connectivity.ultraWideBand}</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Связь</h3>
+            <p>Wi-Fi: {getDataOrFallback(watch.connectivity, "wifi", "")}</p>
+            <p>Bluetooth: {getDataOrFallback(watch.connectivity, "bluetooth", 0)}</p>
+            <p>Чип ультраширокополосной связи: {getDataOrFallback(watch.connectivity, "ultraWideBand", "")}</p>
+          </div>
 
           {watch.sensors && (
             <div className="description-block">
@@ -259,12 +216,10 @@ const WatchProduct = () => {
             </div>
           )}
 
-          {getDataOrFallback(watch.operatingSystem) && (
-            <div className="description-block">
-              <h3>Операционная система</h3>
-              <p>{watch.operatingSystem}</p>
-            </div>
-          )}
+          <div className="description-block">
+            <h3>Операционная система</h3>
+            <p>{getDataOrFallback(watch, "operatingSystem", "")}</p>
+          </div>
         </div>
       </div>
     </div>

@@ -4,13 +4,12 @@ import { getMacById } from "../../Api";
 import { MacDto } from "../../types";
 import "./ProductDetails.css";
 import { colorMapping } from "./colorMapping";
-import { AxiosError } from "axios";
 import LazyLoad from "react-lazyload";
+import { useFetch } from "../hooks/useFetch";
 
-const MacsProduct = () => {
+const MacProduct = () => {
   const { id } = useParams<{ id: string }>();
-  const [mac, setMac] = useState<MacDto | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { data: mac, error, loading } = useFetch<MacDto>(() => getMacById(id!));
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
@@ -21,36 +20,21 @@ const MacsProduct = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (id) {
-          const macData = await getMacById(id);
-          const validImages = macData.images?.filter((img) => img?.trim()) || [];
+    if (mac && !selectedImage) {
+      const defaultColor = mac.colors[0];
+      setSelectedColor(defaultColor);
+      setSelectedImage(mac.images[0]);
+      setSelectedStorage(mac.storages[0].size);
+      setSelectedRam(mac.ramMemories?.[0]?.size || null);
+    }
+  }, [mac]);
 
-          setMac({ ...macData, images: validImages });
-          setSelectedImage(validImages[0] || macData.thumbUrl);
-          setSelectedColor(macData.colors?.[0] || null);
-          setSelectedStorage(macData.storages?.[0]?.size || null);
-          setSelectedRam(macData.ramMemories?.[0]?.size || null);
-        }
-      } catch (error) {
-        const axiosError = error as AxiosError;
-        setError(axiosError.message || "Ошибка загрузки данных");
-      }
-    };
-
-    fetchData().catch((error) => {
-      const axiosError = error as AxiosError;
-      setError(axiosError.message || "Ошибка загрузки данных");
-    });
-  }, [id]);
+  if (loading || !mac) {
+    return <div>Загрузка...</div>;
+  }
 
   if (error) {
     return <div>Ошибка загрузки данных: {error}</div>;
-  }
-
-  if (!mac) {
-    return <div>Загрузка...</div>;
   }
 
   const selectedStoragePrice = getDataOrFallback(
@@ -194,4 +178,4 @@ const MacsProduct = () => {
   );
 };
 
-export default MacsProduct;
+export default MacProduct;

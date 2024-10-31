@@ -12,3 +12,7 @@ export const toPlural = (type: string): string => {
       return type;
   }
 };
+
+export const getDataOrFallback = <T, K extends keyof T>(obj: T | null | undefined, key: K, fallback: T[K]): T[K] => {
+  return obj && obj[key] !== undefined ? obj[key] : fallback;
+};

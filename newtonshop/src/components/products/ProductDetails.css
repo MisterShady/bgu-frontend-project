@@ -110,6 +110,7 @@
   cursor: pointer;
   transition: border 0.3s ease;
   border-radius: 8px;
+  position: relative; /* Позиционирование для подсказки */
 }
 
 .color-square.selected {
