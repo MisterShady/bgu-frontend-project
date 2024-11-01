@@ -7,6 +7,7 @@ import { colorMapping } from "./colorMapping";
 import LazyLoad from "react-lazyload";
 import { useFetch } from "../hooks/useFetch";
 import { getDataOrFallback } from "../../utils";
+import Spinner from "../Spinner";
 
 const IphoneProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,7 +26,7 @@ const IphoneProduct = () => {
   }, [iphone]);
 
   if (loading || !iphone) {
-    return <div>Загрузка...</div>;
+    return <Spinner />;
   }
 
   if (error) {

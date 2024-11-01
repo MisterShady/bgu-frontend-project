@@ -7,6 +7,7 @@ import LazyLoad from "react-lazyload";
 import "./ProductDetails.css";
 import { useFetch } from "../hooks/useFetch";
 import { getDataOrFallback } from "../../utils";
+import Spinner from "../Spinner";
 
 const AirpodsProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,7 +25,7 @@ const AirpodsProduct = () => {
   }, [airpods]);
 
   if (loading || !airpods) {
-    return <div>Загрузка...</div>;
+    return <Spinner />;
   }
 
   if (error) {

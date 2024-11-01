@@ -6,6 +6,7 @@ import "./ProductDetails.css";
 import { colorMapping } from "./colorMapping";
 import LazyLoad from "react-lazyload";
 import { useFetch } from "../hooks/useFetch";
+import Spinner from "../Spinner";
 
 const MacProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,7 +31,7 @@ const MacProduct = () => {
   }, [mac]);
 
   if (loading || !mac) {
-    return <div>Загрузка...</div>;
+    return <Spinner />;
   }
 
   if (error) {

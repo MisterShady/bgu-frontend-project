@@ -8,6 +8,7 @@ import { colorMapping } from "./colorMapping";
 import LazyLoad from "react-lazyload";
 import { useFetch } from "../hooks/useFetch";
 import { getDataOrFallback } from "../../utils";
+import Spinner from "../Spinner";
 
 const IpadProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -48,7 +49,7 @@ const IpadProduct = () => {
   }, [ipad]);
 
   if (!ipad || loading) {
-    return <div>Загрузка...</div>;
+    return <Spinner />;
   }
 
   if (error) {

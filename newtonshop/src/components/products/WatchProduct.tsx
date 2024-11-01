@@ -6,6 +6,7 @@ import "./ProductDetails.css";
 import LazyLoad from "react-lazyload";
 import { useFetch } from "../hooks/useFetch";
 import { getDataOrFallback } from "../../utils";
+import Spinner from "../Spinner";
 
 const WatchProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -40,7 +41,7 @@ const WatchProduct = () => {
   }
 
   if (!watch || loading) {
-    return <div>Загрузка...</div>;
+    return <Spinner />;
   }
 
   const selectedBandType = watch.bandTypes[selectedBandTypeIndex || 0];

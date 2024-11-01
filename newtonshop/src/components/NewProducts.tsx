@@ -1,31 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { getPopularProducts, ProductDto } from "../Api";
 import ImageWrapper from "./handler/ImageWrapper";
 import { Link } from "react-router-dom";
+import Spinner from "./Spinner";
+import { useFetch } from "./hooks/useFetch"; // Импортируем useFetch
 
 const NewProducts = () => {
-  const [products, setProducts] = useState<ProductDto[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: products, error, loading } = useFetch<ProductDto[]>(getPopularProducts);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const allProducts = await getPopularProducts();
-        setProducts(allProducts.slice(0, 5));
-      } catch (error) {
-        console.error("Ошибка при загрузке списка продуктов:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  if (loading || !products) {
+    return <Spinner />;
+  }
 
-    fetchProducts().catch((error) => {
-      console.error("Ошибка при выполнении fetchProducts:", error);
-    });
-  }, []);
-
-  if (loading) {
-    return <div>Загрузка...</div>;
+  if (error) {
+    return <div>Ошибка: {error}</div>;
   }
 
   const getProductLink = (product: ProductDto) => {
