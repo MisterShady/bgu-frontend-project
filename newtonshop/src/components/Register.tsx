@@ -16,7 +16,12 @@ interface RegisterFormInputs {
 }
 
 const Register = () => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<RegisterFormInputs>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<RegisterFormInputs>();
   const navigate = useNavigate();
   const password = watch("password");
 

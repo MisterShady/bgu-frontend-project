@@ -2,7 +2,7 @@ import React, { CSSProperties, useState } from "react";
 import Placeholder1 from "./LargePlaceholder";
 
 interface ImageWrapperProps {
-  src: string;
+  src: string | undefined;
   alt: string;
   className?: string;
   style?: CSSProperties;
@@ -15,9 +15,11 @@ const ImageWrapper = ({ src, alt, className, style }: ImageWrapperProps) => {
     setIsError(true);
   };
 
+  const shouldShowPlaceholder = !src || isError;
+
   return (
     <div>
-      {isError ? (
+      {shouldShowPlaceholder ? (
         <Placeholder1 />
       ) : (
         <img src={src} alt={alt} className={className} onError={handleImageError} style={style} />

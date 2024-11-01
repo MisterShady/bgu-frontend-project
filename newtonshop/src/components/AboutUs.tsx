@@ -25,7 +25,7 @@ const teamMembers: TeamMember[] = [
   },
   {
     image: "https://avatars.githubusercontent.com/u/121055448?v=4",
-    role: "Фронтендер: Еременко В.А.",
+    role: "Фронтендер: Ерёменко В.А.",
     gitlabIssues: "https://github.com/MisterShady",
   },
 ];
@@ -61,6 +61,15 @@ const AboutUs = () => {
           className="link"
         >
           Проект на GitLab
+        </a>
+
+        <a
+          href="https://drive.google.com/drive/folders/1oZZRm4cxDJmTLhow1BGXym3axNW0ZE8G"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="link"
+        >
+          Ресурсы на GoogleDisk
         </a>
       </div>
 

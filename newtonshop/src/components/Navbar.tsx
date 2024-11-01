@@ -52,27 +52,27 @@ const Navbar = () => {
               {isMenuOpen && (
                 <div className="dropdown open">
                   <ul className="dropdown-content">
-                    <Link to="/macs" style={{ textDecoration: "none" }}>
+                    <Link to="/macs">
                       <li>
                         <img src="/image/device/mac.svg" alt="MacBook" /> MacBook
                       </li>
                     </Link>
-                    <Link to="/ipads" style={{ textDecoration: "none" }}>
+                    <Link to="/ipads">
                       <li>
                         <img src="/image/device/ipad.svg" alt="iPad" /> iPad
                       </li>
                     </Link>
-                    <Link to="/iphones" style={{ textDecoration: "none" }}>
+                    <Link to="/iphones">
                       <li>
                         <img src="/image/device/iphone.svg" alt="iPhone" /> iPhone
                       </li>
                     </Link>
-                    <Link to="/watches" style={{ textDecoration: "none" }}>
+                    <Link to="/watches">
                       <li>
                         <img src="/image/device/watch.svg" alt="Watch" /> Watch
                       </li>
                     </Link>
-                    <Link to="/airpods" style={{ textDecoration: "none" }}>
+                    <Link to="/airpods">
                       <li style={{ borderRadius: "0 0 15px 15px" }}>
                         <img src="/image/device/airpods.svg" alt="Airpods" /> Airpods
                       </li>
