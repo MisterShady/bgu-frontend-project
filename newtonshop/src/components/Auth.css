@@ -1,5 +1,5 @@
 .auth-container {
-  max-width: 400px;
+  width: 400px;
   margin: 50px auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -7,13 +7,12 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   background-color: #f9f9f9;
-  position: relative;
 }
 
 .auth-container h2 {
   margin-bottom: 20px;
   font-size: 24px;
-  color: #333;
+  color: #555;
 }
 
 .auth-input-container {
@@ -31,16 +30,17 @@
 
 .auth-input-container input {
   padding: 10px;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 5px;
   font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .submit-button {
   padding: 10px;
   border: none;
   border-radius: 5px;
-  background-color: #333;
+  background-color: #514ed9;
   color: white;
   cursor: pointer;
   font-size: 16px;
@@ -48,7 +48,7 @@
 }
 
 .submit-button:hover {
-  background-color: #555;
+  background-color: #ff6140;
 }
 
 .auth-container p {
@@ -57,19 +57,10 @@
 }
 
 .auth-container a {
-  color: #007bff;
+  color: #514ed9;
   text-decoration: none;
 }
 
 .auth-container a:hover {
   text-decoration: underline;
-}
-
-.back-button {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: 24px;
-  color: #333;
-  text-decoration: none;
 }

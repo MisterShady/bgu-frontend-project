@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { searchProducts, ProductDto } from "../Api";
 import { toPlural } from "../utils";
 import "./Navbar.css";
@@ -8,6 +8,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<ProductDto[]>([]);
+  const navigate = useNavigate();
 
   const toggleMenu = useCallback(() => {
     setIsMenuOpen((prev) => !prev);
@@ -33,6 +34,15 @@ const Navbar = () => {
   const clearSuggestions = useCallback(() => {
     setSuggestions([]);
   }, []);
+
+  const handleAccountClick = () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      navigate("/profile");
+    } else {
+      navigate("/auth");
+    }
+  };
 
   return (
     <>
@@ -126,14 +136,12 @@ const Navbar = () => {
             </div>
 
             <div className="cart-icon">
-              <Link to="/login">
+              <Link to="/auth">
                 <img src="/image/cart.png" alt="Cart" />
               </Link>
             </div>
             <div className="account-icon">
-              <Link to="/login">
-                <img src="/image/account.png" alt="Account" />
-              </Link>
+              <img src="/image/account.png" alt="Account" onClick={handleAccountClick} style={{ cursor: "pointer" }} />
             </div>
           </nav>
         </div>

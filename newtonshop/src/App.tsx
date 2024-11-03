@@ -5,8 +5,6 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import "./App.css";
 import HomePage from "./components/HomePage";
-import Login from "./components/Login";
-import Register from "./components/Register";
 import Profile from "./components/Profile";
 import AboutUs from "./components/AboutUs";
 import NotFound from "./components/NotFound";
@@ -15,6 +13,7 @@ import WatchProduct from "./components/products/WatchProduct";
 import IpadProduct from "./components/products/IpadProduct";
 import IphoneProduct from "./components/products/IphoneProduct";
 import MacProduct from "./components/products/MacProduct";
+import Auth from "./components/Auth";
 
 const App = () => {
   return (
@@ -34,8 +33,7 @@ const App = () => {
             <Route path="/ipads/:id" element={<IpadProduct />} />
             <Route path="/iphones/:id" element={<IphoneProduct />} />
             <Route path="/macs/:id" element={<MacProduct />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/auth" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/about-us" element={<AboutUs />} />
             <Route path="*" element={<NotFound />} />

@@ -318,5 +318,21 @@ export interface UserDto {
   enabled: boolean;
 }
 export interface TokenDto {
-  token: string;
+  accessToken: string;
+  refreshToken: string;
+}
+export interface ProfileDto {
+  id: number;
+  email: string;
+  phoneNumber: string;
+  fullName: string;
+  dateOfBirth: string;
+  username: string;
+  password: string;
+  role: string;
+  accountNonExpired: boolean;
+  accountNonLocked: boolean;
+  credentialsNonExpired: boolean;
+  authorities: { authority: string }[];
+  enabled: boolean;
 }

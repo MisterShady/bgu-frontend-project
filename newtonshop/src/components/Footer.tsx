@@ -38,7 +38,7 @@ const Footer = () => {
       <footer className="footer">
         <img src="/image/alien.gif" alt="Alien GIF" className="footer-image" onClick={handleRightGifClick} />
         <div className="footer-content">
-          <p>Адрес: г. Москва, ул. Примерная, д. 1</p>
+          <p>Адрес: г. Белгород, ул. Победы, 85</p>
           <p>Телефон: +7 (999) 123-45-67</p>
           <p>Email: example@apple.com</p>
           <Link to="/about-us" className="about-link">

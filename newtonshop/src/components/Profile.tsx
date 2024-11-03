@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 import { getCurrentProfile } from "../Api";
-import { UserDto } from "../types";
+import { ProfileDto } from "../types";
 
 const Profile = () => {
   const [avatar, setAvatar] = useState<string>("/image/account.png");
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [orders] = useState<string[]>([]);
-  const [formData, setFormData] = useState<UserDto>({
+  const [formData, setFormData] = useState<ProfileDto>({
     id: 0,
     email: "",
     phoneNumber: "",
@@ -22,13 +23,14 @@ const Profile = () => {
     authorities: [],
     enabled: true,
   });
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (token) {
-          const data = await getCurrentProfile(token);
+        const accessToken = localStorage.getItem("accessToken");
+        if (accessToken) {
+          const data = await getCurrentProfile(accessToken);
           setFormData(data);
         }
       } catch (error) {
@@ -55,6 +57,12 @@ const Profile = () => {
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    navigate("/auth");
   };
 
   return (
@@ -109,31 +117,17 @@ const Profile = () => {
           </div>
           <div className="input-row">
             <div className="profile-input-container">
-              <label htmlFor="firstName">Имя:</label>
+              <label htmlFor="fullName">ФИО:</label>
               <input
                 type="text"
-                id="firstName"
+                id="fullName"
                 name="fullName"
-                value={formData.fullName.split(" ")[0] || ""}
+                value={formData.fullName || ""}
                 onChange={handleChange}
                 required
                 className="profile-input"
               />
             </div>
-            <div className="profile-input-container">
-              <label htmlFor="lastName">Фамилия:</label>
-              <input
-                type="text"
-                id="lastName"
-                name="fullName"
-                value={formData.fullName.split(" ")[1] || ""}
-                onChange={handleChange}
-                required
-                className="profile-input"
-              />
-            </div>
-          </div>
-          <div className="input-row">
             <div className="profile-input-container">
               <label htmlFor="birthdate">Дата рождения:</label>
               <input
@@ -146,6 +140,8 @@ const Profile = () => {
                 className="profile-input"
               />
             </div>
+          </div>
+          <div className="input-row" style={{ justifyContent: "center" }}>
             <div className="profile-input-container">
               <label htmlFor="username">Логин:</label>
               <input
@@ -166,7 +162,7 @@ const Profile = () => {
             <button type="submit" className="rounded-button">
               Сохранить профиль
             </button>
-            <button type="button" className="rounded-button">
+            <button type="button" className="rounded-button" onClick={handleLogout}>
               Выход
             </button>
             <button type="button" className="rounded-button delete-profile-button">
