@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
-import { getCurrentProfile } from "../Api";
+import { getCurrentProfile, deleteProfile } from "../Api";
 import { ProfileDto } from "../types";
 
 const Profile = () => {
@@ -23,6 +23,7 @@ const Profile = () => {
     authorities: [],
     enabled: true,
   });
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -63,6 +64,26 @@ const Profile = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     navigate("/auth");
+  };
+
+  const handleDeleteProfile = async () => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      if (accessToken) {
+        await deleteProfile(accessToken);
+        handleLogout();
+      }
+    } catch (error) {
+      console.error("Ошибка при удалении профиля:", error);
+    }
+  };
+
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
   };
 
   return (
@@ -165,7 +186,7 @@ const Profile = () => {
             <button type="button" className="rounded-button" onClick={handleLogout}>
               Выход
             </button>
-            <button type="button" className="rounded-button delete-profile-button">
+            <button type="button" className="rounded-button delete-profile-button" onClick={openDeleteModal}>
               Удалить профиль
             </button>
           </div>
@@ -183,6 +204,21 @@ const Profile = () => {
           <div className="no-orders">У вас пока нет заказов</div>
         )}
       </div>
+      {isDeleteModalOpen && (
+        <div className="delete-modal">
+          <div className="delete-modal-content">
+            <p>Вы уверены, что хотите удалить свой профиль?</p>
+            <div className="delete-modal-buttons">
+              <button className="delete-modal-button yes-button" onClick={handleDeleteProfile}>
+                Да
+              </button>
+              <button className="delete-modal-button no-button" onClick={closeDeleteModal}>
+                Нет
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

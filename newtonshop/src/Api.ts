@@ -61,6 +61,19 @@ export const refreshTokens = async (refreshToken: string): Promise<TokenDto> => 
   );
   return response.data;
 };
+export const deleteProfile = async (token: string): Promise<void> => {
+  try {
+    await axios.delete(`${BASE_URL}/users/secured/delete`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.error("Ошибка при удалении профиля:", error);
+    throw error;
+  }
+};
+
 
 export const getProductsByCategory = async (category: string): Promise<ProductDto[]> => {
   const response = await axios.get<ProductDto[]>(`${BASE_URL}/products/${category}`);
