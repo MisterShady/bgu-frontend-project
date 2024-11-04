@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { postSignIn, postSignUp } from "../Api";
 import "./Auth.css";
+import Cookies from "js-cookie";
 
 type FormData = {
   username: string;
@@ -26,7 +27,7 @@ const Auth = () => {
   const password = watch("password");
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = Cookies.get("accessToken");
     if (accessToken) {
       navigate("/profile");
     }
@@ -43,8 +44,8 @@ const Auth = () => {
         const response = await postSignIn(data);
         const { accessToken, refreshToken } = response;
 
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
+        Cookies.set("accessToken", accessToken);
+        Cookies.set("refreshToken", refreshToken);
 
         navigate("/profile");
       } else {
@@ -59,7 +60,7 @@ const Auth = () => {
 
         await postSignUp(userData);
         alert("Регистрация успешна");
-        navigate("/login");
+        navigate("/auth");
       }
     } catch (error) {
       console.error("Ошибка:", error);

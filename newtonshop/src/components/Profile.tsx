@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
-import { getCurrentProfile, deleteProfile } from "../Api";
+import { deleteProfile, getCurrentProfile, updateAvatar, updateProfile } from "../Api";
 import { ProfileDto } from "../types";
+import Cookies from "js-cookie";
 
 const Profile = () => {
   const [avatar, setAvatar] = useState<string>("/image/account.png");
@@ -15,6 +16,7 @@ const Profile = () => {
     fullName: "",
     dateOfBirth: "",
     username: "",
+    avatar: "",
     password: "",
     role: "",
     credentialsNonExpired: true,
@@ -23,16 +25,35 @@ const Profile = () => {
     authorities: [],
     enabled: true,
   });
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [existingProfile, setExistingProfile] = useState<ProfileDto>({
+    id: 0,
+    email: "",
+    phoneNumber: "",
+    fullName: "",
+    dateOfBirth: "",
+    username: "",
+    avatar: "",
+    password: "",
+    role: "",
+    credentialsNonExpired: true,
+    accountNonExpired: true,
+    accountNonLocked: true,
+    authorities: [],
+    enabled: true,
+  });
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalAction, setModalAction] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = Cookies.get("accessToken");
         if (accessToken) {
           const data = await getCurrentProfile(accessToken);
           setFormData(data);
+          setExistingProfile(data);
+          setAvatar(data.avatar ? `data:image/jpeg;base64,${data.avatar}` : "/image/account.png");
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -42,9 +63,32 @@ const Profile = () => {
     fetchUserData();
   }, []);
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setAvatar(URL.createObjectURL(e.target.files[0]));
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+
+      reader.onloadend = async () => {
+        const base64String = reader.result?.toString().split(",")[1];
+        if (base64String) {
+          setAvatar(`data:image/jpeg;base64,${base64String}`);
+          setFormData(prevData => ({
+            ...prevData,
+            avatar: base64String,
+          }));
+
+          try {
+            const accessToken = Cookies.get("accessToken");
+            if (accessToken) {
+              await updateAvatar(accessToken, file);
+            }
+          } catch (error) {
+            console.error("Error updating avatar:", error);
+          }
+        }
+      };
+
+      reader.readAsDataURL(file);
     }
   };
 
@@ -61,14 +105,14 @@ const Profile = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
     navigate("/auth");
   };
 
   const handleDeleteProfile = async () => {
     try {
-      const accessToken = localStorage.getItem("accessToken");
+      const accessToken = Cookies.get("accessToken");
       if (accessToken) {
         await deleteProfile(accessToken);
         handleLogout();
@@ -78,12 +122,51 @@ const Profile = () => {
     }
   };
 
-  const openDeleteModal = () => {
-    setIsDeleteModalOpen(true);
+  const handleUpdateProfile = async () => {
+    try {
+      const accessToken = Cookies.get("accessToken");
+      if (accessToken) {
+        const updatedData: Partial<ProfileDto> = {};
+
+        if (formData.email && formData.email !== existingProfile.email) updatedData.email = formData.email;
+        if (formData.phoneNumber && formData.phoneNumber !== existingProfile.phoneNumber) updatedData.phoneNumber = formData.phoneNumber;
+        if (formData.fullName && formData.fullName !== existingProfile.fullName) updatedData.fullName = formData.fullName;
+        if (formData.dateOfBirth && formData.dateOfBirth !== existingProfile.dateOfBirth) updatedData.dateOfBirth = formData.dateOfBirth;
+        if (formData.username && formData.username !== existingProfile.username) updatedData.username = formData.username;
+        if (formData.avatar && formData.avatar !== existingProfile.avatar) updatedData.avatar = formData.avatar;
+
+        Object.keys(updatedData).forEach(key => {
+          if (!updatedData[key as keyof Partial<ProfileDto>]) {
+            delete updatedData[key as keyof Partial<ProfileDto>];
+          }
+        });
+
+        console.log("Sending update request with data:", updatedData);
+        const updatedProfile = await updateProfile(accessToken, updatedData);
+        setFormData(updatedProfile);
+        setExistingProfile(updatedProfile);
+      }
+    } catch (error) {
+      console.error("Ошибка при обновлении профиля:", error);
+    }
   };
 
-  const closeDeleteModal = () => {
-    setIsDeleteModalOpen(false);
+  const openModal = (action: string) => {
+    setModalAction(action);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalConfirm = () => {
+    if (modalAction === "delete") {
+      handleDeleteProfile();
+    } else if (modalAction === "update") {
+      handleUpdateProfile();
+    }
+    closeModal();
   };
 
   return (
@@ -180,13 +263,13 @@ const Profile = () => {
             <button type="button" className="rounded-button">
               Сменить пароль
             </button>
-            <button type="submit" className="rounded-button">
+            <button type="button" className="rounded-button" onClick={() => openModal("update")}>
               Сохранить профиль
             </button>
             <button type="button" className="rounded-button" onClick={handleLogout}>
               Выход
             </button>
-            <button type="button" className="rounded-button delete-profile-button" onClick={openDeleteModal}>
+            <button type="button" className="rounded-button delete-profile-button" onClick={() => openModal("delete")}>
               Удалить профиль
             </button>
           </div>
@@ -204,15 +287,15 @@ const Profile = () => {
           <div className="no-orders">У вас пока нет заказов</div>
         )}
       </div>
-      {isDeleteModalOpen && (
-        <div className="delete-modal">
-          <div className="delete-modal-content">
-            <p>Вы уверены, что хотите удалить свой профиль?</p>
-            <div className="delete-modal-buttons">
-              <button className="delete-modal-button yes-button" onClick={handleDeleteProfile}>
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p>{modalAction === "delete" ? "Вы уверены, что хотите удалить свой профиль?" : "Вы уверены, что хотите изменить свой профиль?"}</p>
+            <div className="modal-buttons">
+              <button className="modal-button yes-button" onClick={handleModalConfirm}>
                 Да
               </button>
-              <button className="delete-modal-button no-button" onClick={closeDeleteModal}>
+              <button className="modal-button no-button" onClick={closeModal}>
                 Нет
               </button>
             </div>

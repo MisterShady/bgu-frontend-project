@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { searchProducts, ProductDto } from "../Api";
+import { searchProducts, ProductDto, getCurrentProfile } from "../Api";
 import { toPlural } from "../utils";
 import "./Navbar.css";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<ProductDto[]>([]);
+  const [avatar, setAvatar] = useState<string>("/image/account.png");
   const navigate = useNavigate();
 
   const toggleMenu = useCallback(() => {
@@ -31,12 +33,28 @@ const Navbar = () => {
     return () => clearTimeout(delayDebounceFn);
   }, [searchTerm]);
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const accessToken = Cookies.get("accessToken");
+        if (accessToken) {
+          const data = await getCurrentProfile(accessToken);
+          setAvatar(data.avatar ? `data:image/jpeg;base64,${data.avatar}` : "/image/account.png");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const clearSuggestions = useCallback(() => {
     setSuggestions([]);
   }, []);
 
   const handleAccountClick = () => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = Cookies.get("accessToken");
     if (accessToken) {
       navigate("/profile");
     } else {
@@ -141,7 +159,7 @@ const Navbar = () => {
               </Link>
             </div>
             <div className="account-icon">
-              <img src="/image/account.png" alt="Account" onClick={handleAccountClick} style={{ cursor: "pointer" }} />
+              <img src={avatar} alt="Account" onClick={handleAccountClick} style={{ cursor: "pointer" }} />
             </div>
           </nav>
         </div>

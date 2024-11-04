@@ -328,11 +328,13 @@ export interface ProfileDto {
   fullName: string;
   dateOfBirth: string;
   username: string;
+  avatar: string;
   password: string;
   role: string;
+  credentialsNonExpired: boolean;
   accountNonExpired: boolean;
   accountNonLocked: boolean;
-  credentialsNonExpired: boolean;
   authorities: { authority: string }[];
   enabled: boolean;
 }
+

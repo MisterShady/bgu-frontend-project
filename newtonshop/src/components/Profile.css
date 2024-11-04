@@ -150,7 +150,8 @@
 .order-item {
   margin-bottom: 10px;
 }
-.delete-modal {
+
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -163,21 +164,21 @@
   z-index: 1000;
 }
 
-.delete-modal-content {
+.modal-content {
   background: #fff;
   padding: 20px;
   border-radius: 10px;
   text-align: center;
 }
 
-.delete-modal-buttons {
+.modal-buttons {
   display: flex;
   justify-content: center;
   gap: 10px;
   margin-top: 20px;
 }
 
-.delete-modal-button {
+.modal-button {
   padding: 10px 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -188,19 +189,18 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.delete-modal-button.yes-button {
+.modal-button.yes-button {
   background-color: #ff6140;
 }
 
-.delete-modal-button.yes-button:hover {
+.modal-button.yes-button:hover {
   background-color: #e45b14;
 }
 
-.delete-modal-button.no-button {
+.modal-button.no-button {
   background-color: #ccc;
 }
 
-.delete-modal-button.no-button:hover {
+.modal-button.no-button:hover {
   background-color: #b3b3b3;
 }
-
