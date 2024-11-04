@@ -204,3 +204,30 @@
 .modal-button.no-button:hover {
   background-color: #b3b3b3;
 }
+.password-input-container {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  margin-bottom: 15px;
+}
+
+.password-input {
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 1.4rem;
+  width: 100%;
+}
+
+.password-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.change-password-title {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-align: center;
+}

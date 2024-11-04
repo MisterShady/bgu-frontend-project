@@ -90,6 +90,20 @@ export const updateProfile = async (token: string, profileData: Partial<ProfileD
   return response.data;
 };
 
+export const updatePassword = async (token: string, passwordData: { providedCurrentPassword: string; newPassword: string }): Promise<ProfileDto> => {
+  const response = await axios.put<ProfileDto>(
+    `${BASE_URL}/users/secured/update-password`,
+    passwordData,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+
 export const updateAvatar = async (token: string, file: File): Promise<ProfileDto> => {
   const formData = new FormData();
   formData.append("file", file);
