@@ -34,7 +34,6 @@
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 10px;
   transition: filter 0.3s;
 }
 
@@ -43,12 +42,12 @@
 }
 
 .avatar-container:hover::after {
-  content: "+";
+  content: "Edit";
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 2rem;
+  font-size: 1rem;
   color: white;
 }
 
@@ -204,6 +203,7 @@
 .modal-button.no-button:hover {
   background-color: #b3b3b3;
 }
+
 .password-input-container {
   display: flex;
   flex-direction: column;
@@ -226,8 +226,14 @@
   align-items: center;
   width: 100%;
 }
+
 .change-password-title {
   font-size: 1.8rem;
   margin-bottom: 20px;
   text-align: center;
+}
+
+.username {
+  font-size: 1.3rem;
+  margin-top: 10px;
 }

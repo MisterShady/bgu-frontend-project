@@ -1,6 +1,5 @@
-import axios from "axios";
+import axios from "./axiosConfig";
 import { AirpodsDto, IpadDto, IphoneDto, MacDto, ProfileDto, TokenDto, UserDto, WatchDto } from "./types";
-import Cookies from "js-cookie";
 
 const BASE_URL = "http://localhost:9000/api/v1";
 
@@ -24,43 +23,29 @@ export const postSignUp = async (userData: Partial<UserDto>): Promise<UserDto> =
 export const postSignIn = async (userData: Partial<UserDto>): Promise<TokenDto> => {
   const response = await axios.post<TokenDto>(
     `${BASE_URL}/users/sign-in`,
-    userData
-  );
-  return response.data;
-};
-
-export const getCurrentProfile = async (token: string): Promise<ProfileDto> => {
-  try {
-    const response = await axios.get<ProfileDto>(`${BASE_URL}/users/secured/get-current`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
-      const refreshToken = Cookies.get("refreshToken");
-      if (refreshToken) {
-        const newTokens = await refreshTokens(refreshToken);
-        Cookies.set("accessToken", newTokens.accessToken);
-        Cookies.set("refreshToken", newTokens.refreshToken);
-        return getCurrentProfile(newTokens.accessToken);
-      }
-    }
-    throw error;
-  }
-};
-
-export const refreshTokens = async (refreshToken: string): Promise<TokenDto> => {
-  const response = await axios.post<TokenDto>(
-    `${BASE_URL}/users/refresh-token`,
-    {},
+    userData,
     {
-      params: {
-        refreshToken,
-      },
+      withCredentials: true,
     }
   );
+  const tokens = response.data;
+
+  localStorage.setItem("accessToken", tokens.accessToken);
+
+  return tokens;
+};
+
+export const getCurrentProfile = async (): Promise<ProfileDto> => {
+  const accessToken = localStorage.getItem("accessToken");
+  if (!accessToken) {
+    throw new Error("Access token not found");
+  }
+
+  const response = await axios.get<ProfileDto>(`${BASE_URL}/users/secured/get-current`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   return response.data;
 };
 
@@ -102,7 +87,6 @@ export const updatePassword = async (token: string, passwordData: { providedCurr
   );
   return response.data;
 };
-
 
 export const updateAvatar = async (token: string, file: File): Promise<ProfileDto> => {
   const formData = new FormData();

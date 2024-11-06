@@ -35,7 +35,7 @@ const NewProducts = () => {
 
   return (
     <div className="new-products">
-      <h2>Новинки в продаже </h2>
+      <h2>Новинки в продаже</h2>
       <div className="product-list">
         {products.map((product) => (
           <Link
@@ -47,12 +47,8 @@ const NewProducts = () => {
             <div className="product-item">
               <ImageWrapper src={product.thumbUrl} alt={product.title} className="product-image" />
               <h3>{product.title}</h3>
-              <div className="price-container1">
-                <span className="price-box">{product.price}$</span>
-                <button className="cart-icon-container">
-                  <img src="/image/cart-white.png" alt="Cart" className="cart-icon-popular" />
-                </button>
-              </div>
+              <p className="price-box">{product.price}$</p>
+              <button className="details-button">Подробнее</button>
             </div>
           </Link>
         ))}

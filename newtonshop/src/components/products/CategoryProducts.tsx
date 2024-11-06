@@ -25,7 +25,7 @@ const CategoryProducts = ({ category }: ProductProps) => {
                         </LazyLoad>
                         <h2>{item.title}</h2>
                         <p className="price">{item.price}$</p>
-                        <button className="buy-button">В корзину</button>
+                        <button className="buy-button">Подробнее</button>
                     </motion.div>
                 </Link>
             </LazyLoad>

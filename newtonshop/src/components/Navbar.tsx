@@ -36,9 +36,9 @@ const Navbar = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const accessToken = Cookies.get("accessToken");
+        const accessToken = localStorage.getItem("accessToken");
         if (accessToken) {
-          const data = await getCurrentProfile(accessToken);
+          const data = await getCurrentProfile();
           setAvatar(data.avatar ? `data:image/jpeg;base64,${data.avatar}` : "/image/account.png");
         }
       } catch (error) {
@@ -47,7 +47,24 @@ const Navbar = () => {
     };
 
     fetchUserData();
+
+    const handleLogin = () => {
+      fetchUserData();
+    };
+
+    const handleLogout = () => {
+      setAvatar("/image/account.png");
+    };
+
+    window.addEventListener("login", handleLogin);
+    window.addEventListener("logout", handleLogout);
+
+    return () => {
+      window.removeEventListener("login", handleLogin);
+      window.removeEventListener("logout", handleLogout);
+    };
   }, []);
+
 
   const clearSuggestions = useCallback(() => {
     setSuggestions([]);

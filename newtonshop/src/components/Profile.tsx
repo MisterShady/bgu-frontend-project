@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
-import { deleteProfile, getCurrentProfile, updateAvatar, updateProfile, updatePassword } from "../Api";
+import { deleteProfile, getCurrentProfile, updateAvatar, updatePassword, updateProfile } from "../Api";
 import { ProfileDto } from "../types";
-import Cookies from "js-cookie";
 
 const Profile = () => {
   const [avatar, setAvatar] = useState<string>("/image/account.png");
@@ -54,13 +53,10 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const accessToken = Cookies.get("accessToken");
-        if (accessToken) {
-          const data = await getCurrentProfile(accessToken);
-          setFormData(data);
-          setExistingProfile(data);
-          setAvatar(data.avatar ? `data:image/jpeg;base64,${data.avatar}` : "/image/account.png");
-        }
+        const data = await getCurrentProfile();
+        setFormData(data);
+        setExistingProfile(data);
+        setAvatar(data.avatar ? `data:image/jpeg;base64,${data.avatar}` : "/image/account.png");
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -68,6 +64,15 @@ const Profile = () => {
 
     fetchUserData();
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    console.log("Logged out and access token removed.");
+    navigate("/auth");
+    // Обновляем состояние аватара в Navbar
+    const event = new Event("logout");
+    window.dispatchEvent(event);
+  };
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -84,7 +89,7 @@ const Profile = () => {
           }));
 
           try {
-            const accessToken = Cookies.get("accessToken");
+            const accessToken = localStorage.getItem("accessToken");
             if (accessToken) {
               await updateAvatar(accessToken, file);
             }
@@ -118,15 +123,9 @@ const Profile = () => {
     }));
   };
 
-  const handleLogout = () => {
-    Cookies.remove("accessToken");
-    Cookies.remove("refreshToken");
-    navigate("/auth");
-  };
-
   const handleDeleteProfile = async () => {
     try {
-      const accessToken = Cookies.get("accessToken");
+      const accessToken = localStorage.getItem("accessToken");
       if (accessToken) {
         await deleteProfile(accessToken);
         handleLogout();
@@ -138,7 +137,7 @@ const Profile = () => {
 
   const handleUpdateProfile = async () => {
     try {
-      const accessToken = Cookies.get("accessToken");
+      const accessToken = localStorage.getItem("accessToken");
       if (accessToken) {
         const updatedData: Partial<ProfileDto> = {};
 
@@ -146,7 +145,6 @@ const Profile = () => {
         if (formData.phoneNumber && formData.phoneNumber !== existingProfile.phoneNumber) updatedData.phoneNumber = formData.phoneNumber;
         if (formData.fullName && formData.fullName !== existingProfile.fullName) updatedData.fullName = formData.fullName;
         if (formData.dateOfBirth && formData.dateOfBirth !== existingProfile.dateOfBirth) updatedData.dateOfBirth = formData.dateOfBirth;
-        if (formData.username && formData.username !== existingProfile.username) updatedData.username = formData.username;
         if (formData.avatar && formData.avatar !== existingProfile.avatar) updatedData.avatar = formData.avatar;
 
         Object.keys(updatedData).forEach(key => {
@@ -167,7 +165,7 @@ const Profile = () => {
 
   const handleUpdatePassword = async () => {
     try {
-      const accessToken = Cookies.get("accessToken");
+      const accessToken = localStorage.getItem("accessToken");
       if (accessToken) {
         if (passwordData.newPassword !== passwordData.confirmNewPassword) {
           alert("Новый пароль и подтверждение нового пароля не совпадают");
@@ -267,6 +265,7 @@ const Profile = () => {
               onClick={handleAvatarClick}
             >
               <img src={avatar} alt="Avatar" className="avatar" />
+              <p className="username">{formData.username}</p>
               {isMenuOpen && (
                 <div>
                   <input
@@ -333,20 +332,6 @@ const Profile = () => {
                   />
                 </div>
               </div>
-              <div className="input-row" style={{ justifyContent: "center" }}>
-                <div className="profile-input-container">
-                  <label htmlFor="username">Логин:</label>
-                  <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={formData.username || ""}
-                    onChange={handleChange}
-                    required
-                    className="profile-input"
-                  />
-                </div>
-              </div>
               <div className="button-container">
                 <button type="button" className="rounded-button" onClick={() => setIsChangePassword(true)}>
                   Сменить пароль
@@ -357,7 +342,8 @@ const Profile = () => {
                 <button type="button" className="rounded-button" onClick={handleLogout}>
                   Выход
                 </button>
-                <button type="button" className="rounded-button delete-profile-button" onClick={() => openModal("delete")}>
+                <button type="button" className="rounded-button delete-profile-button"
+                        onClick={() => openModal("delete")}>
                   Удалить профиль
                 </button>
               </div>

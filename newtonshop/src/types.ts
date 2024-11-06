@@ -319,7 +319,6 @@ export interface UserDto {
 }
 export interface TokenDto {
   accessToken: string;
-  refreshToken: string;
 }
 export interface ProfileDto {
   id: number;

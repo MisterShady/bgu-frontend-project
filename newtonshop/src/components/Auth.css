@@ -64,3 +64,16 @@
 .auth-container a:hover {
   text-decoration: underline;
 }
+
+.auth-input-container .error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.backend-error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  text-align: center;
+}

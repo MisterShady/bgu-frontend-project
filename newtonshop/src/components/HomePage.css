@@ -92,7 +92,7 @@
 
 .product-item {
   border: 1px solid #ddd;
-  padding: 20px;
+  padding: 10px;
   text-align: center;
   width: 200px;
   border-radius: 8px;
@@ -126,45 +126,24 @@
 .product-item p {
   font-size: 1.2em;
   font-weight: bold;
-  color: #fff;
+  color: #514ed9;
   margin: 10px 0;
   text-decoration: none;
 }
 
-.price-container1 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin-top: auto;
-  padding-bottom: 10px;
-}
-
-.price-box {
-  margin-left: 10px;
-  color: #514ed9;
-  font-size: 1.5em;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.cart-icon-container {
-  margin-right: 10px;
+.details-button {
   background-color: #514ed9;
+  color: white;
   border: none;
   border-radius: 5px;
-  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
   cursor: pointer;
+  text-decoration: none;
   transition: background-color 0.3s ease;
 }
 
-.cart-icon-container img {
-  padding-top: 10px;
-  height: 30px;
-  width: 90px;
-}
-
-.cart-icon-container:hover {
+.details-button:hover {
   background-color: #ff6140;
 }
 

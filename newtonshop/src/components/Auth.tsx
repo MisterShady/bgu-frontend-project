@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { postSignIn, postSignUp } from "../Api";
 import "./Auth.css";
-import Cookies from "js-cookie";
 
 type FormData = {
   username: string;
@@ -22,12 +21,13 @@ interface RegisterFormInputs {
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData & RegisterFormInputs>();
+  const [backendError, setBackendError] = useState<string | null>(null);
+  const { register, handleSubmit, watch, formState: { errors }, setError } = useForm<FormData & RegisterFormInputs>();
   const navigate = useNavigate();
   const password = watch("password");
 
   useEffect(() => {
-    const accessToken = Cookies.get("accessToken");
+    const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       navigate("/profile");
     }
@@ -35,17 +35,19 @@ const Auth = () => {
 
   const onSubmit = async (data: FormData & RegisterFormInputs) => {
     if (!isLogin && data.password !== data.confirmPassword) {
-      alert("Пароли не совпадают");
+      setError("confirmPassword", { type: "custom", message: "Пароли не совпадают" });
       return;
     }
 
     try {
       if (isLogin) {
         const response = await postSignIn(data);
-        const { accessToken, refreshToken } = response;
+        const { accessToken } = response;
 
-        Cookies.set("accessToken", accessToken);
-        Cookies.set("refreshToken", refreshToken);
+        localStorage.setItem("accessToken", accessToken);
+
+        const event = new Event("login");
+        window.dispatchEvent(event);
 
         navigate("/profile");
       } else {
@@ -59,12 +61,20 @@ const Auth = () => {
         };
 
         await postSignUp(userData);
-        alert("Регистрация успешна");
-        navigate("/auth");
+
+        const response = await postSignIn(data);
+        const { accessToken } = response;
+
+        localStorage.setItem("accessToken", accessToken);
+
+        const event = new Event("login");
+        window.dispatchEvent(event);
+
+        navigate("/profile");
       }
     } catch (error) {
       console.error("Ошибка:", error);
-      alert(isLogin ? "Ошибка авторизации" : "Ошибка регистрации");
+      setBackendError(isLogin ? "Ошибка авторизации" : "Ошибка регистрации");
     }
   };
 
@@ -88,7 +98,7 @@ const Auth = () => {
                 })}
                 className="auth-input-container input"
               />
-              {errors.email && <p>{errors.email.message}</p>}
+              {errors.email && <p className="error-message">{errors.email.message}</p>}
             </div>
 
             <div className="auth-input-container">
@@ -105,7 +115,7 @@ const Auth = () => {
                 })}
                 className="auth-input-container input"
               />
-              {errors.phone && <p>{errors.phone.message}</p>}
+              {errors.phone && <p className="error-message">{errors.phone.message}</p>}
             </div>
 
             <div className="auth-input-container">
@@ -116,7 +126,7 @@ const Auth = () => {
                 {...register("fullName", { required: "Поле ФИО обязательно" })}
                 className="auth-input-container input"
               />
-              {errors.fullName && <p>{errors.fullName.message}</p>}
+              {errors.fullName && <p className="error-message">{errors.fullName.message}</p>}
             </div>
 
             <div className="auth-input-container">
@@ -127,7 +137,7 @@ const Auth = () => {
                 {...register("birthDate", { required: "Поле дата рождения обязательно" })}
                 className="auth-input-container input"
               />
-              {errors.birthDate && <p>{errors.birthDate.message}</p>}
+              {errors.birthDate && <p className="error-message">{errors.birthDate.message}</p>}
             </div>
           </>
         )}
@@ -140,7 +150,7 @@ const Auth = () => {
             {...register("username", { required: "Поле логин обязательно" })}
             className="auth-input-container input"
           />
-          {errors.username && <p>{errors.username.message}</p>}
+          {errors.username && <p className="error-message">{errors.username.message}</p>}
         </div>
 
         <div className="auth-input-container">
@@ -148,13 +158,10 @@ const Auth = () => {
           <input
             type="password"
             id="password"
-            {...register("password", {
-              required: "Поле пароль обязательно",
-              minLength: { value: 6, message: "Пароль должен содержать минимум 6 символов" },
-            })}
+            {...register("password", { required: "Поле пароль обязательно" })}
             className="auth-input-container input"
           />
-          {errors.password && <p>{errors.password.message}</p>}
+          {errors.password && <p className="error-message">{errors.password.message}</p>}
         </div>
 
         {!isLogin && (
@@ -168,9 +175,11 @@ const Auth = () => {
               })}
               className="auth-input-container input"
             />
-            {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+            {errors.confirmPassword && <p className="error-message">{errors.confirmPassword.message}</p>}
           </div>
         )}
+
+        {backendError && <h1 className="backend-error-message">{backendError}</h1>}
 
         <button type="submit" className="submit-button">
           {isLogin ? "Войти" : "Зарегистрироваться"}
@@ -178,7 +187,10 @@ const Auth = () => {
       </form>
       <p>
         {isLogin ? "У меня нет аккаунта. " : "У меня есть аккаунт. "}
-        <a href="#" onClick={() => setIsLogin(!isLogin)}>
+        <a href="#" onClick={() => {
+          setIsLogin(!isLogin);
+          setBackendError(null);
+        }}>
           {isLogin ? "Зарегистрироваться" : "Войти"}
         </a>
       </p>
