@@ -1,0 +1,160 @@
+.cart-page {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    width: 1275px;
+    align-items: flex-start;
+}
+
+.cart-items {
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 60%;
+    flex-grow: 1;
+}
+
+.customer-info {
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 30%;
+    position: relative;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.cart-item img {
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+}
+
+.item-details {
+    flex-grow: 1;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-controls button {
+    margin: 0 10px;
+}
+
+.remove-button {
+    margin-top: 10px;
+}
+
+.step-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #514ed9;
+    color: white;
+    margin: 20px auto;
+    font-size: 1.2rem;
+    position: relative;
+    z-index: 1;
+}
+
+.step-text {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.cart-page input {
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    width: calc(100% - 40px);
+    margin-left: 20px;
+}
+
+.cart-page input[readonly] {
+    background-color: #f0f0f0;
+    color: #808080;
+}
+
+.total-price {
+    margin-top: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.order-button {
+    width: 100%;
+    padding: 15px;
+    background-color: #514ed9;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.order-button:hover {
+    background-color: #ff6140;
+}
+
+.empty-cart {
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 80px;
+}
+
+.step-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.step-line::before {
+    content: "";
+    width: 0;
+    height: 2px;
+    background-color: #514ed9;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: -1;
+    transition: width 0.3s ease;
+}
+
+.step-line.active::before {
+    width: 100%;
+}
+
+.step-line::after {
+    content: "";
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, transparent 50%, #514ed9 50%) repeat-x;
+    background-size: 10px 2px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: -1;
+    transition: width 0.3s ease;
+}
+
+.step-line.active::after {
+    width: 100%;
+}

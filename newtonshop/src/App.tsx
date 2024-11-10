@@ -14,6 +14,7 @@ import IpadProduct from "./components/products/IpadProduct";
 import IphoneProduct from "./components/products/IphoneProduct";
 import MacProduct from "./components/products/MacProduct";
 import Auth from "./components/Auth";
+import CartPage from "./components/CartPage";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
             <Route path="/auth" element={<Auth />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/about-us" element={<AboutUs />} />
+            <Route path="/cart" element={<CartPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

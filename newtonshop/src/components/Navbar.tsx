@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { searchProducts, ProductDto, getCurrentProfile } from "../Api";
 import { toPlural } from "../utils";
 import "./Navbar.css";
-import Cookies from "js-cookie";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -65,15 +64,23 @@ const Navbar = () => {
     };
   }, []);
 
-
   const clearSuggestions = useCallback(() => {
     setSuggestions([]);
   }, []);
 
   const handleAccountClick = () => {
-    const accessToken = Cookies.get("accessToken");
+    const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       navigate("/profile");
+    } else {
+      navigate("/auth");
+    }
+  };
+
+  const handleCartClick = () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      navigate("/cart");
     } else {
       navigate("/auth");
     }
@@ -170,13 +177,11 @@ const Navbar = () => {
               )}
             </div>
 
-            <div className="cart-icon">
-              <Link to="/auth">
-                <img src="/image/cart.png" alt="Cart" />
-              </Link>
+            <div className="cart-icon" onClick={handleCartClick} style={{ cursor: "pointer" }}>
+              <img src="/image/cart.png" alt="Cart" />
             </div>
-            <div className="account-icon">
-              <img src={avatar} alt="Account" onClick={handleAccountClick} style={{ cursor: "pointer" }} />
+            <div className="account-icon" onClick={handleAccountClick} style={{ cursor: "pointer" }}>
+              <img src={avatar} alt="Account" />
             </div>
           </nav>
         </div>
