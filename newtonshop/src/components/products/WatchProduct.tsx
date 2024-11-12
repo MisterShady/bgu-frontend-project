@@ -7,7 +7,6 @@ import { useFetch } from "../hooks/useFetch";
 import { getDataOrFallback } from "../../utils";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
-import FlyingImage from "../handler/FlyingImage";
 
 const WatchProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,7 +17,6 @@ const WatchProduct = () => {
   const [selectedCaseIndex, setSelectedCaseIndex] = useState<number | null>(null);
   const [selectedVersionIndex, setSelectedVersionIndex] = useState<number | null>(null);
   const [selectedSizeIndex, setSelectedSizeIndex] = useState<number | null>(null);
-  const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
     if (watch) {
@@ -66,14 +64,16 @@ const WatchProduct = () => {
     if (watch) {
       const cartItem: CartItemRequestDto = {
         productId: watch.id,
-        config: `Band Type: ${selectedBandType?.material}, Band Style: ${selectedBandStyle?.name}, Case: ${watch.caseTypes[selectedCaseIndex || 0].material}, Version: ${watch.versions[selectedVersionIndex || 0].type}, Size: ${selectedSizeIndex === 0 ? watch.size.large.name : typeof watch.size.small === "object" && watch.size.small !== null ? watch.size.small.name : watch.size.small}`,
+        config: `Band Type: ${selectedBandType?.material}, Band Style: ${selectedBandStyle?.name}, 
+        Case: ${watch.caseTypes[selectedCaseIndex || 0].material}, 
+        Version: ${watch.versions[selectedVersionIndex || 0].type}, 
+        Size: ${selectedSizeIndex === 0 ? watch.size.large.name : typeof watch.size.small === "object" && 
+        watch.size.small !== null ? watch.size.small.name : watch.size.small}`,
         imageUrl: selectedImage || watch.images[0],
         price: totalPrice,
       };
       try {
         await postCartItem(cartItem);
-        setAnimate(true);
-        setTimeout(() => setAnimate(false), 2000);
       } catch (error) {
         console.error("Ошибка при добавлении товара в корзину:", error);
       }
@@ -248,7 +248,6 @@ const WatchProduct = () => {
           </div>
         </div>
       </div>
-      {animate && <FlyingImage imageUrl={selectedImage || watch.images[0]} title={watch.title} />}
     </div>
   );
 };

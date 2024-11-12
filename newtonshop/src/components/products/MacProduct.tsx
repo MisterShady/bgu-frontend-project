@@ -7,7 +7,7 @@ import { colorMapping } from "./colorMapping";
 import { useFetch } from "../hooks/useFetch";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
-import FlyingImage from "../handler/FlyingImage";
+import Notification from "../Notification";
 
 const MacProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,7 +16,8 @@ const MacProduct = () => {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
   const [selectedRam, setSelectedRam] = useState<string | null>(null);
-  const [animate, setAnimate] = useState(false);
+  const [notifications, setNotifications] = useState<{ id: number, item: CartItemRequestDto }[]>([]);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   const getDataOrFallback = <T, K extends keyof T>(obj: T | null | undefined, key: K, fallback: T[K]): T[K] => {
     return obj && obj[key] !== undefined ? obj[key] : fallback;
@@ -52,21 +53,32 @@ const MacProduct = () => {
   const totalPrice = mac.price + selectedStoragePrice + selectedRamPrice;
 
   const handleAddToCart = async () => {
-    if (mac) {
+    if (mac && !isAddingToCart) {
+      setIsAddingToCart(true);
       const cartItem: CartItemRequestDto = {
         productId: mac.id,
         config: `Color: ${selectedColor}, Storage: ${selectedStorage}, RAM: ${selectedRam}`,
         imageUrl: selectedImage || mac.images[0],
         price: totalPrice,
       };
+
       try {
         await postCartItem(cartItem);
-        setAnimate(true);
-        setTimeout(() => setAnimate(false), 2000);
+        setNotifications((prevNotifications) => [...prevNotifications, { id: Date.now(), item: cartItem }]);
       } catch (error) {
         console.error("Ошибка при добавлении товара в корзину:", error);
+      } finally {
+        setIsAddingToCart(false);
       }
     }
+  };
+
+  const handleNotificationComplete = (id: number) => {
+    setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
+  };
+
+  const handleNotificationCancel = (id: number) => {
+    setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
   };
 
   return (
@@ -193,7 +205,17 @@ const MacProduct = () => {
           )}
         </div>
       </div>
-      {animate && <FlyingImage imageUrl={selectedImage || mac.images[0]} title={mac.title} />}
+
+      {notifications.map((notification, index) => (
+        <Notification
+          key={notification.id}
+          item={notification.item}
+          onCancel={() => handleNotificationCancel(notification.id)}
+          onComplete={() => handleNotificationComplete(notification.id)}
+          index={index}
+          operation="add"
+        />
+      ))}
     </div>
   );
 };

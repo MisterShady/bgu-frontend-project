@@ -8,7 +8,7 @@ import { colorMapping } from "./colorMapping";
 import { useFetch } from "../hooks/useFetch";
 import { getDataOrFallback } from "../../utils";
 import Spinner from "../Spinner";
-import FlyingImage from "../handler/FlyingImage";
+import Notification from "../Notification";
 
 const IpadProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,6 +19,8 @@ const IpadProduct = () => {
   const [selectedConnectivity, setSelectedConnectivity] = useState<string | null>(null);
   const [selectedApplePencil, setSelectedApplePencil] = useState<string | null>(null);
   const [selectedSmartKeyboard, setSelectedSmartKeyboard] = useState<string | null>(null);
+  const [notifications, setNotifications] = useState<{ id: number, item: CartItemRequestDto }[]>([]);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   const selectedStoragePrice = ipad?.storages.find((storage) => storage.size === selectedStorage)?.additionalPrice || 0;
   const selectedConnectivityPrice =
@@ -27,13 +29,12 @@ const IpadProduct = () => {
     ipad?.applePencils.find((pencil) => pencil.type === selectedApplePencil)?.additionalPrice || 0;
   const selectedSmartKeyboardPrice =
     ipad?.smartKeyboards.find((keyboard) => keyboard.type === selectedSmartKeyboard)?.additionalPrice || 0;
-  const [animate, setAnimate] = useState(false);
   const totalPrice = ipad
     ? ipad.price +
-      selectedStoragePrice +
-      selectedConnectivityPrice +
-      selectedApplePencilPrice +
-      selectedSmartKeyboardPrice
+    selectedStoragePrice +
+    selectedConnectivityPrice +
+    selectedApplePencilPrice +
+    selectedSmartKeyboardPrice
     : 0;
 
   useEffect(() => {
@@ -56,21 +57,32 @@ const IpadProduct = () => {
   }
 
   const handleAddToCart = async () => {
-    if (ipad) {
+    if (ipad && !isAddingToCart) {
+      setIsAddingToCart(true);
       const cartItem: CartItemRequestDto = {
         productId: ipad.id,
         config: `Color: ${selectedColor}, Storage: ${selectedStorage}, Connectivity: ${selectedConnectivity}, Apple Pencil: ${selectedApplePencil}, Smart Keyboard: ${selectedSmartKeyboard}`,
         imageUrl: selectedImage || ipad.images[0],
         price: totalPrice,
       };
+
       try {
         await postCartItem(cartItem);
-        setAnimate(true);
-        setTimeout(() => setAnimate(false), 2000);
+        setNotifications((prevNotifications) => [...prevNotifications, { id: Date.now(), item: cartItem }]);
       } catch (error) {
         console.error("Ошибка при добавлении товара в корзину:", error);
+      } finally {
+        setIsAddingToCart(false);
       }
     }
+  };
+
+  const handleNotificationComplete = (id: number) => {
+    setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
+  };
+
+  const handleNotificationCancel = (id: number) => {
+    setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
   };
 
   return (
@@ -228,7 +240,17 @@ const IpadProduct = () => {
           </div>
         </div>
       </div>
-      {animate && <FlyingImage imageUrl={selectedImage || ipad.images[0]} title={ipad.title} />}
+
+      {notifications.map((notification, index) => (
+        <Notification
+          key={notification.id}
+          item={notification.item}
+          onCancel={() => handleNotificationCancel(notification.id)}
+          onComplete={() => handleNotificationComplete(notification.id)}
+          index={index}
+          operation="add"
+        />
+      ))}
     </div>
   );
 };

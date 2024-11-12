@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getCartItems, updateCartItem, deleteCartItem, getCurrentProfile } from "../Api";
+import { getCartItems, updateCartItem, getCurrentProfile, deleteCartItem } from "../Api";
 import { CartItemDto } from "../types";
+import Notification from "./Notification";
 import "./CartPage.css";
+import "./Notification.css";
 
 const CartPage = () => {
   const [items, setItems] = useState<CartItemDto[]>([]);
@@ -12,7 +14,8 @@ const CartPage = () => {
   });
   const [deliveryInfo, setDeliveryInfo] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(1); // Начинаем с шага 1
+  const [notifications, setNotifications] = useState<{ id: number, item: CartItemDto }[]>([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -49,24 +52,45 @@ const CartPage = () => {
     if (quantity < 1) return;
     try {
       const updatedItem = await updateCartItem(id, quantity, true);
-      setItems(items.map((item) => (item.id === id ? updatedItem : item)));
+      setItems(items.map(item => item.id === id ? updatedItem : item));
     } catch (error) {
       console.error("Error updating cart item:", error);
     }
   };
 
+
+  const handleNotificationCancel = (id: number) => {
+    setNotifications(prevNotifications => prevNotifications.filter(notification => notification.id !== id));
+  };
+
   const handleRemoveItem = async (id: number) => {
-    try {
-      await deleteCartItem(id);
-      setItems(items.filter((item) => item.id !== id));
-    } catch (error) {
-      console.error("Error deleting cart item:", error);
+    const itemToRemove = items.find(item => item.id === id);
+    if (itemToRemove) {
+      const isItemInNotifications = notifications.some(notification => notification.item.id === itemToRemove.id);
+      if (!isItemInNotifications) {
+        setNotifications(prevNotifications => [...prevNotifications, { id, item: itemToRemove }]);
+      }
     }
   };
 
+
+  const handleNotificationComplete = async (id: number) => {
+    const notification = notifications.find(notification => notification.id === id);
+    if (notification) {
+      try {
+        await deleteCartItem(notification.item.id);
+        setItems(items.filter(item => item.id !== notification.item.id));
+        setNotifications(prevNotifications => prevNotifications.filter(notification => notification.id !== id));
+      } catch (error) {
+        console.error("Error deleting cart item:", error);
+      }
+    }
+  };
+
+
   const handleCustomerDataChange = (field: string, value: string) => {
     setCustomerData({ ...customerData, [field]: value });
-    if (Object.values(customerData).every((value) => value) && Object.values(customerData).length === 3) {
+    if (Object.values(customerData).every(value => value) && Object.values(customerData).length === 3) {
       setCurrentStep(2);
     }
   };
@@ -97,7 +121,7 @@ const CartPage = () => {
   const formatCardNumber = (value: string) => {
     const cleanedValue = value.replace(/\D/g, "");
     const match = cleanedValue.match(/.{1,4}/g);
-    return match ? match.join("-") : "";
+    return (match ? match.join("-") : "");
   };
 
   const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -112,18 +136,12 @@ const CartPage = () => {
               <div className="item-details">
                 <h3>{item.name}</h3>
                 <div className="quantity-container">
-                  <button
-                    className="quantity-button left"
-                    onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                  >
-                    -
+                  <button className="quantity-button left"
+                          onClick={() => handleQuantityChange(item.id, item.quantity - 1)}>-
                   </button>
                   <span>{item.quantity}</span>
-                  <button
-                    className="quantity-button right"
-                    onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
-                  >
-                    +
+                  <button className="quantity-button right"
+                          onClick={() => handleQuantityChange(item.id, item.quantity + 1)}>+
                   </button>
                 </div>
                 <div className="config-items">
@@ -200,6 +218,17 @@ const CartPage = () => {
         <div className="total-price">Итоговая цена: {totalPrice.toFixed(2)} $</div>
         <button className="order-button">Оформить заказ</button>
       </div>
+
+      {notifications.map((notification, index) => (
+        <Notification
+          key={notification.id}
+          item={notification.item}
+          onCancel={() => handleNotificationCancel(notification.id)}
+          onComplete={() => handleNotificationComplete(notification.id)}
+          index={index}
+          operation="remove"
+        />
+      ))}
     </div>
   );
 };

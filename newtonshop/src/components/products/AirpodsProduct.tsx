@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getAirpodsById, postCartItem } from "../../Api";
-import { AirpodsDto, CartItemRequestDto } from "../../types";
+import { AirpodsDto, CartItemDto, CartItemRequestDto } from "../../types";
 import { colorMapping } from "./colorMapping";
 import "./ProductDetails.css";
 import { useFetch } from "../hooks/useFetch";
 import { getDataOrFallback } from "../../utils";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
-import FlyingImage from "../handler/FlyingImage";
+import Notification from "../Notification";
 
 const AirpodsProduct = () => {
   const { id } = useParams<{ id: string }>();
   const { data: airpods, error, loading } = useFetch<AirpodsDto>(() => getAirpodsById(id!));
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [animate, setAnimate] = useState(false);
-
+  const [notifications, setNotifications] = useState<{ id: number, item: CartItemRequestDto }[]>([]);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
   useEffect(() => {
     if (airpods && selectedColor === null && !selectedImage) {
       const defaultColor = airpods.colors[0];
@@ -40,23 +40,39 @@ const AirpodsProduct = () => {
     setSelectedImage(firstImageForColor || airpods.images[0]);
   };
 
+
   const handleAddToCart = async () => {
-    if (airpods) {
-      const cartItem: CartItemRequestDto = {
+    if (airpods && !isAddingToCart) {
+      setIsAddingToCart(true);
+      const cartItem: CartItemDto = {
+        id: Date.now(), // временный id для уведомления
         productId: airpods.id,
+        name: airpods.title,
         config: selectedColor || "",
         imageUrl: selectedImage || airpods.images[0],
         price: airpods.price,
+        quantity: 1,
+        selected: true,
       };
-      console.log("Cart item:", cartItem);
+
       try {
         await postCartItem(cartItem);
-        setAnimate(true);
-        setTimeout(() => setAnimate(false), 2000);
+        setNotifications((prevNotifications) => [...prevNotifications, { id: cartItem.id, item: cartItem }]);
       } catch (error) {
         console.error("Ошибка при добавлении товара в корзину:", error);
+      } finally {
+        setIsAddingToCart(false);
       }
     }
+  };
+
+  const handleNotificationComplete = (id: number) => {
+    setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
+  };
+
+
+  const handleNotificationCancel = (id: number) => {
+    setNotifications(prevNotifications => prevNotifications.filter(notification => notification.id !== id));
   };
 
   return (
@@ -199,7 +215,16 @@ const AirpodsProduct = () => {
         </div>
       </div>
 
-      {animate && <FlyingImage imageUrl={selectedImage || airpods.images[0]} title={airpods.title} />}
+      {notifications.map((notification, index) => (
+        <Notification
+          key={notification.id}
+          item={notification.item}
+          onCancel={() => handleNotificationCancel(notification.id)}
+          onComplete={() => handleNotificationComplete(notification.id)}
+          index={index}
+          operation="add"
+        />
+      ))}
     </div>
   );
 };

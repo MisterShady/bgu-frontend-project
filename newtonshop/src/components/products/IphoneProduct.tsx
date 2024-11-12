@@ -8,7 +8,7 @@ import { useFetch } from "../hooks/useFetch";
 import { getDataOrFallback } from "../../utils";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
-import FlyingImage from "../handler/FlyingImage";
+import Notification from "../Notification";
 
 const IphoneProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,7 +16,8 @@ const IphoneProduct = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
-  const [animate, setAnimate] = useState(false);
+  const [notifications, setNotifications] = useState<{ id: number, item: CartItemRequestDto }[]>([]);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   useEffect(() => {
     if (iphone && selectedColor === null && !selectedImage) {
@@ -39,21 +40,32 @@ const IphoneProduct = () => {
   const totalPrice = iphone.price + selectedStoragePrice;
 
   const handleAddToCart = async () => {
-    if (iphone) {
+    if (iphone && !isAddingToCart) {
+      setIsAddingToCart(true);
       const cartItem: CartItemRequestDto = {
         productId: iphone.id,
         config: `Color: ${selectedColor}, Storage: ${selectedStorage}`,
         imageUrl: selectedImage || iphone.images[0],
         price: totalPrice,
       };
+
       try {
         await postCartItem(cartItem);
-        setAnimate(true);
-        setTimeout(() => setAnimate(false), 2000);
+        setNotifications((prevNotifications) => [...prevNotifications, { id: Date.now(), item: cartItem }]);
       } catch (error) {
         console.error("Ошибка при добавлении товара в корзину:", error);
+      } finally {
+        setIsAddingToCart(false);
       }
     }
+  };
+
+  const handleNotificationComplete = (id: number) => {
+    setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
+  };
+
+  const handleNotificationCancel = (id: number) => {
+    setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
   };
 
   return (
@@ -208,7 +220,17 @@ const IphoneProduct = () => {
           </div>
         </div>
       </div>
-      {animate && <FlyingImage imageUrl={selectedImage || iphone.images[0]} title={iphone.title} />}
+
+      {notifications.map((notification, index) => (
+        <Notification
+          key={notification.id}
+          item={notification.item}
+          onCancel={() => handleNotificationCancel(notification.id)}
+          onComplete={() => handleNotificationComplete(notification.id)}
+          index={index}
+          operation="add"
+        />
+      ))}
     </div>
   );
 };
