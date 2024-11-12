@@ -83,7 +83,7 @@ const Profile = () => {
         const base64String = reader.result?.toString().split(",")[1];
         if (base64String) {
           setAvatar(`data:image/jpeg;base64,${base64String}`);
-          setFormData(prevData => ({
+          setFormData((prevData) => ({
             ...prevData,
             avatar: base64String,
           }));
@@ -142,12 +142,15 @@ const Profile = () => {
         const updatedData: Partial<ProfileDto> = {};
 
         if (formData.email && formData.email !== existingProfile.email) updatedData.email = formData.email;
-        if (formData.phoneNumber && formData.phoneNumber !== existingProfile.phoneNumber) updatedData.phoneNumber = formData.phoneNumber;
-        if (formData.fullName && formData.fullName !== existingProfile.fullName) updatedData.fullName = formData.fullName;
-        if (formData.dateOfBirth && formData.dateOfBirth !== existingProfile.dateOfBirth) updatedData.dateOfBirth = formData.dateOfBirth;
+        if (formData.phoneNumber && formData.phoneNumber !== existingProfile.phoneNumber)
+          updatedData.phoneNumber = formData.phoneNumber;
+        if (formData.fullName && formData.fullName !== existingProfile.fullName)
+          updatedData.fullName = formData.fullName;
+        if (formData.dateOfBirth && formData.dateOfBirth !== existingProfile.dateOfBirth)
+          updatedData.dateOfBirth = formData.dateOfBirth;
         if (formData.avatar && formData.avatar !== existingProfile.avatar) updatedData.avatar = formData.avatar;
 
-        Object.keys(updatedData).forEach(key => {
+        Object.keys(updatedData).forEach((key) => {
           if (!updatedData[key as keyof Partial<ProfileDto>]) {
             delete updatedData[key as keyof Partial<ProfileDto>];
           }
@@ -342,8 +345,11 @@ const Profile = () => {
                 <button type="button" className="rounded-button" onClick={handleLogout}>
                   Выход
                 </button>
-                <button type="button" className="rounded-button delete-profile-button"
-                        onClick={() => openModal("delete")}>
+                <button
+                  type="button"
+                  className="rounded-button delete-profile-button"
+                  onClick={() => openModal("delete")}
+                >
                   Удалить профиль
                 </button>
               </div>
@@ -366,7 +372,11 @@ const Profile = () => {
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <p>{modalAction === "delete" ? "Вы уверены, что хотите удалить свой профиль?" : "Вы уверены, что хотите изменить свой профиль?"}</p>
+            <p>
+              {modalAction === "delete"
+                ? "Вы уверены, что хотите удалить свой профиль?"
+                : "Вы уверены, что хотите изменить свой профиль?"}
+            </p>
             <div className="modal-buttons">
               <button className="modal-button yes-button" onClick={handleModalConfirm}>
                 Да

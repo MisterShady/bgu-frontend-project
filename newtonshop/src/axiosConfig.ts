@@ -3,7 +3,6 @@ import { TokenDto } from "./types";
 
 const BASE_URL = "http://localhost:9000/api/v1";
 
-
 const refreshTokens = async (): Promise<TokenDto> => {
   const response = await axios.post<TokenDto>(
     `${BASE_URL}/users/refresh-token`,

@@ -1,0 +1,25 @@
+.flying-image {
+  position: fixed;
+  top: 10vh;
+  left: 10vh;
+  z-index: 999;
+  pointer-events: none;
+  animation: fly 2s 1;
+  transform-origin: center;
+  transition: opacity 0.2s;
+}
+
+@keyframes fly {
+  0% {
+    transform: scale(1) translate(0, 0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.5) translate(90vw, 10vh);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0) translate(90vw, 10vh);
+    opacity: 0;
+  }
+}

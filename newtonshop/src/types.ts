@@ -336,4 +336,20 @@ export interface ProfileDto {
   authorities: { authority: string }[];
   enabled: boolean;
 }
+export interface CartItemRequestDto {
+  productId: string;
+  config: string;
+  imageUrl: string;
+  price: number;
+}
 
+export interface CartItemDto {
+  id: number;
+  productId: string;
+  name: string;
+  imageUrl: string;
+  config: string;
+  quantity: number;
+  price: number;
+  selected: boolean;
+}

@@ -1,5 +1,16 @@
 import axios from "./axiosConfig";
-import { AirpodsDto, IpadDto, IphoneDto, MacDto, ProfileDto, TokenDto, UserDto, WatchDto } from "./types";
+import {
+  AirpodsDto,
+  CartItemDto,
+  CartItemRequestDto,
+  IpadDto,
+  IphoneDto,
+  MacDto,
+  ProfileDto,
+  TokenDto,
+  UserDto,
+  WatchDto,
+} from "./types";
 
 const BASE_URL = "http://localhost:9000/api/v1";
 
@@ -11,23 +22,63 @@ export interface ProductDto {
   images: string[];
   type: string;
 }
+export const postCartItem = async (cartItem: CartItemRequestDto): Promise<CartItemDto> => {
+  const token = localStorage.getItem("accessToken");
+  const response = await axios.post<CartItemDto>(`${BASE_URL}/cart-items`, null, {
+    params: {
+      productId: cartItem.productId,
+      config: cartItem.config,
+      imageUrl: cartItem.imageUrl,
+      price: cartItem.price,
+    },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
 
-export const postSignUp = async (userData: Partial<UserDto>): Promise<UserDto> => {
-  const response = await axios.post<UserDto>(
-    `${BASE_URL}/users/sign-up`,
-    userData
+export const getCartItems = async (): Promise<CartItemDto[]> => {
+  const token = localStorage.getItem("accessToken");
+  const response = await axios.get<CartItemDto[]>(`${BASE_URL}/cart-items`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const updateCartItem = async (id: number, quantity: number, selected: boolean): Promise<CartItemDto> => {
+  const token = localStorage.getItem("accessToken");
+  const response = await axios.put<CartItemDto>(
+    `${BASE_URL}/cart-items/${id}`,
+    { quantity, selected },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
   );
   return response.data;
 };
 
+export const deleteCartItem = async (id: number): Promise<void> => {
+  const token = localStorage.getItem("accessToken");
+  await axios.delete(`${BASE_URL}/cart-items/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+export const postSignUp = async (userData: Partial<UserDto>): Promise<UserDto> => {
+  const response = await axios.post<UserDto>(`${BASE_URL}/users/sign-up`, userData);
+  return response.data;
+};
+
 export const postSignIn = async (userData: Partial<UserDto>): Promise<TokenDto> => {
-  const response = await axios.post<TokenDto>(
-    `${BASE_URL}/users/sign-in`,
-    userData,
-    {
-      withCredentials: true,
-    }
-  );
+  const response = await axios.post<TokenDto>(`${BASE_URL}/users/sign-in`, userData, {
+    withCredentials: true,
+  });
   const tokens = response.data;
 
   localStorage.setItem("accessToken", tokens.accessToken);
@@ -63,28 +114,23 @@ export const deleteProfile = async (token: string): Promise<void> => {
 };
 
 export const updateProfile = async (token: string, profileData: Partial<ProfileDto>): Promise<ProfileDto> => {
-  const response = await axios.put<ProfileDto>(
-    `${BASE_URL}/users/secured/update`,
-    profileData,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await axios.put<ProfileDto>(`${BASE_URL}/users/secured/update`, profileData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };
 
-export const updatePassword = async (token: string, passwordData: { providedCurrentPassword: string; newPassword: string }): Promise<ProfileDto> => {
-  const response = await axios.put<ProfileDto>(
-    `${BASE_URL}/users/secured/update-password`,
-    passwordData,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+export const updatePassword = async (
+  token: string,
+  passwordData: { providedCurrentPassword: string; newPassword: string }
+): Promise<ProfileDto> => {
+  const response = await axios.put<ProfileDto>(`${BASE_URL}/users/secured/update-password`, passwordData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };
 
@@ -92,16 +138,12 @@ export const updateAvatar = async (token: string, file: File): Promise<ProfileDt
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await axios.put<ProfileDto>(
-    `${BASE_URL}/users/secured/update-avatar`,
-    formData,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await axios.put<ProfileDto>(`${BASE_URL}/users/secured/update-avatar`, formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
 

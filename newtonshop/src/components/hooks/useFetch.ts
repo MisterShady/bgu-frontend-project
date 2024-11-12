@@ -7,7 +7,10 @@ interface FetchResult<T> {
   loading: boolean;
 }
 
-export const useFetch = <T>(fetchFunction: () => Promise<T>, dependencies: React.DependencyList = []): FetchResult<T> => {
+export const useFetch = <T>(
+  fetchFunction: () => Promise<T>,
+  dependencies: React.DependencyList = []
+): FetchResult<T> => {
   const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

@@ -22,7 +22,13 @@ interface RegisterFormInputs {
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [backendError, setBackendError] = useState<string | null>(null);
-  const { register, handleSubmit, watch, formState: { errors }, setError } = useForm<FormData & RegisterFormInputs>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setError,
+  } = useForm<FormData & RegisterFormInputs>();
   const navigate = useNavigate();
   const password = watch("password");
 
@@ -187,10 +193,13 @@ const Auth = () => {
       </form>
       <p>
         {isLogin ? "У меня нет аккаунта. " : "У меня есть аккаунт. "}
-        <a href="#" onClick={() => {
-          setIsLogin(!isLogin);
-          setBackendError(null);
-        }}>
+        <a
+          href="#"
+          onClick={() => {
+            setIsLogin(!isLogin);
+            setBackendError(null);
+          }}
+        >
           {isLogin ? "Зарегистрироваться" : "Войти"}
         </a>
       </p>
