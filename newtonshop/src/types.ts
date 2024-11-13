@@ -213,9 +213,9 @@ export interface WatchDto {
     };
     small:
       | {
-          name: string;
-          additionalPrice: number;
-        }
+      name: string;
+      additionalPrice: number;
+    }
       | string
       | null;
   };
@@ -245,6 +245,7 @@ export interface WatchDto {
   }[];
   description: string;
 }
+
 export interface MacDto {
   id: string;
   type: string;
@@ -300,6 +301,7 @@ export interface MacDto {
     latest: string;
   };
 }
+
 export interface UserDto {
   id: number;
   email: string | null;
@@ -317,9 +319,11 @@ export interface UserDto {
   }[];
   enabled: boolean;
 }
+
 export interface TokenDto {
   accessToken: string;
 }
+
 export interface ProfileDto {
   id: number;
   email: string;
@@ -336,6 +340,7 @@ export interface ProfileDto {
   authorities: { authority: string }[];
   enabled: boolean;
 }
+
 export interface CartItemRequestDto {
   productId: string;
   config: string;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getCartItems, updateCartItem, getCurrentProfile, deleteCartItem } from "../Api";
+import { deleteCartItem, getCartItems, getCurrentProfile, updateCartItem } from "../Api";
 import { CartItemDto } from "../types";
 import Notification from "./Notification";
 import "./CartPage.css";
@@ -31,7 +31,7 @@ const CartPage = () => {
           setCurrentStep(2);
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Не получил данные походу", error);
       }
     };
 
@@ -40,7 +40,7 @@ const CartPage = () => {
         const cartItems = await getCartItems();
         setItems(cartItems);
       } catch (error) {
-        console.error("Error fetching cart items:", error);
+        console.error("И тут тоже не получил данные походу", error);
       }
     };
 
@@ -51,10 +51,19 @@ const CartPage = () => {
   const handleQuantityChange = async (id: number, quantity: number) => {
     if (quantity < 1) return;
     try {
-      const updatedItem = await updateCartItem(id, quantity, true);
+      const updatedItem = await updateCartItem(id, quantity, items.find(item => item.id === id)!.selected);
       setItems(items.map(item => item.id === id ? updatedItem : item));
     } catch (error) {
-      console.error("Error updating cart item:", error);
+      console.error("Не обновилась походу", error);
+    }
+  };
+
+  const handleSelectedChange = async (id: number, selected: boolean) => {
+    try {
+      const updatedItem = await updateCartItem(id, items.find(item => item.id === id)!.quantity, selected);
+      setItems(items.map(item => item.id === id ? updatedItem : item));
+    } catch (error) {
+      console.error("Не обновилась походу", error);
     }
   };
 
@@ -73,7 +82,6 @@ const CartPage = () => {
     }
   };
 
-
   const handleNotificationComplete = async (id: number) => {
     const notification = notifications.find(notification => notification.id === id);
     if (notification) {
@@ -82,11 +90,10 @@ const CartPage = () => {
         setItems(items.filter(item => item.id !== notification.item.id));
         setNotifications(prevNotifications => prevNotifications.filter(notification => notification.id !== id));
       } catch (error) {
-        console.error("Error deleting cart item:", error);
+        console.error("Не удалилась походу", error);
       }
     }
   };
-
 
   const handleCustomerDataChange = (field: string, value: string) => {
     setCustomerData({ ...customerData, [field]: value });
@@ -124,7 +131,7 @@ const CartPage = () => {
     return (match ? match.join("-") : "");
   };
 
-  const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0);
+  const totalPrice = items.reduce((total, item) => item.selected ? total + item.price * item.quantity : total, 0);
 
   return (
     <div className="cart-page">
@@ -132,7 +139,22 @@ const CartPage = () => {
         {items.length > 0 ? (
           items.map((item: CartItemDto) => (
             <div key={item.id} className="cart-item">
-              <img src={item.imageUrl} alt={item.name} />
+              <div className="image-container">
+                <label className="custom-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={item.selected}
+                    onChange={(e) => handleSelectedChange(item.id, e.target.checked)}
+                  />
+                  <span className="checkmark"></span>
+                </label>
+                {item.imageUrl ? (
+                  <img src={item.imageUrl} alt={item.name} />
+                ) : (
+                  <img src="/image/placeholder.svg" alt={item.name} />
+                )}
+              </div>
+
               <div className="item-details">
                 <h3>{item.name}</h3>
                 <div className="quantity-container">

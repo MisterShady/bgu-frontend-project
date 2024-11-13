@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { searchProducts, ProductDto, getCurrentProfile } from "../Api";
+import { getCurrentProfile, ProductDto, searchProducts } from "../Api";
 import { toPlural } from "../utils";
 import "./Navbar.css";
 

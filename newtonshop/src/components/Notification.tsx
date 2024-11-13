@@ -42,14 +42,17 @@ const Notification = ({ item, onCancel, onComplete, index, operation }: Notifica
       <div className="notification-content">
         <div className="notification-progress-bar" style={{ width: `${progress}%` }}></div>
         <div className="notification-item-details">
-          <img src={item.imageUrl} alt={isCartItemDto(item) ? item.name : ""} />
+          <img
+            src={item.imageUrl ? item.imageUrl : "/image/placeholder.svg"}
+            alt={isCartItemDto(item) ? item.name : ""}
+          />
           <div className="notification-item-info">
             <h3>{isCartItemDto(item) ? item.name : ""}</h3>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <span className="notification-operation">
                 {operation === "add" ? "Добавление в корзину" : "Удаление из корзины"}
               </span>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                 <span className="notification-item-price">
                   ${(item.price * (isCartItemDto(item) ? item.quantity : 1)).toFixed(2)}
                 </span>

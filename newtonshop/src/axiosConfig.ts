@@ -9,7 +9,7 @@ const refreshTokens = async (): Promise<TokenDto> => {
     {},
     {
       withCredentials: true,
-    }
+    },
   );
   const newTokens = response.data;
 
@@ -44,7 +44,7 @@ axios.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default axios;

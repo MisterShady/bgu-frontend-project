@@ -43,12 +43,12 @@ const MacProduct = () => {
   const selectedStoragePrice = getDataOrFallback(
     mac.storages?.find((storage) => storage.size === selectedStorage),
     "additionalPrice",
-    0
+    0,
   );
   const selectedRamPrice = getDataOrFallback(
     mac.ramMemories?.find((ram) => ram.size === selectedRam),
     "additionalPrice",
-    0
+    0,
   );
   const totalPrice = mac.price + selectedStoragePrice + selectedRamPrice;
 
@@ -198,7 +198,8 @@ const MacProduct = () => {
             <div className="description-block">
               <h3>Габариты и вес</h3>
               <p>
-                Высота: {mac.dimensions.height}, Ширина: {mac.dimensions.width}, Глубина: {mac.dimensions.depth}, Вес:{" "}
+                Высота: {mac.dimensions.height}, Ширина: {mac.dimensions.width}, Глубина: {mac.dimensions.depth},
+                Вес:{" "}
                 {mac.dimensions.weight}
               </p>
             </div>

@@ -206,7 +206,8 @@ const IpadProduct = () => {
           <div className="description-block">
             <h3>Процессор</h3>
             <p>
-              {getDataOrFallback(ipad.processor, "chip", "")}, CPU: {getDataOrFallback(ipad.processor, "cpu", "")}, GPU:{" "}
+              {getDataOrFallback(ipad.processor, "chip", "")}, CPU: {getDataOrFallback(ipad.processor, "cpu", "")},
+              GPU:{" "}
               {getDataOrFallback(ipad.processor, "gpu", "")}
             </p>
           </div>

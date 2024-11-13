@@ -22,6 +22,7 @@ export interface ProductDto {
   images: string[];
   type: string;
 }
+
 export const postCartItem = async (cartItem: CartItemRequestDto): Promise<CartItemDto> => {
   const token = localStorage.getItem("accessToken");
   const response = await axios.post<CartItemDto>(`${BASE_URL}/cart-items`, null, {
@@ -52,15 +53,20 @@ export const updateCartItem = async (id: number, quantity: number, selected: boo
   const token = localStorage.getItem("accessToken");
   const response = await axios.put<CartItemDto>(
     `${BASE_URL}/cart-items/${id}`,
-    { quantity, selected },
+    {},
     {
+      params: {
+        quantity,
+        selected,
+      },
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }
+    },
   );
   return response.data;
 };
+
 
 export const deleteCartItem = async (id: number): Promise<void> => {
   const token = localStorage.getItem("accessToken");
@@ -124,7 +130,7 @@ export const updateProfile = async (token: string, profileData: Partial<ProfileD
 
 export const updatePassword = async (
   token: string,
-  passwordData: { providedCurrentPassword: string; newPassword: string }
+  passwordData: { providedCurrentPassword: string; newPassword: string },
 ): Promise<ProfileDto> => {
   const response = await axios.put<ProfileDto>(`${BASE_URL}/users/secured/update-password`, passwordData, {
     headers: {

@@ -67,7 +67,7 @@ const WatchProduct = () => {
         config: `Band Type: ${selectedBandType?.material}, Band Style: ${selectedBandStyle?.name}, 
         Case: ${watch.caseTypes[selectedCaseIndex || 0].material}, 
         Version: ${watch.versions[selectedVersionIndex || 0].type}, 
-        Size: ${selectedSizeIndex === 0 ? watch.size.large.name : typeof watch.size.small === "object" && 
+        Size: ${selectedSizeIndex === 0 ? watch.size.large.name : typeof watch.size.small === "object" &&
         watch.size.small !== null ? watch.size.small.name : watch.size.small}`,
         imageUrl: selectedImage || watch.images[0],
         price: totalPrice,
