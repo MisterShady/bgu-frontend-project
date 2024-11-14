@@ -1,91 +1,91 @@
 .notification-container {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 300px;
-    animation: notification-slideIn 0.5s ease-out;
-    z-index: 1000;
-    margin-bottom: 10px; /* Добавляем отступ снизу для нескольких уведомлений */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 300px;
+  animation: notification-slideIn 0.5s ease-out;
+  z-index: 1000;
+  margin-bottom: 10px; /* Добавляем отступ снизу для нескольких уведомлений */
 }
 
 .notification-content {
-    padding: 20px;
-    position: relative;
-    display: flex;
-    align-items: center;
+  padding: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .notification-progress-bar {
-    height: 5px;
-    background-color: #ff6140;
-    border-radius: 5px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    transition: width 0.5s ease;
+  height: 5px;
+  background-color: #ff6140;
+  border-radius: 5px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: width 0.5s ease;
 }
 
 .notification-item-details {
-    display: flex;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 .notification-item-details img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    margin-right: 10px;
-    border-radius: 5px;
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  margin-right: 10px;
+  border-radius: 5px;
 }
 
 .notification-item-info {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .notification-item-info h3 {
-    margin: 0;
-    font-size: 1rem;
+  margin: 0;
+  font-size: 1rem;
 }
 
 .notification-item-price {
-    font-weight: bold;
-    font-size: 1rem;
-    margin-bottom: 5px;
-    align-self: flex-end;
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  align-self: flex-end;
 }
 
 .notification-operation {
-    font-size: 0.9rem;
-    color: #514ed9;
-    margin-right: 10px;
+  font-size: 0.9rem;
+  color: #514ed9;
+  margin-right: 10px;
 }
 
 .notification-cancel-button {
-    background-color: #514ed9;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-left: auto;
+  background-color: #514ed9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: auto;
 }
 
 .notification-cancel-button:hover {
-    background-color: #ff6140;
+  background-color: #ff6140;
 }
 
 @keyframes notification-slideIn {
-    from {
-        transform: translateX(100%);
-    }
-    to {
-        transform: translateX(0);
-    }
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }

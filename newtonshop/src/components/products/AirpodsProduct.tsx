@@ -15,7 +15,7 @@ const AirpodsProduct = () => {
   const { data: airpods, error, loading } = useFetch<AirpodsDto>(() => getAirpodsById(id!));
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [notifications, setNotifications] = useState<{ id: number, item: CartItemRequestDto }[]>([]);
+  const [notifications, setNotifications] = useState<{ id: number; item: CartItemRequestDto }[]>([]);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   useEffect(() => {
     if (airpods && selectedColor === null && !selectedImage) {
@@ -39,7 +39,6 @@ const AirpodsProduct = () => {
     const firstImageForColor = getImagesByColor(airpods.images, color)[0];
     setSelectedImage(firstImageForColor || airpods.images[0]);
   };
-
 
   const handleAddToCart = async () => {
     if (airpods && !isAddingToCart) {
@@ -70,9 +69,8 @@ const AirpodsProduct = () => {
     setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
   };
 
-
   const handleNotificationCancel = (id: number) => {
-    setNotifications(prevNotifications => prevNotifications.filter(notification => notification.id !== id));
+    setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
   };
 
   return (

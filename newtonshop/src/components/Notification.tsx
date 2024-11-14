@@ -57,7 +57,9 @@ const Notification = ({ item, onCancel, onComplete, index, operation }: Notifica
                   ${(item.price * (isCartItemDto(item) ? item.quantity : 1)).toFixed(2)}
                 </span>
                 {operation === "remove" && (
-                  <button className="notification-cancel-button" onClick={onCancel}>Отменить</button>
+                  <button className="notification-cancel-button" onClick={onCancel}>
+                    Отменить
+                  </button>
                 )}
               </div>
             </div>

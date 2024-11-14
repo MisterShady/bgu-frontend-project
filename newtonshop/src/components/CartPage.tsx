@@ -4,6 +4,8 @@ import { CartItemDto } from "../types";
 import Notification from "./Notification";
 import "./CartPage.css";
 import "./Notification.css";
+import { Link } from "react-router-dom";
+import { categoryMapping } from "./products/AllProducts";
 
 const CartPage = () => {
   const [items, setItems] = useState<CartItemDto[]>([]);
@@ -15,7 +17,7 @@ const CartPage = () => {
   const [deliveryInfo, setDeliveryInfo] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [currentStep, setCurrentStep] = useState(1); // Начинаем с шага 1
-  const [notifications, setNotifications] = useState<{ id: number, item: CartItemDto }[]>([]);
+  const [notifications, setNotifications] = useState<{ id: number; item: CartItemDto }[]>([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -51,8 +53,8 @@ const CartPage = () => {
   const handleQuantityChange = async (id: number, quantity: number) => {
     if (quantity < 1) return;
     try {
-      const updatedItem = await updateCartItem(id, quantity, items.find(item => item.id === id)!.selected);
-      setItems(items.map(item => item.id === id ? updatedItem : item));
+      const updatedItem = await updateCartItem(id, quantity, items.find((item) => item.id === id)!.selected);
+      setItems(items.map((item) => (item.id === id ? updatedItem : item)));
     } catch (error) {
       console.error("Не обновилась походу", error);
     }
@@ -60,35 +62,34 @@ const CartPage = () => {
 
   const handleSelectedChange = async (id: number, selected: boolean) => {
     try {
-      const updatedItem = await updateCartItem(id, items.find(item => item.id === id)!.quantity, selected);
-      setItems(items.map(item => item.id === id ? updatedItem : item));
+      const updatedItem = await updateCartItem(id, items.find((item) => item.id === id)!.quantity, selected);
+      setItems(items.map((item) => (item.id === id ? updatedItem : item)));
     } catch (error) {
       console.error("Не обновилась походу", error);
     }
   };
 
-
   const handleNotificationCancel = (id: number) => {
-    setNotifications(prevNotifications => prevNotifications.filter(notification => notification.id !== id));
+    setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
   };
 
   const handleRemoveItem = async (id: number) => {
-    const itemToRemove = items.find(item => item.id === id);
+    const itemToRemove = items.find((item) => item.id === id);
     if (itemToRemove) {
-      const isItemInNotifications = notifications.some(notification => notification.item.id === itemToRemove.id);
+      const isItemInNotifications = notifications.some((notification) => notification.item.id === itemToRemove.id);
       if (!isItemInNotifications) {
-        setNotifications(prevNotifications => [...prevNotifications, { id, item: itemToRemove }]);
+        setNotifications((prevNotifications) => [...prevNotifications, { id, item: itemToRemove }]);
       }
     }
   };
 
   const handleNotificationComplete = async (id: number) => {
-    const notification = notifications.find(notification => notification.id === id);
+    const notification = notifications.find((notification) => notification.id === id);
     if (notification) {
       try {
         await deleteCartItem(notification.item.id);
-        setItems(items.filter(item => item.id !== notification.item.id));
-        setNotifications(prevNotifications => prevNotifications.filter(notification => notification.id !== id));
+        setItems(items.filter((item) => item.id !== notification.item.id));
+        setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
       } catch (error) {
         console.error("Не удалилась походу", error);
       }
@@ -97,7 +98,7 @@ const CartPage = () => {
 
   const handleCustomerDataChange = (field: string, value: string) => {
     setCustomerData({ ...customerData, [field]: value });
-    if (Object.values(customerData).every(value => value) && Object.values(customerData).length === 3) {
+    if (Object.values(customerData).every((value) => value) && Object.values(customerData).length === 3) {
       setCurrentStep(2);
     }
   };
@@ -128,10 +129,10 @@ const CartPage = () => {
   const formatCardNumber = (value: string) => {
     const cleanedValue = value.replace(/\D/g, "");
     const match = cleanedValue.match(/.{1,4}/g);
-    return (match ? match.join("-") : "");
+    return match ? match.join("-") : "";
   };
 
-  const totalPrice = items.reduce((total, item) => item.selected ? total + item.price * item.quantity : total, 0);
+  const totalPrice = items.reduce((total, item) => (item.selected ? total + item.price * item.quantity : total), 0);
 
   return (
     <div className="cart-page">
@@ -156,14 +157,22 @@ const CartPage = () => {
               </div>
 
               <div className="item-details">
-                <h3>{item.name}</h3>
+                <Link to={`/${categoryMapping[item.type.slice(0, 3)]}/${item.productId}`} className="product-link">
+                  <h3>{item.name}</h3>
+                </Link>
                 <div className="quantity-container">
-                  <button className="quantity-button left"
-                          onClick={() => handleQuantityChange(item.id, item.quantity - 1)}>-
+                  <button
+                    className="quantity-button left"
+                    onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                  >
+                    -
                   </button>
                   <span>{item.quantity}</span>
-                  <button className="quantity-button right"
-                          onClick={() => handleQuantityChange(item.id, item.quantity + 1)}>+
+                  <button
+                    className="quantity-button right"
+                    onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                  >
+                    +
                   </button>
                 </div>
                 <div className="config-items">

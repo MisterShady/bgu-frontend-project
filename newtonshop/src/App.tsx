@@ -15,6 +15,7 @@ import IphoneProduct from "./components/products/IphoneProduct";
 import MacProduct from "./components/products/MacProduct";
 import Auth from "./components/Auth";
 import CartPage from "./components/CartPage";
+import AllProducts from "./components/products/AllProducts";
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
         <Navbar />
         <div className="content">
           <Routes>
+            <Route path="/products" element={<AllProducts />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/airpods" element={<CategoryProducts category="airpods" />} />
             <Route path="/watches" element={<CategoryProducts category="watches" />} />

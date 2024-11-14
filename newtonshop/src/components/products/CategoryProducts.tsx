@@ -7,11 +7,7 @@ import LazyLoad from "react-lazyload";
 import { useFetch } from "../hooks/useFetch";
 import Spinner from "../Spinner";
 
-interface ProductProps {
-  category: string;
-}
-
-const CategoryProducts = ({ category }: ProductProps) => {
+const CategoryProducts = ({ category }: { category: string }) => {
   const { data: products, error, loading } = useFetch<ProductDto[]>(() => getProductsByCategory(category), [category]);
 
   const productList = useMemo(() => {
@@ -39,7 +35,17 @@ const CategoryProducts = ({ category }: ProductProps) => {
     return <div>Ошибка загрузки данных: {error}</div>;
   }
 
-  return <div className="card-container">{productList}</div>;
+  return (
+    <div>
+      <h1 style={{ marginBottom: "20px", marginLeft: "50px" }}>
+        <Link to="/products" className="all-products-link">
+          Все товары
+        </Link>
+        {category && ` / ${category}`}
+      </h1>
+      <div className="card-container">{productList}</div>
+    </div>
+  );
 };
 
 export default CategoryProducts;

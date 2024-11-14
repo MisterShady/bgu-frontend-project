@@ -16,7 +16,7 @@ const MacProduct = () => {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
   const [selectedRam, setSelectedRam] = useState<string | null>(null);
-  const [notifications, setNotifications] = useState<{ id: number, item: CartItemRequestDto }[]>([]);
+  const [notifications, setNotifications] = useState<{ id: number; item: CartItemRequestDto }[]>([]);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   const getDataOrFallback = <T, K extends keyof T>(obj: T | null | undefined, key: K, fallback: T[K]): T[K] => {
@@ -43,12 +43,12 @@ const MacProduct = () => {
   const selectedStoragePrice = getDataOrFallback(
     mac.storages?.find((storage) => storage.size === selectedStorage),
     "additionalPrice",
-    0,
+    0
   );
   const selectedRamPrice = getDataOrFallback(
     mac.ramMemories?.find((ram) => ram.size === selectedRam),
     "additionalPrice",
-    0,
+    0
   );
   const totalPrice = mac.price + selectedStoragePrice + selectedRamPrice;
 
@@ -198,8 +198,7 @@ const MacProduct = () => {
             <div className="description-block">
               <h3>Габариты и вес</h3>
               <p>
-                Высота: {mac.dimensions.height}, Ширина: {mac.dimensions.width}, Глубина: {mac.dimensions.depth},
-                Вес:{" "}
+                Высота: {mac.dimensions.height}, Ширина: {mac.dimensions.width}, Глубина: {mac.dimensions.depth}, Вес:{" "}
                 {mac.dimensions.weight}
               </p>
             </div>

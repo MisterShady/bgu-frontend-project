@@ -19,7 +19,7 @@ const IpadProduct = () => {
   const [selectedConnectivity, setSelectedConnectivity] = useState<string | null>(null);
   const [selectedApplePencil, setSelectedApplePencil] = useState<string | null>(null);
   const [selectedSmartKeyboard, setSelectedSmartKeyboard] = useState<string | null>(null);
-  const [notifications, setNotifications] = useState<{ id: number, item: CartItemRequestDto }[]>([]);
+  const [notifications, setNotifications] = useState<{ id: number; item: CartItemRequestDto }[]>([]);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   const selectedStoragePrice = ipad?.storages.find((storage) => storage.size === selectedStorage)?.additionalPrice || 0;
@@ -31,10 +31,10 @@ const IpadProduct = () => {
     ipad?.smartKeyboards.find((keyboard) => keyboard.type === selectedSmartKeyboard)?.additionalPrice || 0;
   const totalPrice = ipad
     ? ipad.price +
-    selectedStoragePrice +
-    selectedConnectivityPrice +
-    selectedApplePencilPrice +
-    selectedSmartKeyboardPrice
+      selectedStoragePrice +
+      selectedConnectivityPrice +
+      selectedApplePencilPrice +
+      selectedSmartKeyboardPrice
     : 0;
 
   useEffect(() => {
@@ -206,8 +206,7 @@ const IpadProduct = () => {
           <div className="description-block">
             <h3>Процессор</h3>
             <p>
-              {getDataOrFallback(ipad.processor, "chip", "")}, CPU: {getDataOrFallback(ipad.processor, "cpu", "")},
-              GPU:{" "}
+              {getDataOrFallback(ipad.processor, "chip", "")}, CPU: {getDataOrFallback(ipad.processor, "cpu", "")}, GPU:{" "}
               {getDataOrFallback(ipad.processor, "gpu", "")}
             </p>
           </div>

@@ -1,239 +1,239 @@
 .profile-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 800px;
 }
 
 .profile-form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  width: 100%;
+  max-width: 800px;
+  margin-bottom: 20px;
 }
 
 .avatar-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-    position: relative;
-    cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+  cursor: pointer;
 }
 
 .avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    transition: filter 0.3s;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: filter 0.3s;
 }
 
 .avatar-container:hover .avatar {
-    filter: brightness(0.7);
+  filter: brightness(0.7);
 }
 
 .avatar-container:hover::after {
-    content: "Edit";
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1rem;
-    color: white;
+  content: "Edit";
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1rem;
+  color: white;
 }
 
 .menu {
-    position: absolute;
-    top: 110%;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 10px;
+  position: absolute;
+  top: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
 }
 
 .menu-item {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .file-input {
-    display: none;
+  display: none;
 }
 
 .input-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
 }
 
 .profile-input-container {
-    display: flex;
-    flex-direction: column;
-    width: 48%;
+  display: flex;
+  flex-direction: column;
+  width: 48%;
 }
 
 .label {
-    margin-bottom: 5px;
+  margin-bottom: 5px;
 }
 
 .profile-input {
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-size: 1.2rem;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 1.2rem;
 }
 
 .button-container {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .rounded-button {
-    padding: 10px 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    color: #000;
-    cursor: pointer;
-    text-align: center;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  color: #000;
+  cursor: pointer;
+  text-align: center;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .rounded-button:hover {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 
 .delete-profile-button {
-    background-color: #ff6140;
+  background-color: #ff6140;
 }
 
 .delete-profile-button:hover {
-    background-color: #e45b14;
+  background-color: #e45b14;
 }
 
 .orders-title {
-    margin-top: 20px;
-    margin-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 .orders-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    width: 100%;
-    max-width: 800px;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
 }
 
 .no-orders {
-    font-size: 1.2rem;
-    color: #888;
+  font-size: 1.2rem;
+  color: #888;
 }
 
 .order-item {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
 .modal-content {
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
 }
 
 .modal-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
 }
 
 .modal-button {
-    padding: 10px 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    color: #000;
-    cursor: pointer;
-    text-align: center;
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  color: #000;
+  cursor: pointer;
+  text-align: center;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .modal-button.yes-button {
-    background-color: #ff6140;
+  background-color: #ff6140;
 }
 
 .modal-button.yes-button:hover {
-    background-color: #e45b14;
+  background-color: #e45b14;
 }
 
 .modal-button.no-button {
-    background-color: #ccc;
+  background-color: #ccc;
 }
 
 .modal-button.no-button:hover {
-    background-color: #b3b3b3;
+  background-color: #b3b3b3;
 }
 
 .password-input-container {
-    display: flex;
-    flex-direction: column;
-    width: 40%;
-    margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+  margin-bottom: 15px;
 }
 
 .password-input {
-    padding: 15px;
-    border-radius: 10px;
-    border: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-size: 1.4rem;
-    width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 1.4rem;
+  width: 100%;
 }
 
 .password-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 .change-password-title {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .username {
-    font-size: 1.3rem;
-    margin-top: 10px;
+  font-size: 1.3rem;
+  margin-top: 10px;
 }

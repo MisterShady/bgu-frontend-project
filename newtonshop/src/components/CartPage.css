@@ -1,290 +1,300 @@
 .cart-page {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    width: 1275px;
-    align-items: flex-start;
-    margin: 0 auto;
-    padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 1275px;
+  align-items: flex-start;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .cart-items {
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    width: 60%;
-    flex-grow: 1;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 60%;
+  flex-grow: 1;
 }
 
 .customer-info {
-    background-color: white;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    width: 30%;
-    position: relative;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 30%;
+  position: relative;
 }
 
 .cart-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    border-radius: 20px;
-    position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 20px;
+  position: relative;
 }
 
 .cart-item img {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    margin-right: 20px;
-    border-radius: 10px;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  margin-right: 20px;
+  border-radius: 10px;
 }
 
 .item-details {
-    flex-grow: 1;
-    position: relative;
+  flex-grow: 1;
+  position: relative;
 }
 
 .config-items p {
-    margin: 5px 0;
+  margin: 5px 0;
 }
 
 .remove-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .remove-button img {
-    width: 25px;
-    height: 25px;
+  width: 25px;
+  height: 25px;
 }
 
 .item-details h3 {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .config-items {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .item-details span.item-price {
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-    font-weight: bold;
-    font-size: 1.5rem;
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  font-weight: bold;
+  font-size: 1.5rem;
 }
 
 .quantity-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 15px;
-    width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  width: 120px;
 }
 
 .quantity-button {
-    width: 30px;
-    height: 30px;
-    border: none;
-    border-radius: 50%;
-    background-color: #514ed9;
-    font-size: 1.2rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    transition: background-color 0.3s ease;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background-color: #514ed9;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: background-color 0.3s ease;
 }
 
 .quantity-button.left {
-    border-radius: 10px 0 0 10px;
+  border-radius: 10px 0 0 10px;
 }
 
 .quantity-button.right {
-    border-radius: 0 10px 10px 0;
+  border-radius: 0 10px 10px 0;
 }
 
 .quantity-button:hover {
-    background-color: #ff6140;
+  background-color: #ff6140;
 }
 
 .quantity-container span {
-    margin: 0 10px;
-    font-size: 1.2rem;
+  margin: 0 10px;
+  font-size: 1.2rem;
 }
 
 .step-circle {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #514ed9;
-    color: white;
-    margin: 20px auto;
-    font-size: 1.2rem;
-    position: relative;
-    z-index: 1;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #514ed9;
+  color: white;
+  margin: 20px auto;
+  font-size: 1.2rem;
+  position: relative;
+  z-index: 1;
 }
 
 .step-text {
-    text-align: center;
-    margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .cart-page input {
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    width: calc(100% - 40px);
-    margin-left: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  width: calc(100% - 40px);
+  margin-left: 20px;
 }
 
 .cart-page input[readonly] {
-    background-color: #f0f0f0;
-    color: #808080;
+  background-color: #f0f0f0;
+  color: #808080;
 }
 
 .total-price {
-    margin-top: 20px;
-    font-weight: bold;
-    text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
 }
 
 .order-button {
-    width: 100%;
-    padding: 15px;
-    background-color: #514ed9;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
+  width: 100%;
+  padding: 15px;
+  background-color: #514ed9;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
 }
 
 .order-button:hover {
-    background-color: #ff6140;
+  background-color: #ff6140;
 }
 
 .empty-cart {
-    text-align: center;
-    font-size: 1.2rem;
-    margin: 80px;
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 80px;
 }
 
 .step-line {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-    position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
 }
 
 .step-line::before {
-    content: "";
-    width: 0;
-    height: 2px;
-    background-color: #514ed9;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: -1;
-    transition: width 0.3s ease;
+  content: "";
+  width: 0;
+  height: 2px;
+  background-color: #514ed9;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: -1;
+  transition: width 0.3s ease;
 }
 
 .step-line.active::before {
-    width: 100%;
+  width: 100%;
 }
 
 .step-line::after {
-    content: "";
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(to right, transparent 50%, #514ed9 50%) repeat-x;
-    background-size: 10px 2px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: -1;
-    transition: width 0.3s ease;
+  content: "";
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, transparent 50%, #514ed9 50%) repeat-x;
+  background-size: 10px 2px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: -1;
+  transition: width 0.3s ease;
 }
 
 .step-line.active::after {
-    width: 100%;
+  width: 100%;
 }
 
 .custom-checkbox {
-    display: inline-block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 22px;
+  display: inline-block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
 }
 
 .custom-checkbox input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
 
 .checkmark {
-    position: absolute;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: rgba(204, 204, 204, 0.63);
-    border-radius: 5px;
+  position: absolute;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: rgba(204, 204, 204, 0.63);
+  border-radius: 5px;
 }
 
 .custom-checkbox:hover input ~ .checkmark {
-    background-color: #ff6140;
+  background-color: #ff6140;
 }
 
 .custom-checkbox input:checked ~ .checkmark {
-    background-color: #514ed9;
+  background-color: #514ed9;
 }
 
 .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
+  content: "";
+  position: absolute;
+  display: none;
 }
 
 .custom-checkbox input:checked ~ .checkmark:after {
-    display: block;
+  display: block;
 }
 
 .custom-checkbox .checkmark:after {
-    left: 9px;
-    top: 5px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.product-link {
+  text-decoration: none;
+  color: black;
+  transition: color 0.3s ease;
+}
+
+.product-link:hover {
+  color: #514ed9;
 }

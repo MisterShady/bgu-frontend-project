@@ -213,9 +213,9 @@ export interface WatchDto {
     };
     small:
       | {
-      name: string;
-      additionalPrice: number;
-    }
+          name: string;
+          additionalPrice: number;
+        }
       | string
       | null;
   };
@@ -351,6 +351,7 @@ export interface CartItemRequestDto {
 export interface CartItemDto {
   id: number;
   productId: string;
+  type: string;
   name: string;
   imageUrl: string;
   config: string;

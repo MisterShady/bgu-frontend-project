@@ -16,7 +16,7 @@ const IphoneProduct = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
-  const [notifications, setNotifications] = useState<{ id: number, item: CartItemRequestDto }[]>([]);
+  const [notifications, setNotifications] = useState<{ id: number; item: CartItemRequestDto }[]>([]);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   useEffect(() => {
