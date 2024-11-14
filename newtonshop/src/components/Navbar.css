@@ -198,9 +198,8 @@
 
 .dropdown-content li {
   padding: 15px;
-  transition:
-    background-color 0.3s ease,
-    border 0.3s ease;
+  transition: background-color 0.3s ease,
+  border 0.3s ease;
   color: white;
   font-family: "Arial", sans-serif;
 }
@@ -217,4 +216,76 @@
 
 .navigation a {
   text-decoration: none;
+}
+
+/* Стили для всплывающего окна корзины */
+.navbar-center-container .cart-dropdown {
+  position: absolute;
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  width: 300px;
+  z-index: 1;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.navbar-center-container .cart-items-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+  overflow-y: auto;
+  width: 300px;
+}
+
+.navbar-center-container .cart-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-center-container .cart-item img{
+  height: 50px;
+  width: 50px;
+  object-fit: cover;
+}
+
+.navbar-center-container .empty-cart {
+  text-align: center;
+  color: #777;
+}
+
+.navbar-center-container .cart-total {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.navbar-center-container .checkout-button {
+  margin-top: 15px;
+  width: 100%;
+  font-size: 16px;
+  background-color: #514ed9;
+  color: white;
+}
+
+.navbar-center-container .checkout-button:hover {
+  background-color: #ff6140;
 }
