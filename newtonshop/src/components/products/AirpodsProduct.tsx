@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getAirpodsById, postCartItem } from "../../Api";
-import { AirpodsDto, CartItemDto, CartItemRequestDto } from "../../types";
+import { AirpodsDto, CartItemRequestDto } from "../../types";
 import { colorMapping } from "./colorMapping";
 import "./ProductDetails.css";
 import { useFetch } from "../hooks/useFetch";
@@ -17,6 +17,7 @@ const AirpodsProduct = () => {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<{ id: number; item: CartItemRequestDto }[]>([]);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+
   useEffect(() => {
     if (airpods && selectedColor === null && !selectedImage) {
       const defaultColor = airpods.colors[0];
@@ -43,20 +44,16 @@ const AirpodsProduct = () => {
   const handleAddToCart = async () => {
     if (airpods && !isAddingToCart) {
       setIsAddingToCart(true);
-      const cartItem: CartItemDto = {
-        id: Date.now(), // временный id для уведомления
+      const cartItem: CartItemRequestDto = {
         productId: airpods.id,
-        name: airpods.title,
-        config: selectedColor || "",
+        config: `Color: ${selectedColor}`,
         imageUrl: selectedImage || airpods.images[0],
         price: airpods.price,
-        quantity: 1,
-        selected: true,
       };
 
       try {
         await postCartItem(cartItem);
-        setNotifications((prevNotifications) => [...prevNotifications, { id: cartItem.id, item: cartItem }]);
+        setNotifications((prevNotifications) => [...prevNotifications, { id: Date.now(), item: cartItem }]);
       } catch (error) {
         console.error("Ошибка при добавлении товара в корзину:", error);
       } finally {

@@ -1,6 +1,7 @@
+// CartPage.tsx
 import React, { useEffect, useState } from "react";
-import { deleteCartItem, getCartItems, getCurrentProfile, updateCartItem } from "../Api";
-import { CartItemDto } from "../types";
+import { createOrder, deleteCartItem, getCartItems, getCurrentProfile, updateCartItem } from "../Api";
+import { CartItemDto, OrderRequestDto } from "../types";
 import Notification from "./Notification";
 import "./CartPage.css";
 import "./Notification.css";
@@ -134,6 +135,19 @@ const CartPage = () => {
 
   const totalPrice = items.reduce((total, item) => (item.selected ? total + item.price * item.quantity : total), 0);
 
+  const handleOrderSubmit = async () => {
+    const orderData: OrderRequestDto = {
+      fullName: customerData.fullName,
+      email: customerData.email,
+      phoneNumber: customerData.phone,
+      address: deliveryInfo,
+      cardNumber: paymentMethod,
+      totalPrice: totalPrice,
+      cartItemIds: items.map((item) => item.id),
+    };
+    await createOrder(orderData);
+  };
+
   return (
     <div className="cart-page">
       <div className="cart-items">
@@ -247,7 +261,9 @@ const CartPage = () => {
           </>
         )}
         <div className="total-price">Итоговая цена: {totalPrice.toFixed(2)} $</div>
-        <button className="order-button">Оформить заказ</button>
+        <button className="order-button" onClick={handleOrderSubmit}>
+          Оформить заказ
+        </button>
       </div>
 
       {notifications.map((notification, index) => (

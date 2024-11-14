@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
-import { deleteProfile, getCurrentProfile, updateAvatar, updatePassword, updateProfile } from "../Api";
-import { ProfileDto } from "../types";
+import { deleteProfile, getCurrentProfile, getOrders, updateAvatar, updatePassword, updateProfile } from "../Api";
+import { OrderResponseDto, ProfileDto } from "../types";
 
 const Profile = () => {
   const [avatar, setAvatar] = useState<string>("/image/account.png");
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [orders] = useState<string[]>([]);
+  const [orders, setOrders] = useState<OrderResponseDto[]>([]);
   const [formData, setFormData] = useState<ProfileDto>({
     id: 0,
     email: "",
@@ -48,6 +48,7 @@ const Profile = () => {
     newPassword: "",
     confirmNewPassword: "",
   });
+  const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,14 +63,23 @@ const Profile = () => {
       }
     };
 
+    const fetchOrders = async () => {
+      try {
+        const data = await getOrders();
+        setOrders(data);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
     fetchUserData();
+    fetchOrders();
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     console.log("Logged out and access token removed.");
     navigate("/auth");
-    // Обновляем состояние аватара в Navbar
     const event = new Event("logout");
     window.dispatchEvent(event);
   };
@@ -204,6 +214,10 @@ const Profile = () => {
       handleUpdateProfile();
     }
     closeModal();
+  };
+
+  const toggleOrderDetails = (orderId: number) => {
+    setExpandedOrderId((prevId) => (prevId === orderId ? null : orderId));
   };
 
   return (
@@ -360,9 +374,63 @@ const Profile = () => {
       <h3 className="orders-title">Ваши заказы</h3>
       <div className="orders-container">
         {orders.length > 0 ? (
-          orders.map((order, index) => (
-            <div key={index} className="order-item">
-              {order}
+          orders.map((order) => (
+            <div key={order.id} className="order-item">
+              <div className="order-header">
+                <span>
+                  Заказ №{order.id} от {order.creationDate}
+                </span>
+                <span className="order-status">в пути</span>
+                <span className="arrow-down" onClick={() => toggleOrderDetails(order.id)}>
+                  ▼
+                </span>
+              </div>
+              <div className="order-details">
+                <div className="order-images">
+                  {order.cartItems.map((item, index) => (
+                    <img
+                      key={index}
+                      src={item.imageUrl}
+                      alt={`Изображение товара ${index + 1}`}
+                      className="order-image"
+                    />
+                  ))}
+                </div>
+                <div className="order-price">
+                  <span className="total-price">${order.totalPrice}</span>
+                </div>
+              </div>
+              {expandedOrderId === order.id && (
+                <div className="order-details-expanded">
+                  <p>Имя: {order.fullName}</p>
+                  <p>Email: {order.email}</p>
+                  <p>Телефон: {order.phoneNumber}</p>
+                  <p>Адрес: {order.address}</p>
+                  <p>Номер карты: {order.cardNumber}</p>
+                  {order.cartItems.length > 0 ? (
+                    order.cartItems.map((item) => (
+                      <div key={item.id} className="order-item-product">
+                        <img src={item.imageUrl} alt={"Изображение товара"} className="order-image" />
+                        <div>
+                          <p>{item.name}</p>
+                          <p>Количество: {item.quantity}</p>
+                          <p>
+                            {item.config.split(",").map((config, index) => (
+                              <span key={index}>
+                                {config}
+                                <br />
+                              </span>
+                            ))}
+                          </p>
+                        </div>
+                        <p className="price-product">${item.price}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>Нет товаров</p>
+                  )}
+                </div>
+              )}
             </div>
           ))
         ) : (

@@ -6,6 +6,8 @@ import {
   IpadDto,
   IphoneDto,
   MacDto,
+  OrderRequestDto,
+  OrderResponseDto,
   ProfileDto,
   TokenDto,
   UserDto,
@@ -23,6 +25,36 @@ export interface ProductDto {
   type: string;
   category: string;
 }
+
+export const createOrder = async (orderData: OrderRequestDto): Promise<OrderResponseDto> => {
+  const accessToken = localStorage.getItem("accessToken");
+  try {
+    const response = await axios.post(`${BASE_URL}/orders`, orderData, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating order:", error);
+    throw error;
+  }
+};
+
+export const getOrders = async (): Promise<OrderResponseDto[]> => {
+  const accessToken = localStorage.getItem("accessToken");
+  try {
+    const response = await axios.get(`${BASE_URL}/orders`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    throw error;
+  }
+};
 
 export const postCartItem = async (cartItem: CartItemRequestDto): Promise<CartItemDto> => {
   const token = localStorage.getItem("accessToken");

@@ -147,7 +147,111 @@
 }
 
 .order-item {
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  text-align: left;
+  width: 95%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
   margin-bottom: 10px;
+}
+
+.order-status {
+  background-color: #514ed9;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  margin-left: 20px;
+}
+
+.order-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.order-images {
+  display: flex;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.order-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.order-price {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.arrow-down {
+  cursor: pointer;
+  font-size: 1.5rem;
+  margin-left: auto;
+}
+
+.total-price {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.price-product {
+  margin-left: auto;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.order-details-expanded {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.order-item-product {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.order-item-product img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-right: 20px;
+  border-radius: 10px;
+}
+
+.order-item-product div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.order-item-product div p {
+  margin: 0;
+  font-size: 1.2rem; /* Увеличил шрифт */
+}
+
+.order-item-product div p:first-child {
+  font-weight: bold; /* Название жирным */
 }
 
 .modal-overlay {
@@ -179,7 +283,6 @@
 
 .modal-button {
   padding: 10px 20px;
-  border: 1px solid #ccc;
   border-radius: 10px;
   color: #000;
   cursor: pointer;

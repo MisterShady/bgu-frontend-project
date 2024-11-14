@@ -12,7 +12,7 @@ export default [
   {
     settings: {
       react: {
-        version: "detect", // Или укажите конкретную версию, например, "17.0"
+        version: "detect",
       },
     },
   },

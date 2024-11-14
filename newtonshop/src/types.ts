@@ -359,3 +359,25 @@ export interface CartItemDto {
   price: number;
   selected: boolean;
 }
+
+export interface OrderRequestDto {
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  cardNumber: string;
+  totalPrice: number;
+  cartItemIds: number[];
+}
+
+export interface OrderResponseDto {
+  id: number;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  address: string;
+  cardNumber: string;
+  totalPrice: number;
+  creationDate: string;
+  cartItems: CartItemDto[];
+}

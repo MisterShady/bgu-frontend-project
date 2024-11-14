@@ -50,7 +50,7 @@ const Notification = ({ item, onCancel, onComplete, index, operation }: Notifica
             <h3>{isCartItemDto(item) ? item.name : ""}</h3>
             <div style={{ display: "flex", alignItems: "center" }}>
               <span className="notification-operation">
-                {operation === "add" ? "Добавление в корзину" : "Удаление из корзины"}
+                {operation === "add" ? "Добавлено в корзину" : "Удаление из корзины"}
               </span>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                 <span className="notification-item-price">

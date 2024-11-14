@@ -7,6 +7,7 @@ import { useFetch } from "../hooks/useFetch";
 import { getDataOrFallback } from "../../utils";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
+import Notification from "../Notification";
 
 const WatchProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,8 @@ const WatchProduct = () => {
   const [selectedCaseIndex, setSelectedCaseIndex] = useState<number | null>(null);
   const [selectedVersionIndex, setSelectedVersionIndex] = useState<number | null>(null);
   const [selectedSizeIndex, setSelectedSizeIndex] = useState<number | null>(null);
+  const [notifications, setNotifications] = useState<{ id: number; item: CartItemRequestDto }[]>([]);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
 
   useEffect(() => {
     if (watch) {
@@ -61,12 +64,13 @@ const WatchProduct = () => {
   const totalPrice = watch.price + selectedBandTypePrice + selectedCasePrice + selectedVersionPrice + selectedSizePrice;
 
   const handleAddToCart = async () => {
-    if (watch) {
+    if (watch && !isAddingToCart) {
+      setIsAddingToCart(true);
       const cartItem: CartItemRequestDto = {
         productId: watch.id,
-        config: `Band Type: ${selectedBandType?.material}, Band Style: ${selectedBandStyle?.name}, 
-        Case: ${watch.caseTypes[selectedCaseIndex || 0].material}, 
-        Version: ${watch.versions[selectedVersionIndex || 0].type}, 
+        config: `Band Type: ${selectedBandType?.material}, Band Style: ${selectedBandStyle?.name},
+        Case: ${watch.caseTypes[selectedCaseIndex || 0].material},
+        Version: ${watch.versions[selectedVersionIndex || 0].type},
         Size: ${
           selectedSizeIndex === 0
             ? watch.size.large.name
@@ -79,10 +83,21 @@ const WatchProduct = () => {
       };
       try {
         await postCartItem(cartItem);
+        setNotifications((prevNotifications) => [...prevNotifications, { id: Date.now(), item: cartItem }]);
       } catch (error) {
         console.error("Ошибка при добавлении товара в корзину:", error);
+      } finally {
+        setIsAddingToCart(false);
       }
     }
+  };
+
+  const handleNotificationComplete = (id: number) => {
+    setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
+  };
+
+  const handleNotificationCancel = (id: number) => {
+    setNotifications((prevNotifications) => prevNotifications.filter((notification) => notification.id !== id));
   };
 
   return (
@@ -253,6 +268,17 @@ const WatchProduct = () => {
           </div>
         </div>
       </div>
+
+      {notifications.map((notification, index) => (
+        <Notification
+          key={notification.id}
+          item={notification.item}
+          onCancel={() => handleNotificationCancel(notification.id)}
+          onComplete={() => handleNotificationComplete(notification.id)}
+          index={index}
+          operation="add"
+        />
+      ))}
     </div>
   );
 };
