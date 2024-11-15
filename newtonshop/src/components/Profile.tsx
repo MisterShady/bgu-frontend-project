@@ -1,63 +1,53 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import {
+  deleteProfile,
+  getCurrentProfile,
+  getOrders,
+  updateAvatar,
+  updatePassword,
+  updateProfile,
+} from "../Api";
+import {
+  setAvatar,
+  setIsMenuOpen,
+  setOrders,
+  setFormData,
+  setExistingProfile,
+  setIsModalOpen,
+  setModalAction,
+  setIsChangePassword,
+  setPasswordData,
+  setExpandedOrderId,
+} from "./slices/profileSlice";
+import { RootState } from "../store";
 import "./Profile.css";
-import { deleteProfile, getCurrentProfile, getOrders, updateAvatar, updatePassword, updateProfile } from "../Api";
-import { OrderResponseDto, ProfileDto } from "../types";
+import {ProfileDto} from "../types";
 
 const Profile = () => {
-  const [avatar, setAvatar] = useState<string>("/image/account.png");
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [orders, setOrders] = useState<OrderResponseDto[]>([]);
-  const [formData, setFormData] = useState<ProfileDto>({
-    id: 0,
-    email: "",
-    phoneNumber: "",
-    fullName: "",
-    dateOfBirth: "",
-    username: "",
-    avatar: "",
-    password: "",
-    role: "",
-    credentialsNonExpired: true,
-    accountNonExpired: true,
-    accountNonLocked: true,
-    authorities: [],
-    enabled: true,
-  });
-  const [existingProfile, setExistingProfile] = useState<ProfileDto>({
-    id: 0,
-    email: "",
-    phoneNumber: "",
-    fullName: "",
-    dateOfBirth: "",
-    username: "",
-    avatar: "",
-    password: "",
-    role: "",
-    credentialsNonExpired: true,
-    accountNonExpired: true,
-    accountNonLocked: true,
-    authorities: [],
-    enabled: true,
-  });
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [modalAction, setModalAction] = useState<string>("");
-  const [isChangePassword, setIsChangePassword] = useState<boolean>(false);
-  const [passwordData, setPasswordData] = useState({
-    providedCurrentPassword: "",
-    newPassword: "",
-    confirmNewPassword: "",
-  });
-  const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
+  const dispatch = useDispatch();
+  const {
+    avatar,
+    isMenuOpen,
+    orders,
+    formData,
+    existingProfile,
+    isModalOpen,
+    modalAction,
+    isChangePassword,
+    passwordData,
+    expandedOrderId,
+  } = useSelector((state: RootState) => state.profile);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const data = await getCurrentProfile();
-        setFormData(data);
-        setExistingProfile(data);
-        setAvatar(data.avatar ? `data:image/jpeg;base64,${data.avatar}` : "/image/account.png");
+        dispatch(setFormData(data));
+        dispatch(setExistingProfile(data));
+        dispatch(setAvatar(data.avatar ? `data:image/jpeg;base64,${data.avatar}` : "/image/account.png"));
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -66,7 +56,7 @@ const Profile = () => {
     const fetchOrders = async () => {
       try {
         const data = await getOrders();
-        setOrders(data);
+        dispatch(setOrders(data));
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
@@ -74,7 +64,7 @@ const Profile = () => {
 
     fetchUserData();
     fetchOrders();
-  }, []);
+  }, [dispatch]);
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
@@ -92,11 +82,8 @@ const Profile = () => {
       reader.onloadend = async () => {
         const base64String = reader.result?.toString().split(",")[1];
         if (base64String) {
-          setAvatar(`data:image/jpeg;base64,${base64String}`);
-          setFormData((prevData) => ({
-            ...prevData,
-            avatar: base64String,
-          }));
+          dispatch(setAvatar(`data:image/jpeg;base64,${base64String}`));
+          dispatch(setFormData({ ...formData, avatar: base64String }));
 
           try {
             const accessToken = localStorage.getItem("accessToken");
@@ -119,18 +106,12 @@ const Profile = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    dispatch(setFormData({ ...formData, [name]: value }));
   };
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setPasswordData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    dispatch(setPasswordData({ ...passwordData, [name]: value }));
   };
 
   const handleDeleteProfile = async () => {
@@ -168,8 +149,8 @@ const Profile = () => {
 
         console.log("Sending update request with data:", updatedData);
         const updatedProfile = await updateProfile(accessToken, updatedData);
-        setFormData(updatedProfile);
-        setExistingProfile(updatedProfile);
+        dispatch(setFormData(updatedProfile));
+        dispatch(setExistingProfile(updatedProfile));
       }
     } catch (error) {
       console.error("Ошибка при обновлении профиля:", error);
@@ -189,9 +170,9 @@ const Profile = () => {
           providedCurrentPassword: passwordData.providedCurrentPassword,
           newPassword: passwordData.newPassword,
         });
-        setFormData(updatedProfile);
-        setExistingProfile(updatedProfile);
-        setIsChangePassword(false);
+        dispatch(setFormData(updatedProfile));
+        dispatch(setExistingProfile(updatedProfile));
+        dispatch(setIsChangePassword(false));
       }
     } catch (error) {
       console.error("Ошибка при смене пароля:", error);
@@ -199,12 +180,12 @@ const Profile = () => {
   };
 
   const openModal = (action: string) => {
-    setModalAction(action);
-    setIsModalOpen(true);
+    dispatch(setModalAction(action));
+    dispatch(setIsModalOpen(true));
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    dispatch(setIsModalOpen(false));
   };
 
   const handleModalConfirm = () => {
@@ -217,7 +198,7 @@ const Profile = () => {
   };
 
   const toggleOrderDetails = (orderId: number) => {
-    setExpandedOrderId((prevId) => (prevId === orderId ? null : orderId));
+    dispatch(setExpandedOrderId(expandedOrderId === orderId ? null : orderId));
   };
 
   return (
@@ -267,7 +248,7 @@ const Profile = () => {
                 <button type="button" className="rounded-button" onClick={handleUpdatePassword}>
                   Сохранить пароль
                 </button>
-                <button type="button" className="rounded-button" onClick={() => setIsChangePassword(false)}>
+                <button type="button" className="rounded-button" onClick={() => dispatch(setIsChangePassword(false))}>
                   Отмена
                 </button>
               </div>
@@ -277,8 +258,8 @@ const Profile = () => {
           <>
             <div
               className="avatar-container"
-              onMouseEnter={() => setIsMenuOpen(true)}
-              onMouseLeave={() => setIsMenuOpen(false)}
+              onMouseEnter={() => dispatch(setIsMenuOpen(true))}
+              onMouseLeave={() => dispatch(setIsMenuOpen(false))}
               onClick={handleAvatarClick}
             >
               <img src={avatar} alt="Avatar" className="avatar" />
@@ -350,7 +331,7 @@ const Profile = () => {
                 </div>
               </div>
               <div className="button-container">
-                <button type="button" className="rounded-button" onClick={() => setIsChangePassword(true)}>
+                <button type="button" className="rounded-button" onClick={() => dispatch(setIsChangePassword(true))}>
                   Сменить пароль
                 </button>
                 <button type="button" className="rounded-button" onClick={() => openModal("update")}>
@@ -408,7 +389,7 @@ const Profile = () => {
                   <p>Адрес: {order.address}</p>
                   <p>Номер карты: {order.cardNumber}</p>
                   {order.cartItems.length > 0 ? (
-                    order.cartItems.map((item) => (
+order.cartItems.map((item) => (
                       <div key={item.id} className="order-item-product">
                         <img src={item.imageUrl} alt={"Изображение товара"} className="order-image" />
                         <div>

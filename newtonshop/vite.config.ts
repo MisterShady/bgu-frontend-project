@@ -11,11 +11,7 @@ export default defineConfig(async () => {
       react(),
       svgr(),
       tsconfigPaths(),
-      eslintPlugin({
-        cache: false, // кэширование для более быстрой проверки
-        include: ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
-        exclude: ["node_modules"],
-      }),
+
     ],
     resolve: {
       alias: {
