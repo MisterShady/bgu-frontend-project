@@ -8,7 +8,7 @@
   width: 300px;
   animation: notification-slideIn 0.5s ease-out;
   z-index: 1000;
-  margin-bottom: 10px; /* Добавляем отступ снизу для нескольких уведомлений */
+  margin-bottom: 10px;
 }
 
 .notification-content {

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Profile.css";
 import { deleteProfile, getCurrentProfile, getOrders, updateAvatar, updatePassword, updateProfile } from "../Api";
 import { OrderResponseDto, ProfileDto } from "../types";
+import { categoryMapping } from "./products/AllProducts";
 
 const Profile = () => {
-  const [avatar, setAvatar] = useState<string>("/image/account.png");
+  const [avatar, setAvatar] = useState<string>("/image/png/account.png");
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [orders, setOrders] = useState<OrderResponseDto[]>([]);
   const [formData, setFormData] = useState<ProfileDto>({
@@ -57,7 +58,7 @@ const Profile = () => {
         const data = await getCurrentProfile();
         setFormData(data);
         setExistingProfile(data);
-        setAvatar(data.avatar ? `data:image/jpeg;base64,${data.avatar}` : "/image/account.png");
+        setAvatar(data.avatar ? `data:image/jpeg;base64,${data.avatar}` : "/image/png/account.png");
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -220,6 +221,11 @@ const Profile = () => {
     setExpandedOrderId((prevId) => (prevId === orderId ? null : orderId));
   };
 
+  const formatCardNumber = (cardNumber: string) => {
+    const lastTwoDigits = cardNumber.slice(-2);
+    return "*".repeat(cardNumber.length - 2) + lastTwoDigits;
+  };
+
   return (
     <div className="profile-wrapper">
       <div className="profile-form-container">
@@ -371,72 +377,95 @@ const Profile = () => {
           </>
         )}
       </div>
-      <h3 className="orders-title">Ваши заказы</h3>
-      <div className="orders-container">
-        {orders.length > 0 ? (
-          orders.map((order) => (
-            <div key={order.id} className="order-item">
-              <div className="order-header">
-                <span>
-                  Заказ №{order.id} от {order.creationDate}
-                </span>
-                <span className="order-status">в пути</span>
-                <span className="arrow-down" onClick={() => toggleOrderDetails(order.id)}>
-                  ▼
-                </span>
-              </div>
-              <div className="order-details">
-                <div className="order-images">
-                  {order.cartItems.map((item, index) => (
+      {!isChangePassword && (
+        <>
+          <h3 className="orders-title">Ваши заказы</h3>
+          <div className="orders-container">
+            {orders.length > 0 ? (
+              orders.map((order) => (
+                <div key={order.id} className="order-item">
+                  <div className="order-header">
+                    <span>
+                      Заказ №{order.id} от {order.creationDate}
+                    </span>
+                    <span className="order-status">в пути</span>
                     <img
-                      key={index}
-                      src={item.imageUrl}
-                      alt={`Изображение товара ${index + 1}`}
-                      className="order-image"
+                      alt="Arrow"
+                      className={`arrow-down ${expandedOrderId === order.id ? "expanded" : ""}`}
+                      onClick={() => toggleOrderDetails(order.id)}
+                      src="/image/svg/arrow.svg"
                     />
-                  ))}
-                </div>
-                <div className="order-price">
-                  <span className="total-price">${order.totalPrice}</span>
-                </div>
-              </div>
-              {expandedOrderId === order.id && (
-                <div className="order-details-expanded">
-                  <p>Имя: {order.fullName}</p>
-                  <p>Email: {order.email}</p>
-                  <p>Телефон: {order.phoneNumber}</p>
-                  <p>Адрес: {order.address}</p>
-                  <p>Номер карты: {order.cardNumber}</p>
-                  {order.cartItems.length > 0 ? (
-                    order.cartItems.map((item) => (
-                      <div key={item.id} className="order-item-product">
-                        <img src={item.imageUrl} alt={"Изображение товара"} className="order-image" />
-                        <div>
-                          <p>{item.name}</p>
-                          <p>Количество: {item.quantity}</p>
-                          <p>
-                            {item.config.split(",").map((config, index) => (
-                              <span key={index}>
-                                {config}
-                                <br />
-                              </span>
-                            ))}
-                          </p>
-                        </div>
-                        <p className="price-product">${item.price}</p>
+                  </div>
+                  {expandedOrderId !== order.id && (
+                    <div className="order-details">
+                      <div className="order-images">
+                        {order.cartItems.map((item, index) => (
+                          <img
+                            key={index}
+                            src={item.imageUrl ? item.imageUrl : "/image/placeholder.svg"}
+                            alt={`Изображение товара ${index + 1}`}
+                            className="order-image"
+                          />
+                        ))}
                       </div>
-                    ))
-                  ) : (
-                    <p>Нет товаров</p>
+                      <div className="order-price">
+                        <span className="total-price">${order.totalPrice}</span>
+                      </div>
+                    </div>
+                  )}
+                  {expandedOrderId === order.id && (
+                    <div className="order-details-expanded">
+                      <p>ФИО: {order.fullName}</p>
+                      <p>Email: {order.email}</p>
+                      <p>Телефон: {order.phoneNumber}</p>
+                      <p>Адрес: {order.address}</p>
+                      <p>Номер карты: {formatCardNumber(order.cardNumber)}</p>
+                      {order.cartItems.length > 0 ? (
+                        order.cartItems.map((item) => (
+                          <div key={item.id} className="order-item-product">
+                            <Link
+                              to={`/${categoryMapping[item.type.slice(0, 3)]}/${item.productId}`}
+                              className="product-link"
+                            >
+                              <img
+                                src={item.imageUrl ? item.imageUrl : "/image/placeholder.svg"}
+                                alt={"Изображение товара"}
+                                className="order-image"
+                              />
+                            </Link>
+                            <div>
+                              <Link
+                                to={`/${categoryMapping[item.type.slice(0, 3)]}/${item.productId}`}
+                                className="product-link"
+                              >
+                                <p>{item.name}</p>
+                              </Link>
+                              <p>Количество: {item.quantity}</p>
+                              <p>
+                                {item.config.split(",").map((config, index) => (
+                                  <span key={index}>
+                                    {config}
+                                    <br />
+                                  </span>
+                                ))}
+                              </p>
+                            </div>
+                            <p className="price-product">${item.price}</p>
+                          </div>
+                        ))
+                      ) : (
+                        <p>Нет товаров</p>
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
-            </div>
-          ))
-        ) : (
-          <div className="no-orders">У вас пока нет заказов</div>
-        )}
-      </div>
+              ))
+            ) : (
+              <div className="no-orders">У вас пока нет заказов</div>
+            )}
+          </div>
+        </>
+      )}
       {isModalOpen && (
         <div className="modal-overlay">
           <div className="modal-content">

@@ -1,4 +1,3 @@
-// CartPage.tsx
 import React, { useEffect, useState } from "react";
 import { createOrder, deleteCartItem, getCartItems, getCurrentProfile, updateCartItem } from "../Api";
 import { CartItemDto, OrderRequestDto } from "../types";
@@ -19,6 +18,7 @@ const CartPage = () => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [currentStep, setCurrentStep] = useState(1); // Начинаем с шага 1
   const [notifications, setNotifications] = useState<{ id: number; item: CartItemDto }[]>([]);
+  const [orderNotification, setOrderNotification] = useState<{ items: CartItemDto[]; index: number } | null>(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -146,7 +146,25 @@ const CartPage = () => {
       cartItemIds: items.map((item) => item.id),
     };
     await createOrder(orderData);
+    setItems([]);
+    setOrderNotification({ items: items.filter((item) => item.selected), index: 0 });
   };
+
+  useEffect(() => {
+    if (orderNotification) {
+      const interval = setInterval(() => {
+        setOrderNotification((prev) => {
+          if (prev) {
+            const newIndex = (prev.index + 1) % prev.items.length;
+            return { ...prev, index: newIndex };
+          }
+          return prev;
+        });
+      }, 2000);
+
+      return () => clearInterval(interval);
+    }
+  }, [orderNotification]);
 
   return (
     <div className="cart-page">
@@ -196,13 +214,17 @@ const CartPage = () => {
                 </div>
                 <span className="item-price">${(item.price * item.quantity).toFixed(2)}</span>
                 <button onClick={() => handleRemoveItem(item.id)} className="remove-button">
-                  <img src="/image/device/trash.svg" alt="Remove" />
+                  <img src="/image/svg/trash.svg" alt="Remove" />
                 </button>
               </div>
             </div>
           ))
         ) : (
-          <div className="empty-cart">Ваша корзина пуста</div>
+          <div className="empty-cart">
+            <img src="/image/png/cartNothing.png" alt="Empty Cart" />
+            <h2>Ваша корзина пуста</h2>
+            <p>Самое время добавить в нее что-нибудь</p>
+          </div>
         )}
       </div>
 
@@ -276,6 +298,17 @@ const CartPage = () => {
           operation="remove"
         />
       ))}
+
+      {orderNotification && (
+        <Notification
+          key="order-confirmation"
+          item={orderNotification.items[orderNotification.index]}
+          onCancel={() => setOrderNotification(null)}
+          onComplete={() => setOrderNotification(null)}
+          index={0}
+          operation="order-confirmation"
+        />
+      )}
     </div>
   );
 };

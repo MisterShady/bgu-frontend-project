@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { postSignIn, postSignUp } from "../Api";
 import "./Auth.css";
@@ -30,6 +30,7 @@ const Auth = () => {
     setError,
   } = useForm<FormData & RegisterFormInputs>();
   const navigate = useNavigate();
+  const location = useLocation();
   const password = watch("password");
 
   useEffect(() => {
@@ -38,6 +39,12 @@ const Auth = () => {
       navigate("/profile");
     }
   }, [navigate]);
+
+  useEffect(() => {
+    if (location.state && location.state.message) {
+      setBackendError(location.state.message);
+    }
+  }, [location.state]);
 
   const onSubmit = async (data: FormData & RegisterFormInputs) => {
     if (!isLogin && data.password !== data.confirmPassword) {

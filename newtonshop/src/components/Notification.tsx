@@ -7,7 +7,7 @@ interface NotificationProps {
   onCancel: () => void;
   onComplete: () => void;
   index: number;
-  operation: "add" | "remove";
+  operation: "add" | "remove" | "order-confirmation";
 }
 
 const Notification = ({ item, onCancel, onComplete, index, operation }: NotificationProps) => {
@@ -50,7 +50,11 @@ const Notification = ({ item, onCancel, onComplete, index, operation }: Notifica
             <h3>{isCartItemDto(item) ? item.name : ""}</h3>
             <div style={{ display: "flex", alignItems: "center" }}>
               <span className="notification-operation">
-                {operation === "add" ? "Добавлено в корзину" : "Удаление из корзины"}
+                {operation === "add"
+                  ? "Добавлено в корзину"
+                  : operation === "remove"
+                    ? "Удаление из корзины"
+                    : "Заказ оформлен и добавлен в профиль"}
               </span>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                 <span className="notification-item-price">

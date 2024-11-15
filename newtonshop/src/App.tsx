@@ -16,6 +16,7 @@ import MacProduct from "./components/products/MacProduct";
 import Auth from "./components/Auth";
 import CartPage from "./components/CartPage";
 import AllProducts from "./components/products/AllProducts";
+import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
   return (
@@ -37,9 +38,11 @@ const App = () => {
             <Route path="/iphones/:id" element={<IphoneProduct />} />
             <Route path="/macs/:id" element={<MacProduct />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route element={<PrivateRoute />}>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/cart" element={<CartPage />} />
+            </Route>
             <Route path="/about-us" element={<AboutUs />} />
-            <Route path="/cart" element={<CartPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
