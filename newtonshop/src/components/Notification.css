@@ -9,6 +9,12 @@
   animation: notification-slideIn 0.5s ease-out;
   z-index: 1000;
   margin-bottom: 10px;
+  transition: opacity 0.3s ease, bottom 0.3s ease;
+}
+
+.notification-container.exiting {
+  opacity: 0;
+  bottom: -20px; /* Смещение при исчезновении */
 }
 
 .notification-content {

@@ -20,7 +20,7 @@ const Notification = ({ item, onCancel, onComplete, index, operation }: Notifica
           clearInterval(timer);
           return 100;
         }
-        return prevProgress + 1;
+        return prevProgress + 2;
       });
     }, 75);
 
@@ -29,7 +29,11 @@ const Notification = ({ item, onCancel, onComplete, index, operation }: Notifica
 
   useEffect(() => {
     if (progress === 100) {
-      onComplete();
+      const fadeOutTimeout = setTimeout(() => {
+        onComplete();
+      }, 300);
+
+      return () => clearTimeout(fadeOutTimeout);
     }
   }, [progress, onComplete]);
 
