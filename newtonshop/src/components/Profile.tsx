@@ -15,6 +15,7 @@ import {
   setIsChangePassword,
   setPasswordData,
   setExpandedOrderId,
+  setIsLogoutModalOpen, // Импорт нового редюсера
 } from "./slices/profileSlice";
 import { RootState } from "../store";
 
@@ -32,8 +33,8 @@ const Profile = () => {
     isChangePassword,
     passwordData,
     expandedOrderId,
+    isLogoutModalOpen, // Новое состояние для модального окна выхода
   } = useSelector((state: RootState) => state.profile);
-
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -182,6 +183,14 @@ const Profile = () => {
     dispatch(setIsModalOpen(false));
   };
 
+  const openLogoutModal = () => {
+    dispatch(setIsLogoutModalOpen(true));
+  };
+
+  const closeLogoutModal = () => {
+    dispatch(setIsLogoutModalOpen(false));
+  };
+
   const handleModalConfirm = () => {
     if (modalAction === "delete") {
       handleDeleteProfile();
@@ -189,6 +198,11 @@ const Profile = () => {
       handleUpdateProfile();
     }
     closeModal();
+  };
+
+  const handleLogoutConfirm = () => {
+    handleLogout();
+    closeLogoutModal();
   };
 
   const toggleOrderDetails = (orderId: number) => {
@@ -201,265 +215,282 @@ const Profile = () => {
   };
 
   return (
-      <div className="profile-wrapper">
-        <div className="profile-form-container">
-          {isChangePassword ? (
-              <>
-                <h2 className="change-password-title">Смена пароля</h2>
-                <form className="password-form">
-                  <div className="password-input-container">
-                    <label htmlFor="providedCurrentPassword">Старый пароль:</label>
-                    <input
-                        type="password"
-                        id="providedCurrentPassword"
-                        name="providedCurrentPassword"
-                        value={passwordData.providedCurrentPassword}
-                        onChange={handlePasswordChange}
-                        required
-                        className="password-input"
-                    />
-                  </div>
-                  <div className="password-input-container">
-                    <label htmlFor="newPassword">Новый пароль:</label>
-                    <input
-                        type="password"
-                        id="newPassword"
-                        name="newPassword"
-                        value={passwordData.newPassword}
-                        onChange={handlePasswordChange}
-                        required
-                        className="password-input"
-                    />
-                  </div>
-                  <div className="password-input-container">
-                    <label htmlFor="confirmNewPassword">Подтверждение нового пароля:</label>
-                    <input
-                        type="password"
-                        id="confirmNewPassword"
-                        name="confirmNewPassword"
-                        value={passwordData.confirmNewPassword}
-                        onChange={handlePasswordChange}
-                        required
-                        className="password-input"
-                    />
-                  </div>
-                  <div className="button-container">
-                    <button type="button" className="rounded-button" onClick={handleUpdatePassword}>
-                      Сохранить пароль
-                    </button>
-                    <button type="button" className="rounded-button" onClick={() => dispatch(setIsChangePassword(false))}>
-                      Отмена
-                    </button>
-                  </div>
-                </form>
-              </>
-          ) : (
-              <>
-                <div
-                    className="avatar-container"
-                    onMouseEnter={() => dispatch(setIsModalOpen(true))}
-                    onMouseLeave={() => dispatch(setIsModalOpen(false))}
-                    onClick={handleAvatarClick}
-                >
-                  <img src={avatar} alt="Avatar" className="avatar" />
-                  <p className="username">{formData.username}</p>
-                  {isModalOpen && (
-                      <div>
-                        <input
-                            id="avatar-upload"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleAvatarChange}
-                            className="file-input"
-                            style={{ display: "none" }}
-                        />
-                      </div>
-                  )}
-                </div>
-                <form className="profile-form">
-                  <div className="input-row">
-                    <div className="profile-input-container">
-                      <label htmlFor="email">Email:</label>
-                      <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          value={formData.email || ""}
-                          onChange={handleChange}
-                          required
-                          className="profile-input"
-                      />
-                    </div>
-                    <div className="profile-input-container">
-                      <label htmlFor="phone">Номер телефона:</label>
-                      <input
-                          type="tel"
-                          id="phone"
-                          name="phoneNumber"
-                          value={formData.phoneNumber || ""}
-                          onChange={handleChange}
-                          required
-                          className="profile-input"
-                      />
-                    </div>
-                  </div>
-                  <div className="input-row">
-                    <div className="profile-input-container">
-                      <label htmlFor="fullName">ФИО:</label>
-                      <input
-                          type="text"
-                          id="fullName"
-                          name="fullName"
-                          value={formData.fullName || ""}
-                          onChange={handleChange}
-                          required
-                          className="profile-input"
-                      />
-                    </div>
-                    <div className="profile-input-container">
-                      <label htmlFor="birthdate">Дата рождения:</label>
-                      <input
-                          type="date"
-                          id="birthdate"
-                          name="dateOfBirth"
-                          value={formData.dateOfBirth || ""}
-                          onChange={handleChange}
-                          required
-                          className="profile-input"
-                      />
-                    </div>
-                  </div>
-                  <div className="button-container">
-                    <button type="button" className="rounded-button" onClick={() => dispatch(setIsChangePassword(true))}>
-                      Сменить пароль
-                    </button>
-                    <button type="button" className="rounded-button" onClick={() => openModal("update")}>
-                      Сохранить профиль
-                    </button>
-                    <button type="button" className="rounded-button" onClick={handleLogout}>
-                      Выход
-                    </button>
-                    <button
-                        type="button"
-                        className="rounded-button delete-profile-button"
-                        onClick={() => openModal("delete")}
-                    >
-                      Удалить профиль
-                    </button>
-                  </div>
-                </form>
-              </>
-          )}
-        </div>
-        {!isChangePassword && (
-            <>
-              <h3 className="orders-title">Ваши заказы</h3>
-              <div className="orders-container">
-                {orders.length > 0 ? (
-                    orders.map((order) => (
-                        <div key={order.id} className="order-item">
-                          <div className="order-header">
-                    <span>
-                      Заказ №{order.id} от {order.creationDate}
-                    </span>
-                            <span className="order-status">в пути</span>
-                            <img
-                                alt="Arrow"
-                                className={`arrow-down ${expandedOrderId === order.id ? "expanded" : ""}`}
-                                onClick={() => toggleOrderDetails(order.id)}
-                                src="/image/svg/arrow.svg"
-                            />
-                          </div>
-                          {expandedOrderId !== order.id && (
-                              <div className="order-details">
-                                <div className="order-images">
-                                  {order.cartItems.map((item, index) => (
-                                      <img
-                                          key={index}
-                                          src={item.imageUrl ? item.imageUrl : "/image/placeholder.svg"}
-                                          alt={`Изображение товара ${index + 1}`}
-                                          className="order-image"
-                                      />
-                                  ))}
-                                </div>
-                                <div className="order-price">
-                                  <span className="total-price">${order.totalPrice}</span>
-                                </div>
-                              </div>
-                          )}
-                          {expandedOrderId === order.id && (
-                              <div className="order-details-expanded">
-                                <p>ФИО: {order.fullName}</p>
-                                <p>Email: {order.email}</p>
-                                <p>Телефон: {order.phoneNumber}</p>
-                                <p>Адрес: {order.address}</p>
-                                <p>Номер карты: {formatCardNumber(order.cardNumber)}</p>
-                                {order.cartItems.length > 0 ? (
-                                    order.cartItems.map((item) => (
-                                        <div key={item.id} className="order-item-product">
-                                          <Link
-                                              to={`/${categoryMapping[item.type.slice(0, 3)]}/${item.productId}`}
-                                              className="product-link"
-                                          >
-                                            <img
-                                                src={item.imageUrl ? item.imageUrl : "/image/placeholder.svg"}
-                                                alt={"Изображение товара"}
-                                                className="order-image"
-                                            />
-                                          </Link>
-                                          <div>
-                                            <Link
-                                                to={`/${categoryMapping[item.type.slice(0, 3)]}/${item.productId}`}
-                                                className="product-link"
-                                            >
-                                              <p>{item.name}</p>
-                                            </Link>
-                                            <p>Количество: {item.quantity}</p>
-                                            <p>
-                                              {item.config.split(",").map((config, index) => (
-                                                  <span key={index}>
-                                    {config}
-                                                    <br />
-                                  </span>
-                                              ))}
-                                            </p>
-                                          </div>
-                                          <p className="price-product">${item.price}</p>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p>Нет товаров</p>
-                                )}
-                              </div>
-                          )}
-                        </div>
-                    ))
-                ) : (
-                    <div className="no-orders">У вас пока нет заказов</div>
-                )}
+    <div className="profile-wrapper">
+      <div className="profile-form-container">
+        {isChangePassword ? (
+          <>
+            <h2 className="change-password-title">Смена пароля</h2>
+            <form className="password-form">
+              <div className="password-input-container">
+                <label htmlFor="providedCurrentPassword">Старый пароль:</label>
+                <input
+                  type="password"
+                  id="providedCurrentPassword"
+                  name="providedCurrentPassword"
+                  value={passwordData.providedCurrentPassword}
+                  onChange={handlePasswordChange}
+                  required
+                  className="password-input"
+                />
               </div>
-            </>
-        )}
-        {isModalOpen && (
-            <div className="modal-overlay">
-              <div className="modal-content">
-                <p>
-                  {modalAction === "delete"
-                      ? "Вы уверены, что хотите удалить свой профиль?"
-                      : "Вы уверены, что хотите изменить свой профиль?"}
-                </p>
-                <div className="modal-buttons">
-                  <button className="modal-button yes-button" onClick={handleModalConfirm}>
-                    Да
-                  </button>
-                  <button className="modal-button no-button" onClick={closeModal}>
-                    Нет
-                  </button>
-                </div>
+              <div className="password-input-container">
+                <label htmlFor="newPassword">Новый пароль:</label>
+                <input
+                  type="password"
+                  id="newPassword"
+                  name="newPassword"
+                  value={passwordData.newPassword}
+                  onChange={handlePasswordChange}
+                  required
+                  className="password-input"
+                />
               </div>
+              <div className="password-input-container">
+                <label htmlFor="confirmNewPassword">Подтверждение нового пароля:</label>
+                <input
+                  type="password"
+                  id="confirmNewPassword"
+                  name="confirmNewPassword"
+                  value={passwordData.confirmNewPassword}
+                  onChange={handlePasswordChange}
+                  required
+                  className="password-input"
+                />
+              </div>
+              <div className="button-container">
+                <button type="button" className="rounded-button" onClick={handleUpdatePassword}>
+                  Сохранить пароль
+                </button>
+                <button type="button" className="rounded-button" onClick={() => dispatch(setIsChangePassword(false))}>
+                  Отмена
+                </button>
+              </div>
+            </form>
+          </>
+        ) : (
+          <>
+            <div
+              className="avatar-container"
+              onMouseEnter={() => dispatch(setIsModalOpen(true))}
+              onMouseLeave={() => dispatch(setIsModalOpen(false))}
+              onClick={handleAvatarClick}
+            >
+              <img src={avatar} alt="Avatar" className="avatar" />
+              <p className="username">{formData.username}</p>
+              {isModalOpen && (
+                <div>
+                  <input
+                    id="avatar-upload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    className="file-input"
+                    style={{ display: "none" }}
+                  />
+                </div>
+              )}
             </div>
+            <form className="profile-form">
+              <div className="input-row">
+                <div className="profile-input-container">
+                  <label htmlFor="email">Email:</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email || ""}
+                    onChange={handleChange}
+                    required
+                    className="profile-input"
+                  />
+                </div>
+                <div className="profile-input-container">
+                  <label htmlFor="phone">Номер телефона:</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phoneNumber"
+                    value={formData.phoneNumber || ""}
+                    onChange={handleChange}
+                    required
+                    className="profile-input"
+                  />
+                </div>
+              </div>
+              <div className="input-row">
+                <div className="profile-input-container">
+                  <label htmlFor="fullName">ФИО:</label>
+                  <input
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    value={formData.fullName || ""}
+                    onChange={handleChange}
+                    required
+                    className="profile-input"
+                  />
+                </div>
+                <div className="profile-input-container">
+                  <label htmlFor="birthdate">Дата рождения:</label>
+                  <input
+                    type="date"
+                    id="birthdate"
+                    name="dateOfBirth"
+                    value={formData.dateOfBirth || ""}
+                    onChange={handleChange}
+                    required
+                    className="profile-input"
+                  />
+                </div>
+              </div>
+              <div className="button-container">
+                <button type="button" className="rounded-button" onClick={() => dispatch(setIsChangePassword(true))}>
+                  Сменить пароль
+                </button>
+                <button type="button" className="rounded-button" onClick={() => openModal("update")}>
+                  Сохранить профиль
+                </button>
+                <button type="button" className="rounded-button" onClick={openLogoutModal}>
+                  Выход
+                </button>
+                <button
+                  type="button"
+                  className="rounded-button delete-profile-button"
+                  onClick={() => openModal("delete")}
+                >
+                  Удалить профиль
+                </button>
+              </div>
+            </form>
+          </>
         )}
       </div>
+      {!isChangePassword && (
+        <>
+          <h3 className="orders-title">Ваши заказы</h3>
+          <div className="orders-container">
+            {orders.length > 0 ? (
+              orders.map((order) => (
+                <div key={order.id} className="order-item">
+                  <div className={`order-header ${expandedOrderId === order.id ? "expanded" : ""}`}>
+              <span>
+                Заказ №{order.id} от {order.creationDate}
+              </span>
+                    <span className="order-status">в пути</span>
+                    <img
+                      alt="Arrow"
+                      className={`arrow-down ${expandedOrderId === order.id ? "expanded" : ""}`}
+                      onClick={() => toggleOrderDetails(order.id)}
+                      src="/image/svg/arrow.svg"
+                    />
+                  </div>
+                  {expandedOrderId !== order.id && (
+                    <div className="order-details">
+                      <div className="order-images">
+                        {order.cartItems.map((item, index) => (
+                          <img
+                            key={index}
+                            src={item.imageUrl ? item.imageUrl : "/image/placeholder.svg"}
+                            alt={`Изображение товара ${index + 1}`}
+                            className="order-image"
+                          />
+                        ))}
+                      </div>
+                      <div className="order-price">
+                        <span className="total-price">${order.totalPrice}</span>
+                      </div>
+                    </div>
+                  )}
+                  {expandedOrderId === order.id && (
+                    <div className="order-details-expanded">
+                      <p>ФИО: {order.fullName}</p>
+                      <p>Email: {order.email}</p>
+                      <p>Телефон: {order.phoneNumber}</p>
+                      <p>Адрес: {order.address}</p>
+                      <p className={`card-number ${expandedOrderId === order.id ? "expanded" : ""}`}>
+                        Номер карты: {formatCardNumber(order.cardNumber)}
+                      </p>
+                      {order.cartItems.length > 0 ? (
+                        order.cartItems.map((item) => (
+                          <div key={item.id} className="order-item-product">
+                            <Link
+                              to={`/${categoryMapping[item.type.slice(0, 3)]}/${item.productId}`}
+                              className="product-link"
+                            >
+                              <img
+                                src={item.imageUrl ? item.imageUrl : "/image/placeholder.svg"}
+                                alt={"Изображение товара"}
+                                className="order-image"
+                              />
+                            </Link>
+                            <div>
+                              <Link
+                                to={`/${categoryMapping[item.type.slice(0, 3)]}/${item.productId}`}
+                                className="product-link"
+                              >
+                                <p>{item.name}</p>
+                              </Link>
+                              <p>Количество: {item.quantity}</p>
+                              <p>
+                                {item.config.split(",").map((config, index) => (
+                                  <span key={index}>
+                              {config}
+                                    <br />
+                            </span>
+                                ))}
+                              </p>
+                            </div>
+                            <p className="price-product">${item.price}</p>
+                          </div>
+                        ))
+                      ) : (
+                        <p>Нет товаров</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="no-orders">У вас пока нет заказов</div>
+            )}
+          </div>
+        </>
+      )}
+      {isModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p>
+              {modalAction === "delete"
+                ? "Вы уверены, что хотите удалить свой профиль?"
+                : "Вы уверены, что хотите изменить свой профиль?"}
+            </p>
+            <div className="modal-buttons">
+              <button className="modal-button yes-button" onClick={handleModalConfirm}>
+                Да
+              </button>
+              <button className="modal-button no-button" onClick={closeModal}>
+                Нет
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {isLogoutModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <p>Вы уверены, что хотите выйти из аккаунта?</p>
+            <div className="modal-buttons">
+              <button className="modal-button yes-button" onClick={handleLogoutConfirm}>
+                Да
+              </button>
+              <button className="modal-button no-button" onClick={closeLogoutModal}>
+                Нет
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

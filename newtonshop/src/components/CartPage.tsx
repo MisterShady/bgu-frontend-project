@@ -143,18 +143,29 @@ const CartPage = () => {
   const totalPrice = items.reduce((total, item) => (item.selected ? total + item.price * item.quantity : total), 0);
 
   const handleOrderSubmit = async () => {
+    const selectedItems = items.filter((item) => item.selected);
+    if (selectedItems.length === 0) {
+      alert("Пожалуйста, выберите товары для оформления заказа.");
+      return;
+    }
+
     const orderData: OrderRequestDto = {
       fullName: customerData.fullName,
       email: customerData.email,
       phoneNumber: customerData.phone,
       address: deliveryInfo,
       cardNumber: paymentMethod,
-      totalPrice: totalPrice,
-      cartItemIds: items.map((item) => item.id),
+      totalPrice: selectedItems.reduce((total, item) => total + item.price * item.quantity, 0),
+      cartItemIds: selectedItems.map((item) => item.id),
     };
-    await createOrder(orderData);
-    dispatch(setItems([]));
-    dispatch(setOrderNotification({ items: items.filter((item) => item.selected), index: 0 }));
+
+    try {
+      await createOrder(orderData);
+      dispatch(setItems(items.filter((item) => !item.selected)));
+      dispatch(setOrderNotification({ items: selectedItems, index: 0 }));
+    } catch (error) {
+      console.error("Не удалось оформить заказ", error);
+    }
   };
 
   useEffect(() => {
@@ -167,6 +178,7 @@ const CartPage = () => {
       return () => clearInterval(interval);
     }
   }, [orderNotification, dispatch]);
+
 
 
   return (

@@ -104,7 +104,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
+  height: 280px; /* Фиксированная высота для всех карточек */
 }
 
 .product-item:hover {
@@ -113,8 +113,7 @@
 
 .product-item img {
   width: 100%;
-  height: 200px;
-  max-height: 200px;
+  height: 120px; /* Фиксированная высота для изображений */
   object-fit: contain;
   margin-bottom: 10px;
 }
@@ -123,6 +122,202 @@
   font-size: 1.2em;
   text-decoration: none;
   margin-top: auto;
+  word-wrap: break-word; /* Перенос длинных слов */
+  overflow-wrap: break-word; /* Перенос длинных слов */
+  text-overflow: ellipsis; /* Многоточие для переполнения */
+  display: -webkit-box; /* Для поддержки многострочного переноса */
+  -webkit-line-clamp: 2; /* Ограничение количества строк */
+  -webkit-box-orient: vertical; /* Ориентация для многострочного переноса */
+}
+
+.product-item p {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #514ed9;
+  margin: 10px 0;
+  text-decoration: none;
+}
+
+.details-button {
+  background-color: #514ed9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.details-button:hover {
+  background-color: #ff6140;
+}
+
+.quick-search {
+  margin-top: 60px;
+  margin-bottom: 40px;
+}
+
+.quick-search h2 {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.search-button {
+  background-color: #514ed9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #ff6140;
+}
+.slick-slider {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.slick-slide img {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 25px;
+}
+
+.slick-dots {
+  position: absolute;
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.slick-dots li {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 4px;
+  margin: 0 5px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.slick-dots li button {
+  font-size: 0;
+  line-height: 0;
+  display: block;
+  width: 20px;
+  height: 4px;
+  padding: 5px;
+  cursor: pointer;
+  color: transparent;
+  border: 0;
+  outline: none;
+  background: transparent;
+}
+
+.slick-dots li button:before {
+  font-size: 0;
+  line-height: 0;
+  display: block;
+  width: 20px;
+  height: 4px;
+  content: "";
+  text-align: center;
+  background-color: #ccc;
+  border-radius: 2px;
+  opacity: 0.25;
+  transition: background-color 0.3s ease;
+}
+
+.slick-dots li.slick-active button:before {
+  background-color: #514ed9;
+  opacity: 1;
+}
+
+.slick-dots li button:hover:before {
+  background-color: #ff6140;
+  opacity: 1;
+}
+
+.new-products {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.new-products h2 {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.new-products h3 {
+  color: black;
+}
+
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.product-item {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+  width: 200px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 280px; /* Фиксированная высота для всех карточек */
+}
+
+.product-item:hover {
+  transform: scale(1.05);
+}
+
+.product-item img {
+  width: 100%;
+  height: 120px; /* Фиксированная высота для изображений */
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.product-item h3 {
+  font-size: 1.2em;
+  text-decoration: none;
+  margin-top: auto;
+  word-wrap: break-word; /* Перенос длинных слов */
+  overflow-wrap: break-word; /* Перенос длинных слов */
+  text-overflow: ellipsis; /* Многоточие для переполнения */
+  display: -webkit-box; /* Для поддержки многострочного переноса */
+  -webkit-line-clamp: 2; /* Ограничение количества строк */
+  -webkit-box-orient: vertical; /* Ориентация для многострочного переноса */
 }
 
 .product-item p {

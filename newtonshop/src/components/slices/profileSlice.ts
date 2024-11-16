@@ -15,6 +15,7 @@ interface ProfileState {
         confirmNewPassword: string;
     };
     expandedOrderId: number | null;
+    isLogoutModalOpen: boolean; // Новое состояние для модального окна выхода
 }
 
 const initialState: ProfileState = {
@@ -61,6 +62,7 @@ const initialState: ProfileState = {
         confirmNewPassword: "",
     },
     expandedOrderId: null,
+    isLogoutModalOpen: false,
 };
 
 const profileSlice = createSlice({
@@ -98,6 +100,9 @@ const profileSlice = createSlice({
         setExpandedOrderId: (state, action: PayloadAction<number | null>) => {
             state.expandedOrderId = action.payload;
         },
+        setIsLogoutModalOpen: (state, action: PayloadAction<boolean>) => {
+            state.isLogoutModalOpen = action.payload;
+        },
     },
 });
 
@@ -111,6 +116,7 @@ export const {
     setIsChangePassword,
     setPasswordData,
     setExpandedOrderId,
+    setIsLogoutModalOpen,
 } = profileSlice.actions;
 
 export default profileSlice.reducer;
