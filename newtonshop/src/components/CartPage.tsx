@@ -17,12 +17,13 @@ import {
   removeNotification,
   updateItem,
   removeItem,
+  setOrderNotification,
 } from "./slices/cartSlice";
 import { RootState } from "../store";
 
 const CartPage = () => {
   const dispatch = useDispatch();
-  const { items, customerData, deliveryInfo, paymentMethod, currentStep, notifications } = useSelector(
+  const { items, customerData, deliveryInfo, paymentMethod, currentStep, notifications, orderNotification } = useSelector(
       (state: RootState) => state.cart
   );
 
@@ -152,7 +153,21 @@ const CartPage = () => {
       cartItemIds: items.map((item) => item.id),
     };
     await createOrder(orderData);
+    dispatch(setItems([]));
+    dispatch(setOrderNotification({ items: items.filter((item) => item.selected), index: 0 }));
   };
+
+  useEffect(() => {
+    if (orderNotification) {
+      const interval = setInterval(() => {
+        const newIndex = (orderNotification.index + 1) % orderNotification.items.length;
+        dispatch(setOrderNotification({ ...orderNotification, index: newIndex }));
+      }, 2000);
+
+      return () => clearInterval(interval);
+    }
+  }, [orderNotification, dispatch]);
+
 
   return (
       <div className="cart-page">
@@ -202,13 +217,17 @@ const CartPage = () => {
                       </div>
                       <span className="item-price">${(item.price * item.quantity).toFixed(2)}</span>
                       <button onClick={() => handleRemoveItem(item.id)} className="remove-button">
-                        <img src="/image/device/trash.svg" alt="Remove" />
+                        <img src="/image/svg/trash.svg" alt="Remove" />
                       </button>
                     </div>
                   </div>
               ))
           ) : (
-              <div className="empty-cart">Ваша корзина пуста</div>
+              <div className="empty-cart">
+                <img src="/image/png/cartNothing.png" alt="Empty Cart" />
+                <h2>Ваша корзина пуста</h2>
+                <p>Самое время добавить в нее что-нибудь</p>
+              </div>
           )}
         </div>
 
@@ -282,6 +301,17 @@ const CartPage = () => {
                 operation="remove"
             />
         ))}
+
+        {orderNotification && (
+            <Notification
+                key="order-confirmation"
+                item={orderNotification.items[orderNotification.index]}
+                onCancel={() => dispatch(setOrderNotification(null))}
+                onComplete={() => dispatch(setOrderNotification(null))}
+                index={0}
+                operation="order-confirmation"
+            />
+        )}
       </div>
   );
 };

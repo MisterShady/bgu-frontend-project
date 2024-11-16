@@ -1,12 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { OrderResponseDto, ProfileDto } from '../../types';
+import { ProfileDto, OrderResponseDto } from '../../types';
 
 interface ProfileState {
     avatar: string;
-    isMenuOpen: boolean;
-    orders: OrderResponseDto[];
     formData: ProfileDto;
     existingProfile: ProfileDto;
+    orders: OrderResponseDto[];
     isModalOpen: boolean;
     modalAction: string;
     isChangePassword: boolean;
@@ -19,9 +18,7 @@ interface ProfileState {
 }
 
 const initialState: ProfileState = {
-    avatar: "/image/account.png",
-    isMenuOpen: false,
-    orders: [],
+    avatar: "/image/png/account.png",
     formData: {
         id: 0,
         email: "",
@@ -54,6 +51,7 @@ const initialState: ProfileState = {
         authorities: [],
         enabled: true,
     },
+    orders: [],
     isModalOpen: false,
     modalAction: "",
     isChangePassword: false,
@@ -72,17 +70,14 @@ const profileSlice = createSlice({
         setAvatar: (state, action: PayloadAction<string>) => {
             state.avatar = action.payload;
         },
-        setIsMenuOpen: (state, action: PayloadAction<boolean>) => {
-            state.isMenuOpen = action.payload;
-        },
-        setOrders: (state, action: PayloadAction<OrderResponseDto[]>) => {
-            state.orders = action.payload;
-        },
         setFormData: (state, action: PayloadAction<ProfileDto>) => {
             state.formData = action.payload;
         },
         setExistingProfile: (state, action: PayloadAction<ProfileDto>) => {
             state.existingProfile = action.payload;
+        },
+        setOrders: (state, action: PayloadAction<OrderResponseDto[]>) => {
+            state.orders = action.payload;
         },
         setIsModalOpen: (state, action: PayloadAction<boolean>) => {
             state.isModalOpen = action.payload;
@@ -108,10 +103,9 @@ const profileSlice = createSlice({
 
 export const {
     setAvatar,
-    setIsMenuOpen,
-    setOrders,
     setFormData,
     setExistingProfile,
+    setOrders,
     setIsModalOpen,
     setModalAction,
     setIsChangePassword,

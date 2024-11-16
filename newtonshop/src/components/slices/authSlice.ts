@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
     isLogin: boolean;
@@ -13,7 +13,7 @@ const initialState: AuthState = {
 };
 
 const authSlice = createSlice({
-    name: 'auth',
+    name: "auth",
     initialState,
     reducers: {
         setIsLogin: (state, action: PayloadAction<boolean>) => {
@@ -29,5 +29,4 @@ const authSlice = createSlice({
 });
 
 export const { setIsLogin, setBackendError, setAccessToken } = authSlice.actions;
-
 export default authSlice.reducer;

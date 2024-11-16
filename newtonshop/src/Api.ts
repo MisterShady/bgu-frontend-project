@@ -85,17 +85,17 @@ export const getCartItems = async (): Promise<CartItemDto[]> => {
 export const updateCartItem = async (id: number, quantity: number, selected: boolean): Promise<CartItemDto> => {
   const token = localStorage.getItem("accessToken");
   const response = await axios.put<CartItemDto>(
-    `${BASE_URL}/cart-items/${id}`,
-    {},
-    {
-      params: {
-        quantity,
-        selected,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+      `${BASE_URL}/cart-items/${id}`,
+      {},
+      {
+        params: {
+          quantity,
+          selected,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
   );
   return response.data;
 };
@@ -161,8 +161,8 @@ export const updateProfile = async (token: string, profileData: Partial<ProfileD
 };
 
 export const updatePassword = async (
-  token: string,
-  passwordData: { providedCurrentPassword: string; newPassword: string }
+    token: string,
+    passwordData: { providedCurrentPassword: string; newPassword: string }
 ): Promise<ProfileDto> => {
   const response = await axios.put<ProfileDto>(`${BASE_URL}/users/secured/update-password`, passwordData, {
     headers: {
@@ -186,7 +186,7 @@ export const updateAvatar = async (token: string, file: File): Promise<ProfileDt
 };
 export const getProductsByPage = async (page: number, size: number, sort: string): Promise<ProductDto[]> => {
   const response = await axios.get<ProductDto[]>(
-    `${BASE_URL}/products/catalog-pages?page=${page}&size=${size}&sort=${sort}`
+      `${BASE_URL}/products/catalog-pages?page=${page}&size=${size}&sort=${sort}`
   );
   return response.data;
 };

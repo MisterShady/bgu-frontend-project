@@ -54,8 +54,15 @@
 }
 
 .menu-button .arrow {
-  margin-left: 5px;
-  font-size: 14px;
+  margin-left: 10px;
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+  filter: invert(1);
+}
+
+.menu-button.open .arrow {
+  transform: rotate(180deg);
 }
 
 .menu-button:hover {
@@ -199,8 +206,8 @@
 .dropdown-content li {
   padding: 15px;
   transition:
-    background-color 0.3s ease,
-    border 0.3s ease;
+          background-color 0.3s ease,
+          border 0.3s ease;
   color: white;
   font-family: "Arial", sans-serif;
 }

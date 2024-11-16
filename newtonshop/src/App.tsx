@@ -16,36 +16,39 @@ import MacProduct from "./components/products/MacProduct";
 import Auth from "./components/Auth";
 import CartPage from "./components/CartPage";
 import AllProducts from "./components/products/AllProducts";
+import PrivateRoute from "./components/PrivateRoute";
 
 const App = () => {
   return (
-    <Router>
-      <div className="app-container">
-        <Navbar />
-        <div className="content">
-          <Routes>
-            <Route path="/products" element={<AllProducts />} />
-            <Route path="/" element={<HomePage />} />
-            <Route path="/airpods" element={<CategoryProducts category="airpods" />} />
-            <Route path="/watches" element={<CategoryProducts category="watches" />} />
-            <Route path="/ipads" element={<CategoryProducts category="ipads" />} />
-            <Route path="/iphones" element={<CategoryProducts category="iphones" />} />
-            <Route path="/macs" element={<CategoryProducts category="macs" />} />
-            <Route path="/airpods/:id" element={<AirpodsProduct />} />
-            <Route path="/watches/:id" element={<WatchProduct />} />
-            <Route path="/ipads/:id" element={<IpadProduct />} />
-            <Route path="/iphones/:id" element={<IphoneProduct />} />
-            <Route path="/macs/:id" element={<MacProduct />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/about-us" element={<AboutUs />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+      <Router>
+        <div className="app-container">
+          <Navbar />
+          <div className="content">
+            <Routes>
+              <Route path="/products" element={<AllProducts />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/airpods" element={<CategoryProducts category="airpods" />} />
+              <Route path="/watches" element={<CategoryProducts category="watches" />} />
+              <Route path="/ipads" element={<CategoryProducts category="ipads" />} />
+              <Route path="/iphones" element={<CategoryProducts category="iphones" />} />
+              <Route path="/macs" element={<CategoryProducts category="macs" />} />
+              <Route path="/airpods/:id" element={<AirpodsProduct />} />
+              <Route path="/watches/:id" element={<WatchProduct />} />
+              <Route path="/ipads/:id" element={<IpadProduct />} />
+              <Route path="/iphones/:id" element={<IphoneProduct />} />
+              <Route path="/macs/:id" element={<MacProduct />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route element={<PrivateRoute />}>
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/cart" element={<CartPage />} />
+              </Route>
+              <Route path="/about-us" element={<AboutUs />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </Router>
+      </Router>
   );
 };
 

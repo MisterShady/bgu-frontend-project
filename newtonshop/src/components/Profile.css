@@ -116,11 +116,11 @@
 }
 
 .delete-profile-button {
-  background-color: #ff6140;
+  background-color: #ff8b59;
 }
 
 .delete-profile-button:hover {
-  background-color: #e45b14;
+  background-color: #ee7035;
 }
 
 .orders-title {
@@ -199,8 +199,14 @@
 
 .arrow-down {
   cursor: pointer;
-  font-size: 1.5rem;
+  width: 20px;
+  height: 20px;
   margin-left: auto;
+  transition: transform 0.3s ease;
+}
+
+.arrow-down.expanded {
+  transform: rotate(180deg);
 }
 
 .total-price {
@@ -247,11 +253,11 @@
 
 .order-item-product div p {
   margin: 0;
-  font-size: 1.2rem; /* Увеличил шрифт */
+  font-size: 1.2rem;
 }
 
 .order-item-product div p:first-child {
-  font-weight: bold; /* Название жирным */
+  font-weight: bold;
 }
 
 .modal-overlay {

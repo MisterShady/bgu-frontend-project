@@ -8,7 +8,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<ProductDto[]>([]);
-  const [avatar, setAvatar] = useState<string>("/image/account.png");
+  const [avatar, setAvatar] = useState<string>("/image/png/account.png");
   const navigate = useNavigate();
 
   const toggleMenu = useCallback(() => {
@@ -38,7 +38,7 @@ const Navbar = () => {
         const accessToken = localStorage.getItem("accessToken");
         if (accessToken) {
           const data = await getCurrentProfile();
-          setAvatar(data.avatar ? `data:image/jpeg;base64,${data.avatar}` : "/image/account.png");
+          setAvatar(data.avatar ? `data:image/jpeg;base64,${data.avatar}` : "/image/png/account.png");
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -52,7 +52,7 @@ const Navbar = () => {
     };
 
     const handleLogout = () => {
-      setAvatar("/image/account.png");
+      setAvatar("/image/png/account.png");
     };
 
     window.addEventListener("login", handleLogin);
@@ -73,7 +73,7 @@ const Navbar = () => {
     if (accessToken) {
       navigate("/profile");
     } else {
-      navigate("/auth");
+      navigate("/auth", { state: { message: "Для входа в профиль нужно авторизоваться." } });
     }
   };
 
@@ -82,7 +82,7 @@ const Navbar = () => {
     if (accessToken) {
       navigate("/cart");
     } else {
-      navigate("/auth");
+      navigate("/auth", { state: { message: "Для входа в корзину нужно авторизоваться." } });
     }
   };
 
@@ -93,40 +93,40 @@ const Navbar = () => {
             <nav className="navigation">
               <div className="logo">
                 <Link to="/">
-                  <img src="/image/logo.png" alt="Apple Store" />
+                  <img src="/image/png/logo.png" alt="Apple Store" />
                 </Link>
               </div>
 
               <div className="menu-item">
                 <button className={`menu-button ${isMenuOpen ? "open" : ""}`} onClick={toggleMenu}>
-                  Каталог <span className="arrow">▼</span>
+                  Каталог <img src="/image/svg/arrow.svg" alt="Arrow" className={`arrow ${isMenuOpen ? "up" : "down"}`} />
                 </button>
                 {isMenuOpen && (
                     <div className="dropdown open">
                       <ul className="dropdown-content">
                         <Link to="/macs">
                           <li>
-                            <img src="/image/device/mac.svg" alt="MacBook" /> MacBook
+                            <img src="/image/svg/mac.svg" alt="MacBook" /> MacBook
                           </li>
                         </Link>
                         <Link to="/ipads">
                           <li>
-                            <img src="/image/device/ipad.svg" alt="iPad" /> iPad
+                            <img src="/image/svg/ipad.svg" alt="iPad" /> iPad
                           </li>
                         </Link>
                         <Link to="/iphones">
                           <li>
-                            <img src="/image/device/iphone.svg" alt="iPhone" /> iPhone
+                            <img src="/image/svg/iphone.svg" alt="iPhone" /> iPhone
                           </li>
                         </Link>
                         <Link to="/watches">
                           <li>
-                            <img src="/image/device/watch.svg" alt="Watch" /> Watch
+                            <img src="/image/svg/watch.svg" alt="Watch" /> Watch
                           </li>
                         </Link>
                         <Link to="/airpods">
                           <li style={{ borderRadius: "0 0 15px 15px" }}>
-                            <img src="/image/device/airpods.svg" alt="Airpods" /> Airpods
+                            <img src="/image/svg/airpods.svg" alt="Airpods" /> Airpods
                           </li>
                         </Link>
                       </ul>
@@ -178,7 +178,7 @@ const Navbar = () => {
               </div>
 
               <div className="cart-icon" onClick={handleCartClick} style={{ cursor: "pointer" }}>
-                <img src="/image/cart.png" alt="Cart" />
+                <img src="/image/png/cart.png" alt="Cart" />
               </div>
               <div className="account-icon" onClick={handleAccountClick} style={{ cursor: "pointer" }}>
                 <img src={avatar} alt="Account" />

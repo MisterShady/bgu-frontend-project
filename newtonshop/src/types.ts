@@ -212,12 +212,12 @@ export interface WatchDto {
       additionalPrice: number;
     };
     small:
-      | {
-          name: string;
-          additionalPrice: number;
-        }
-      | string
-      | null;
+        | {
+      name: string;
+      additionalPrice: number;
+    }
+        | string
+        | null;
   };
   versions: {
     type: string;

@@ -7,7 +7,7 @@ interface NotificationProps {
   onCancel: () => void;
   onComplete: () => void;
   index: number;
-  operation: "add" | "remove";
+  operation: "add" | "remove" | "order-confirmation";
 }
 
 const Notification = ({ item, onCancel, onComplete, index, operation }: NotificationProps) => {
@@ -38,35 +38,39 @@ const Notification = ({ item, onCancel, onComplete, index, operation }: Notifica
   };
 
   return (
-    <div className="notification-container" style={{ bottom: `${index * 120 + 20}px` }}>
-      <div className="notification-content">
-        <div className="notification-progress-bar" style={{ width: `${progress}%` }}></div>
-        <div className="notification-item-details">
-          <img
-            src={item.imageUrl ? item.imageUrl : "/image/placeholder.svg"}
-            alt={isCartItemDto(item) ? item.name : ""}
-          />
-          <div className="notification-item-info">
-            <h3>{isCartItemDto(item) ? item.name : ""}</h3>
-            <div style={{ display: "flex", alignItems: "center" }}>
+      <div className="notification-container" style={{ bottom: `${index * 120 + 20}px` }}>
+        <div className="notification-content">
+          <div className="notification-progress-bar" style={{ width: `${progress}%` }}></div>
+          <div className="notification-item-details">
+            <img
+                src={item.imageUrl ? item.imageUrl : "/image/placeholder.svg"}
+                alt={isCartItemDto(item) ? item.name : ""}
+            />
+            <div className="notification-item-info">
+              <h3>{isCartItemDto(item) ? item.name : ""}</h3>
+              <div style={{ display: "flex", alignItems: "center" }}>
               <span className="notification-operation">
-                {operation === "add" ? "Добавлено в корзину" : "Удаление из корзины"}
+                {operation === "add"
+                    ? "Добавлено в корзину"
+                    : operation === "remove"
+                        ? "Удаление из корзины"
+                        : "Заказ оформлен и добавлен в профиль"}
               </span>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                 <span className="notification-item-price">
                   ${(item.price * (isCartItemDto(item) ? item.quantity : 1)).toFixed(2)}
                 </span>
-                {operation === "remove" && (
-                  <button className="notification-cancel-button" onClick={onCancel}>
-                    Отменить
-                  </button>
-                )}
+                  {operation === "remove" && (
+                      <button className="notification-cancel-button" onClick={onCancel}>
+                        Отменить
+                      </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

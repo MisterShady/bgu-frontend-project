@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { postSignIn, postSignUp } from "../Api";
 import { setIsLogin, setBackendError, setAccessToken } from "./slices/authSlice";
-import { RootState } from "../store";
 import "./Auth.css";
+import {AppDispatch} from "../store";
 
 type FormData = {
   username: string;
@@ -22,9 +22,17 @@ interface RegisterFormInputs {
   confirmPassword: string;
 }
 
+interface RootState {
+  auth: {
+    isLogin: boolean;
+    backendError: string | null;
+    accessToken: string | null;
+  };
+}
+
 const Auth = () => {
-  const dispatch = useDispatch();
-  const { isLogin, backendError } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+  const { isLogin, backendError, accessToken } = useSelector((state: RootState) => state.auth);
   const {
     register,
     handleSubmit,
@@ -33,14 +41,20 @@ const Auth = () => {
     setError,
   } = useForm<FormData & RegisterFormInputs>();
   const navigate = useNavigate();
+  const location = useLocation();
   const password = watch("password");
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       navigate("/profile");
     }
-  }, [navigate]);
+  }, [accessToken, navigate]);
+
+  useEffect(() => {
+    if (location.state && location.state.message) {
+      dispatch(setBackendError(location.state.message));
+    }
+  }, [location.state, dispatch]);
 
   const onSubmit = async (data: FormData & RegisterFormInputs) => {
     if (!isLogin && data.password !== data.confirmPassword) {

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CartItemDto, OrderRequestDto } from '../../types';
+import { CartItemDto } from '../../types';
 
 interface CartState {
     items: CartItemDto[];
@@ -12,6 +12,7 @@ interface CartState {
     paymentMethod: string;
     currentStep: number;
     notifications: { id: number; item: CartItemDto }[];
+    orderNotification: { items: CartItemDto[]; index: number } | null;
 }
 
 const initialState: CartState = {
@@ -25,6 +26,7 @@ const initialState: CartState = {
     paymentMethod: "",
     currentStep: 1,
     notifications: [],
+    orderNotification: null,
 };
 
 const cartSlice = createSlice({
@@ -58,6 +60,9 @@ const cartSlice = createSlice({
         removeItem: (state, action: PayloadAction<number>) => {
             state.items = state.items.filter((item) => item.id !== action.payload);
         },
+        setOrderNotification: (state, action: PayloadAction<{ items: CartItemDto[]; index: number } | null>) => {
+            state.orderNotification = action.payload;
+        },
     },
 });
 
@@ -71,6 +76,7 @@ export const {
     removeNotification,
     updateItem,
     removeItem,
+    setOrderNotification,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
