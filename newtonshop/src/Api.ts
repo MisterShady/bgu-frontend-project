@@ -58,13 +58,7 @@ export const getOrders = async (): Promise<OrderResponseDto[]> => {
 
 export const postCartItem = async (cartItem: CartItemRequestDto): Promise<CartItemDto> => {
   const token = localStorage.getItem("accessToken");
-  const response = await axios.post<CartItemDto>(`${BASE_URL}/cart-items`, null, {
-    params: {
-      productId: cartItem.productId,
-      config: cartItem.config,
-      imageUrl: cartItem.imageUrl,
-      price: cartItem.price,
-    },
+  const response = await axios.post<CartItemDto>(`${BASE_URL}/cart-items`, cartItem, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -86,12 +80,8 @@ export const updateCartItem = async (id: number, quantity: number, selected: boo
   const token = localStorage.getItem("accessToken");
   const response = await axios.put<CartItemDto>(
       `${BASE_URL}/cart-items/${id}`,
-      {},
+      { quantity, selected }, // Передаем параметры в теле запроса
       {
-        params: {
-          quantity,
-          selected,
-        },
         headers: {
           Authorization: `Bearer ${token}`,
         },

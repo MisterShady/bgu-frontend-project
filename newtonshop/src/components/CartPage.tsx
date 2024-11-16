@@ -61,19 +61,25 @@ const CartPage = () => {
   const handleQuantityChange = async (id: number, quantity: number) => {
     if (quantity < 1) return;
     try {
-      const updatedItem = await updateCartItem(id, quantity, items.find((item) => item.id === id)!.selected);
-      dispatch(updateItem(updatedItem));
+      const item = items.find((item) => item.id === id);
+      if (item) {
+        const updatedItem = await updateCartItem(id, quantity, item.selected);
+        dispatch(updateItem(updatedItem));
+      }
     } catch (error) {
-      console.error("Не обновилась походу", error);
+      console.error("Не удалось обновить количество:", error);
     }
   };
 
   const handleSelectedChange = async (id: number, selected: boolean) => {
     try {
-      const updatedItem = await updateCartItem(id, items.find((item) => item.id === id)!.quantity, selected);
-      dispatch(updateItem(updatedItem));
+      const item = items.find((item) => item.id === id);
+      if (item) {
+        const updatedItem = await updateCartItem(id, item.quantity, selected);
+        dispatch(updateItem(updatedItem));
+      }
     } catch (error) {
-      console.error("Не обновилась походу", error);
+      console.error("Не удалось обновить выбор:", error);
     }
   };
 
