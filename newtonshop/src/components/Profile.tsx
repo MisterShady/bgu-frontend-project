@@ -142,11 +142,14 @@ const Profile = () => {
           const file = new File([base64ToBlob(formData.avatar)], "avatar.jpg", { type: "image/jpeg" });
           await updateAvatar(accessToken, file);
         }
+
+        window.location.reload();
       }
     } catch (error) {
       console.error("Ошибка при обновлении профиля:", error);
     }
   };
+
 
   const handleUpdatePassword = async () => {
     try {
