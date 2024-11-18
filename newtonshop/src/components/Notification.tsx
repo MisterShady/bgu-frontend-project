@@ -22,7 +22,7 @@ const Notification = ({ item, onCancel, onComplete, index, operation }: Notifica
         }
         return prevProgress + 2;
       });
-    }, 75);
+    }, 50);
 
     return () => clearInterval(timer);
   }, []);

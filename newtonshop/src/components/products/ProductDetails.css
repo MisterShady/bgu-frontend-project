@@ -232,7 +232,7 @@
   cursor: pointer;
   transition: border 0.3s ease;
   border-radius: 8px;
-  position: relative; /* Позиционирование для подсказки */
+  position: relative;
 }
 
 .color-square.selected {

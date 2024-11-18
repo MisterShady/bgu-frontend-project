@@ -15,7 +15,7 @@ interface ProfileState {
         confirmNewPassword: string;
     };
     expandedOrderId: number | null;
-    isLogoutModalOpen: boolean; // Новое состояние для модального окна выхода
+    isLogoutModalOpen: boolean;
 }
 
 const initialState: ProfileState = {

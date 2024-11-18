@@ -80,7 +80,7 @@ export const updateCartItem = async (id: number, quantity: number, selected: boo
   const token = localStorage.getItem("accessToken");
   const response = await axios.put<CartItemDto>(
       `${BASE_URL}/cart-items/${id}`,
-      { quantity, selected }, // Передаем параметры в теле запроса
+      { quantity, selected },
       {
         headers: {
           Authorization: `Bearer ${token}`,

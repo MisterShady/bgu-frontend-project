@@ -14,7 +14,7 @@
 
 .notification-container.exiting {
   opacity: 0;
-  bottom: -20px; /* Смещение при исчезновении */
+  bottom: -20px;
 }
 
 .notification-content {

@@ -138,7 +138,6 @@ const Profile = () => {
         dispatch(setFormData(updatedProfile));
         dispatch(setExistingProfile(updatedProfile));
 
-        // Update avatar on the server
         if (formData.avatar && formData.avatar !== existingProfile.avatar) {
           const file = new File([base64ToBlob(formData.avatar)], "avatar.jpg", { type: "image/jpeg" });
           await updateAvatar(accessToken, file);
