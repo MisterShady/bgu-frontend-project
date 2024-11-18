@@ -98,6 +98,45 @@ export const deleteCartItem = async (id: number): Promise<void> => {
     },
   });
 };
+
+export const selectAllCartItems = async (): Promise<CartItemDto[]> => {
+  const token = localStorage.getItem("accessToken");
+  const response = await axios.put<CartItemDto[]>(`${BASE_URL}/cart-items/to-selected`, {}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const setAllToUnselected = async (): Promise<CartItemDto[]> => {
+  const token = localStorage.getItem("accessToken");
+  const response = await axios.put<CartItemDto[]>(`${BASE_URL}/cart-items/to-unselected`, {}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
+
+export const deleteAllSelectedCartItems = async (): Promise<void> => {
+  const token = localStorage.getItem("accessToken");
+  await axios.delete(`${BASE_URL}/cart-items/selected`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const deleteAllCartItems = async (): Promise<void> => {
+  const token = localStorage.getItem("accessToken");
+  await axios.delete(`${BASE_URL}/cart-items`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 export const postSignUp = async (userData: Partial<UserDto>): Promise<UserDto> => {
   const response = await axios.post<UserDto>(`${BASE_URL}/users/sign-up`, userData);
   return response.data;
