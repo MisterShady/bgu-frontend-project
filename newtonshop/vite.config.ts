@@ -11,7 +11,11 @@ export default defineConfig(async () => {
       react(),
       svgr(),
       tsconfigPaths(),
-
+      eslintPlugin({
+        cache: false,
+        include: ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
+        exclude: ["node_modules"],
+      }),
     ],
     resolve: {
       alias: {
@@ -19,16 +23,16 @@ export default defineConfig(async () => {
       },
     },
     server: {
-      port: 3000, // Порт, на котором будет запущен сервер разработки
-      open: true, // Автоматически открывать браузер при запуске сервера
-      historyApiFallback: true, // позволяет Vite обрабатывать все маршруты React Router
+      port: 3000,
+      open: true,
+      historyApiFallback: true,
     },
     build: {
-      outDir: "dist", // Директория для сборки
-      sourcemap: true, // Включить sourcemaps для production сборки
+      outDir: "dist",
+      sourcemap: true,
     },
     esbuild: {
-      // Дополнительные настройки для esbuild, если нужно
+      // Дополнительные настройки для esbuild
     },
   };
 });
