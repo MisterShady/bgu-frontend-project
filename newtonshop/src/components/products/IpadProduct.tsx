@@ -10,7 +10,6 @@ import {
   setSelectedApplePencil,
   setSelectedSmartKeyboard,
   addToCart,
-  removeNotification,
 } from "../slices/ipadSlice";
 import { AppDispatch, RootState } from "../../store";
 import { CartItemRequestDto } from "../../types";
@@ -18,8 +17,8 @@ import "./ProductDetails.css";
 import ImageWrapper from "../handler/ImageWrapper";
 import { colorMapping } from "./colorMapping";
 import Spinner from "../Spinner";
-import Notification from "../Notification";
 import { getDataOrFallback } from "../../utils";
+import { addNotification } from "../slices/notificationSlice";
 
 const IpadProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,28 +33,33 @@ const IpadProduct = () => {
     selectedConnectivity,
     selectedApplePencil,
     selectedSmartKeyboard,
-    notifications,
     isAddingToCart,
   } = useSelector((state: RootState) => state.ipad);
 
   useEffect(() => {
     if (id) {
       dispatch(fetchIpadById(id));
+      dispatch(setSelectedImage(null));
+      dispatch(setSelectedColor(null));
     }
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (ipad && selectedColor === null && !selectedImage) {
-      dispatch(setSelectedColor(ipad.colors[0]));
-      dispatch(setSelectedImage(ipad.images[0]));
+    if (ipad && ipad.images.length > 0) {
+      const defaultColor = ipad.colors[0];
+      const firstImageForColor = getImagesByColor(ipad.images, defaultColor)[0];
+      dispatch(setSelectedColor(defaultColor));
+      dispatch(setSelectedImage(firstImageForColor || ipad.images[0]));
       dispatch(setSelectedStorage(ipad.storages[0].size));
       dispatch(setSelectedConnectivity(ipad.connectivities[0].type));
       dispatch(setSelectedApplePencil(ipad.applePencils[0].type));
       dispatch(setSelectedSmartKeyboard(ipad.smartKeyboards[0].type));
+    } else {
+      dispatch(setSelectedImage(null));
     }
-  }, [ipad, dispatch, selectedColor, selectedImage]);
+  }, [ipad, dispatch]);
 
-  if (!ipad || loading) {
+  if (loading || !ipad) {
     return <Spinner />;
   }
 
@@ -68,202 +72,200 @@ const IpadProduct = () => {
   const selectedApplePencilPrice = ipad.applePencils.find((pencil) => pencil.type === selectedApplePencil)?.additionalPrice || 0;
   const selectedSmartKeyboardPrice = ipad.smartKeyboards.find((keyboard) => keyboard.type === selectedSmartKeyboard)?.additionalPrice || 0;
   const totalPrice = ipad
-      ? ipad.price +
-      selectedStoragePrice +
-      selectedConnectivityPrice +
-      selectedApplePencilPrice +
-      selectedSmartKeyboardPrice
-      : 0;
+    ? ipad.price +
+    selectedStoragePrice +
+    selectedConnectivityPrice +
+    selectedApplePencilPrice +
+    selectedSmartKeyboardPrice
+    : 0;
+
+  const handleColorChange = (color: string) => {
+    const firstImageForColor = getImagesByColor(ipad.images, color)[0];
+    dispatch(setSelectedColor(color));
+    dispatch(setSelectedImage(firstImageForColor || ipad.images[0]));
+  };
 
   const handleAddToCart = async () => {
     if (ipad && !isAddingToCart) {
       const cartItem: CartItemRequestDto = {
         productId: ipad.id,
         config: `Color: ${selectedColor}, Storage: ${selectedStorage}, Connectivity: ${selectedConnectivity}, Apple Pencil: ${selectedApplePencil}, Smart Keyboard: ${selectedSmartKeyboard}`,
-        imageUrl: selectedImage || ipad.images[0],
+        imageUrl: selectedImage || '',
         price: totalPrice,
       };
 
       dispatch(addToCart(cartItem));
+      dispatch(addNotification({ item: cartItem, operation: 'add', id: Date.now() }));
     }
   };
 
-  const handleNotificationComplete = (id: number) => {
-    dispatch(removeNotification(id));
-  };
-
-  const handleNotificationCancel = (id: number) => {
-    dispatch(removeNotification(id));
-  };
-
   return (
-      <div className="product-details">
-        <div className="product-images">
-          <ImageWrapper src={selectedImage || ipad.images[0]} alt={ipad.title} className="main-image" />
-          <div className="image-thumbnails">
-            {ipad.images.map((image, index) => (
-                <img
-                    key={image}
-                    src={image}
-                    alt={`iPad Image ${index + 1}`}
-                    className={`thumbnail ${image === selectedImage ? "selected" : ""}`}
-                    onClick={() => dispatch(setSelectedImage(image))}
-                />
+    <div className="product-details">
+      <div className="product-images">
+        {selectedImage ? (
+          <ImageWrapper src={selectedImage} alt={ipad.title} className="main-image" />
+        ) : (
+          <ImageWrapper src={''} alt="No image available" className="main-image" />
+        )}
+        <div className="image-thumbnails">
+          {ipad.images.length > 0 &&
+            ipad.images.map((image, index) => (
+              <img
+                key={image}
+                src={image}
+                alt={`iPad Image ${index + 1}`}
+                className={`thumbnail ${image === selectedImage ? "selected" : ""}`}
+                onClick={() => dispatch(setSelectedImage(image))}
+              />
             ))}
-          </div>
         </div>
-
-        <div className="product-info">
-          <h2>{ipad.title}</h2>
-
-          <div className="price-container">
-            <p className="product-price">${totalPrice}</p>
-            <button className="buy-button" onClick={handleAddToCart}>
-              В корзину
-            </button>
-          </div>
-
-          {ipad.colors.length > 1 && (
-              <div className="product-colors">
-                <h3>Выберите цвет</h3>
-                <div className="color-squares">
-                  {ipad.colors.map((color) => (
-                      <div key={color} className="color-square-container">
-                        <div
-                            className={`color-square ${selectedColor === color ? "selected" : ""}`}
-                            onClick={() => dispatch(setSelectedColor(color))}
-                            style={{ backgroundColor: colorMapping[color] || "transparent" }}
-                        >
-                          <div className="color-tooltip">
-                            <p>{color}</p>
-                          </div>
-                        </div>
-                      </div>
-                  ))}
-                </div>
-              </div>
-          )}
-
-          <div className="product-configuration">
-            <h3>Выбор конфигурации</h3>
-
-            <div className="config-option">
-              <h4>Хранилище</h4>
-              <select
-                  value={selectedStorage || ipad.storages[0].size}
-                  onChange={(e) => dispatch(setSelectedStorage(e.target.value))}
-              >
-                {ipad.storages.map((storage) => (
-                    <option key={storage.size} value={storage.size}>
-                      {storage.size} {storage.additionalPrice > 0 ? `(Дополнительно: $${storage.additionalPrice})` : ""}
-                    </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="config-option">
-              <h4>Подключение</h4>
-              <select
-                  value={selectedConnectivity || ipad.connectivities[0].type}
-                  onChange={(e) => dispatch(setSelectedConnectivity(e.target.value))}
-              >
-                {ipad.connectivities.map((conn) => (
-                    <option key={conn.type} value={conn.type}>
-                      {conn.type} {conn.additionalPrice > 0 ? `(Дополнительно: $${conn.additionalPrice})` : ""}
-                    </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="config-option">
-              <h4>Карандаш</h4>
-              <select
-                  value={selectedApplePencil || ipad.applePencils[0].type}
-                  onChange={(e) => dispatch(setSelectedApplePencil(e.target.value))}
-              >
-                {ipad.applePencils.map((pencil) => (
-                    <option key={pencil.type} value={pencil.type}>
-                      {pencil.type} {pencil.additionalPrice > 0 ? `(Дополнительно: $${pencil.additionalPrice})` : ""}
-                    </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="config-option">
-              <h4>Клавиатура</h4>
-              <select
-                  value={selectedSmartKeyboard || ipad.smartKeyboards[0].type}
-                  onChange={(e) => dispatch(setSelectedSmartKeyboard(e.target.value))}
-              >
-                {ipad.smartKeyboards.map((keyboard) => (
-                    <option key={keyboard.type} value={keyboard.type}>
-                      {keyboard.type} {keyboard.additionalPrice > 0 ? `(Дополнительно: $${keyboard.additionalPrice})` : ""}
-                    </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div className="product-description">
-            <div className="description-block">
-              <h3>Экран</h3>
-              <p>
-                {getDataOrFallback(ipad.display, "size", "")}, {getDataOrFallback(ipad.display, "type", "")},{" "}
-                {getDataOrFallback(ipad.display, "resolution", "")}, {getDataOrFallback(ipad.display, "ppi", "")} PPI,{" "}
-                {getDataOrFallback(ipad.display, "refreshRate", "")}
-              </p>
-            </div>
-
-            <div className="description-block">
-              <h3>Процессор</h3>
-              <p>
-                {getDataOrFallback(ipad.processor, "chip", "")}, CPU: {getDataOrFallback(ipad.processor, "cpu", "")}, GPU:{" "}
-                {getDataOrFallback(ipad.processor, "gpu", "")}
-              </p>
-            </div>
-
-            <div className="description-block">
-              <h3>Камеры</h3>
-              <p>Основные камеры: {ipad.camera.rearCameras.map((cam) => `${cam.resolution} (${cam.type})`).join(", ")}</p>
-              <p>
-                Фронтальная камера: {getDataOrFallback(ipad.camera.frontCamera, "resolution", "")} (
-                {getDataOrFallback(ipad.camera.frontCamera, "aperture", "")})
-              </p>
-            </div>
-
-            <div className="description-block">
-              <h3>Память</h3>
-              <p>{getDataOrFallback(ipad, "memory", "")}</p>
-            </div>
-
-            <div className="description-block">
-              <h3>Аккумулятор</h3>
-              <p>Емкость: {getDataOrFallback(ipad.battery, "capacity", "")}</p>
-            </div>
-
-            <div className="description-block">
-              <h3>Габариты и вес</h3>
-              <p>
-                Высота: {getDataOrFallback(ipad.dimensions, "height", "")}, ширина:{" "}
-                {getDataOrFallback(ipad.dimensions, "width", "")}, толщина:{" "}
-                {getDataOrFallback(ipad.dimensions, "depth", "")}, вес: {getDataOrFallback(ipad.dimensions, "weight", "")}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {notifications.map((notification, index) => (
-            <Notification
-                key={notification.id}
-                item={notification.item}
-                onCancel={() => handleNotificationCancel(notification.id)}
-                onComplete={() => handleNotificationComplete(notification.id)}
-                index={index}
-                operation="add"
-            />
-        ))}
       </div>
+
+      <div className="product-info">
+        <h2>{ipad.title}</h2>
+
+        <div className="price-container">
+          <p className="product-price">${totalPrice}</p>
+          <button className="buy-button" onClick={handleAddToCart}>
+            В корзину
+          </button>
+        </div>
+
+        {ipad.colors.length > 1 && (
+          <div className="product-colors">
+            <h3>Выберите цвет</h3>
+            <div className="color-squares">
+              {ipad.colors.map((color) => (
+                <div key={color} className="color-square-container">
+                  <div
+                    className={`color-square ${selectedColor === color ? "selected" : ""}`}
+                    onClick={() => handleColorChange(color)}
+                    style={{ backgroundColor: colorMapping[color] || "transparent" }}
+                  >
+                    <div className="color-tooltip">
+                      <p>{color}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="product-configuration">
+          <h3>Выбор конфигурации</h3>
+
+          <div className="config-option">
+            <h4>Хранилище</h4>
+            <select
+              value={selectedStorage || ipad.storages[0].size}
+              onChange={(e) => dispatch(setSelectedStorage(e.target.value))}
+            >
+              {ipad.storages.map((storage) => (
+                <option key={storage.size} value={storage.size}>
+                  {storage.size} {storage.additionalPrice > 0 ? `(Дополнительно: $${storage.additionalPrice})` : ""}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="config-option">
+            <h4>Подключение</h4>
+            <select
+              value={selectedConnectivity || ipad.connectivities[0].type}
+              onChange={(e) => dispatch(setSelectedConnectivity(e.target.value))}
+            >
+              {ipad.connectivities.map((conn) => (
+                <option key={conn.type} value={conn.type}>
+                  {conn.type} {conn.additionalPrice > 0 ? `(Дополнительно: $${conn.additionalPrice})` : ""}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="config-option">
+            <h4>Карандаш</h4>
+            <select
+              value={selectedApplePencil || ipad.applePencils[0].type}
+              onChange={(e) => dispatch(setSelectedApplePencil(e.target.value))}
+            >
+              {ipad.applePencils.map((pencil) => (
+                <option key={pencil.type} value={pencil.type}>
+                  {pencil.type} {pencil.additionalPrice > 0 ? `(Дополнительно: $${pencil.additionalPrice})` : ""}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="config-option">
+            <h4>Клавиатура</h4>
+            <select
+              value={selectedSmartKeyboard || ipad.smartKeyboards[0].type}
+              onChange={(e) => dispatch(setSelectedSmartKeyboard(e.target.value))}
+            >
+              {ipad.smartKeyboards.map((keyboard) => (
+                <option key={keyboard.type} value={keyboard.type}>
+                  {keyboard.type} {keyboard.additionalPrice > 0 ? `(Дополнительно: $${keyboard.additionalPrice})` : ""}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="product-description">
+          <div className="description-block">
+            <h3>Экран</h3>
+            <p>
+              {getDataOrFallback(ipad.display, "size", "")}, {getDataOrFallback(ipad.display, "type", "")},{" "}
+              {getDataOrFallback(ipad.display, "resolution", "")}, {getDataOrFallback(ipad.display, "ppi", "")} PPI,{" "}
+              {getDataOrFallback(ipad.display, "refreshRate", "")}
+            </p>
+          </div>
+
+          <div className="description-block">
+            <h3>Процессор</h3>
+            <p>
+              {getDataOrFallback(ipad.processor, "chip", "")}, CPU: {getDataOrFallback(ipad.processor, "cpu", "")}, GPU:{" "}
+              {getDataOrFallback(ipad.processor, "gpu", "")}
+            </p>
+          </div>
+
+          <div className="description-block">
+            <h3>Камеры</h3>
+            <p>Основные камеры: {ipad.camera.rearCameras.map((cam) => `${cam.resolution} (${cam.type})`).join(", ")}</p>
+            <p>
+              Фронтальная камера: {getDataOrFallback(ipad.camera.frontCamera, "resolution", "")} (
+              {getDataOrFallback(ipad.camera.frontCamera, "aperture", "")})
+            </p>
+          </div>
+
+          <div className="description-block">
+            <h3>Память</h3>
+            <p>{getDataOrFallback(ipad, "memory", "")}</p>
+          </div>
+
+          <div className="description-block">
+            <h3>Аккумулятор</h3>
+            <p>Емкость: {getDataOrFallback(ipad.battery, "capacity", "")}</p>
+          </div>
+
+          <div className="description-block">
+            <h3>Габариты и вес</h3>
+            <p>
+              Высота: {getDataOrFallback(ipad.dimensions, "height", "")}, ширина:{" "}
+              {getDataOrFallback(ipad.dimensions, "width", "")}, толщина:{" "}
+              {getDataOrFallback(ipad.dimensions, "depth", "")}, вес: {getDataOrFallback(ipad.dimensions, "weight", "")}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default IpadProduct;
+
+const getImagesByColor = (images: string[], color: string): string[] => {
+  const normalizedColor = color.replace(/\s+/g, "").toLowerCase();
+  return images.filter((image) => image.toLowerCase().includes(normalizedColor));
+};

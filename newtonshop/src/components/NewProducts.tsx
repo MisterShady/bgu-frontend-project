@@ -47,8 +47,10 @@ const NewProducts = () => {
             <div className="product-item">
               <ImageWrapper src={product.thumbUrl} alt={product.title} className="product-image" />
               <h3>{product.title}</h3>
-              <p className="price-box">{product.price}$</p>
-              <button className="details-button">Подробнее</button>
+              <div className="product-footer">
+                <p className="price-box">{product.price}$</p>
+                <button className="details-button">Подробнее</button>
+              </div>
             </div>
           </Link>
         ))}

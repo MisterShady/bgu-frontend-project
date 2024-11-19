@@ -25,19 +25,19 @@ const initialState: IphoneState = {
 };
 
 export const fetchIphoneById = createAsyncThunk<IphoneDto, string>(
-    'iphone/fetchIphoneById',
-    async (id) => {
-        const response = await getIphoneById(id);
-        return response;
-    }
+  'iphone/fetchIphoneById',
+  async (id) => {
+      const response = await getIphoneById(id);
+      return response;
+  }
 );
 
 export const addToCart = createAsyncThunk<CartItemRequestDto, CartItemRequestDto>(
-    'iphone/addToCart',
-    async (cartItem) => {
-        await postCartItem(cartItem);
-        return cartItem;
-    }
+  'iphone/addToCart',
+  async (cartItem) => {
+      await postCartItem(cartItem);
+      return cartItem;
+  }
 );
 
 const iphoneSlice = createSlice({
@@ -59,29 +59,29 @@ const iphoneSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchIphoneById.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(fetchIphoneById.fulfilled, (state, action: PayloadAction<IphoneDto>) => {
-                state.loading = false;
-                state.item = action.payload;
-            })
-            .addCase(fetchIphoneById.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message || 'Ошибка загрузки данных';
-            })
-            .addCase(addToCart.pending, (state) => {
-                state.isAddingToCart = true;
-            })
-            .addCase(addToCart.fulfilled, (state, action: PayloadAction<CartItemRequestDto>) => {
-                state.isAddingToCart = false;
-                state.notifications.push({ id: Date.now(), item: action.payload });
-            })
-            .addCase(addToCart.rejected, (state, action) => {
-                state.isAddingToCart = false;
-                console.error("Ошибка при добавлении товара в корзину:", action.error.message);
-            });
+          .addCase(fetchIphoneById.pending, (state) => {
+              state.loading = true;
+              state.error = null;
+          })
+          .addCase(fetchIphoneById.fulfilled, (state, action: PayloadAction<IphoneDto>) => {
+              state.loading = false;
+              state.item = action.payload;
+          })
+          .addCase(fetchIphoneById.rejected, (state, action) => {
+              state.loading = false;
+              state.error = action.error.message || 'Ошибка загрузки данных';
+          })
+          .addCase(addToCart.pending, (state) => {
+              state.isAddingToCart = true;
+          })
+          .addCase(addToCart.fulfilled, (state, action: PayloadAction<CartItemRequestDto>) => {
+              state.isAddingToCart = false;
+              state.notifications.push({ id: Date.now(), item: action.payload });
+          })
+          .addCase(addToCart.rejected, (state, action) => {
+              state.isAddingToCart = false;
+              console.error("Ошибка при добавлении товара в корзину:", action.error.message);
+          });
     },
 });
 

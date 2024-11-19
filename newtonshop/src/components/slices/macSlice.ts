@@ -27,19 +27,19 @@ const initialState: MacState = {
 };
 
 export const fetchMacById = createAsyncThunk<MacDto, string>(
-    'mac/fetchMacById',
-    async (id) => {
-        const response = await getMacById(id);
-        return response;
-    }
+  'mac/fetchMacById',
+  async (id) => {
+      const response = await getMacById(id);
+      return response;
+  }
 );
 
 export const addToCart = createAsyncThunk<CartItemRequestDto, CartItemRequestDto>(
-    'mac/addToCart',
-    async (cartItem) => {
-        await postCartItem(cartItem);
-        return cartItem;
-    }
+  'mac/addToCart',
+  async (cartItem) => {
+      await postCartItem(cartItem);
+      return cartItem;
+  }
 );
 
 const macSlice = createSlice({
@@ -64,29 +64,29 @@ const macSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchMacById.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(fetchMacById.fulfilled, (state, action: PayloadAction<MacDto>) => {
-                state.loading = false;
-                state.item = action.payload;
-            })
-            .addCase(fetchMacById.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message || 'Ошибка загрузки данных';
-            })
-            .addCase(addToCart.pending, (state) => {
-                state.isAddingToCart = true;
-            })
-            .addCase(addToCart.fulfilled, (state, action: PayloadAction<CartItemRequestDto>) => {
-                state.isAddingToCart = false;
-                state.notifications.push({ id: Date.now(), item: action.payload });
-            })
-            .addCase(addToCart.rejected, (state, action) => {
-                state.isAddingToCart = false;
-                console.error("Ошибка при добавлении товара в корзину:", action.error.message);
-            });
+          .addCase(fetchMacById.pending, (state) => {
+              state.loading = true;
+              state.error = null;
+          })
+          .addCase(fetchMacById.fulfilled, (state, action: PayloadAction<MacDto>) => {
+              state.loading = false;
+              state.item = action.payload;
+          })
+          .addCase(fetchMacById.rejected, (state, action) => {
+              state.loading = false;
+              state.error = action.error.message || 'Ошибка загрузки данных';
+          })
+          .addCase(addToCart.pending, (state) => {
+              state.isAddingToCart = true;
+          })
+          .addCase(addToCart.fulfilled, (state, action: PayloadAction<CartItemRequestDto>) => {
+              state.isAddingToCart = false;
+              state.notifications.push({ id: Date.now(), item: action.payload });
+          })
+          .addCase(addToCart.rejected, (state, action) => {
+              state.isAddingToCart = false;
+              console.error("Ошибка при добавлении товара в корзину:", action.error.message);
+          });
     },
 });
 

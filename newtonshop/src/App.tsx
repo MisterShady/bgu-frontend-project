@@ -1,5 +1,7 @@
-import React from "react";
+import React from 'react';
+import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import store from './store';
 import CategoryProducts from "./components/products/CategoryProducts";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -17,13 +19,16 @@ import Auth from "./components/Auth";
 import CartPage from "./components/CartPage";
 import AllProducts from "./components/products/AllProducts";
 import PrivateRoute from "./components/PrivateRoute";
+import NotificationList from "./components/NotificationList";
 
 const App = () => {
   return (
+    <Provider store={store}>
       <Router>
         <div className="app-container">
           <Navbar />
           <div className="content">
+            <NotificationList />
             <Routes>
               <Route path="/products" element={<AllProducts />} />
               <Route path="/" element={<HomePage />} />
@@ -49,6 +54,7 @@ const App = () => {
           <Footer />
         </div>
       </Router>
+    </Provider>
   );
 };
 

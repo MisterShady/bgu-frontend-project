@@ -31,19 +31,19 @@ const initialState: IpadState = {
 };
 
 export const fetchIpadById = createAsyncThunk<IpadDto, string>(
-    'ipad/fetchIpadById',
-    async (id) => {
-        const response = await getIpadById(id);
-        return response;
-    }
+  'ipad/fetchIpadById',
+  async (id) => {
+      const response = await getIpadById(id);
+      return response;
+  }
 );
 
 export const addToCart = createAsyncThunk<CartItemRequestDto, CartItemRequestDto>(
-    'ipad/addToCart',
-    async (cartItem) => {
-        await postCartItem(cartItem);
-        return cartItem;
-    }
+  'ipad/addToCart',
+  async (cartItem) => {
+      await postCartItem(cartItem);
+      return cartItem;
+  }
 );
 
 const ipadSlice = createSlice({
@@ -74,29 +74,29 @@ const ipadSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchIpadById.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(fetchIpadById.fulfilled, (state, action: PayloadAction<IpadDto>) => {
-                state.loading = false;
-                state.item = action.payload;
-            })
-            .addCase(fetchIpadById.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message || 'Ошибка загрузки данных';
-            })
-            .addCase(addToCart.pending, (state) => {
-                state.isAddingToCart = true;
-            })
-            .addCase(addToCart.fulfilled, (state, action: PayloadAction<CartItemRequestDto>) => {
-                state.isAddingToCart = false;
-                state.notifications.push({ id: Date.now(), item: action.payload });
-            })
-            .addCase(addToCart.rejected, (state, action) => {
-                state.isAddingToCart = false;
-                console.error("Ошибка при добавлении товара в корзину:", action.error.message);
-            });
+          .addCase(fetchIpadById.pending, (state) => {
+              state.loading = true;
+              state.error = null;
+          })
+          .addCase(fetchIpadById.fulfilled, (state, action: PayloadAction<IpadDto>) => {
+              state.loading = false;
+              state.item = action.payload;
+          })
+          .addCase(fetchIpadById.rejected, (state, action) => {
+              state.loading = false;
+              state.error = action.error.message || 'Ошибка загрузки данных';
+          })
+          .addCase(addToCart.pending, (state) => {
+              state.isAddingToCart = true;
+          })
+          .addCase(addToCart.fulfilled, (state, action: PayloadAction<CartItemRequestDto>) => {
+              state.isAddingToCart = false;
+              state.notifications.push({ id: Date.now(), item: action.payload });
+          })
+          .addCase(addToCart.rejected, (state, action) => {
+              state.isAddingToCart = false;
+              console.error("Ошибка при добавлении товара в корзину:", action.error.message);
+          });
     },
 });
 

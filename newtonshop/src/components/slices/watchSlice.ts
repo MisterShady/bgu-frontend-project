@@ -31,19 +31,19 @@ const initialState: WatchState = {
 };
 
 export const fetchWatchById = createAsyncThunk<WatchDto, string>(
-    'watch/fetchWatchById',
-    async (id) => {
-        const response = await getWatchById(id);
-        return response;
-    }
+  'watch/fetchWatchById',
+  async (id) => {
+      const response = await getWatchById(id);
+      return response;
+  }
 );
 
 export const addToCart = createAsyncThunk<CartItemRequestDto, CartItemRequestDto>(
-    'watch/addToCart',
-    async (cartItem) => {
-        await postCartItem(cartItem);
-        return cartItem;
-    }
+  'watch/addToCart',
+  async (cartItem) => {
+      await postCartItem(cartItem);
+      return cartItem;
+  }
 );
 
 const watchSlice = createSlice({
@@ -74,29 +74,29 @@ const watchSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchWatchById.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-            })
-            .addCase(fetchWatchById.fulfilled, (state, action: PayloadAction<WatchDto>) => {
-                state.loading = false;
-                state.item = action.payload;
-            })
-            .addCase(fetchWatchById.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message || 'Ошибка загрузки данных';
-            })
-            .addCase(addToCart.pending, (state) => {
-                state.isAddingToCart = true;
-            })
-            .addCase(addToCart.fulfilled, (state, action: PayloadAction<CartItemRequestDto>) => {
-                state.isAddingToCart = false;
-                state.notifications.push({ id: Date.now(), item: action.payload });
-            })
-            .addCase(addToCart.rejected, (state, action) => {
-                state.isAddingToCart = false;
-                console.error("Ошибка при добавлении товара в корзину:", action.error.message);
-            });
+          .addCase(fetchWatchById.pending, (state) => {
+              state.loading = true;
+              state.error = null;
+          })
+          .addCase(fetchWatchById.fulfilled, (state, action: PayloadAction<WatchDto>) => {
+              state.loading = false;
+              state.item = action.payload;
+          })
+          .addCase(fetchWatchById.rejected, (state, action) => {
+              state.loading = false;
+              state.error = action.error.message || 'Ошибка загрузки данных';
+          })
+          .addCase(addToCart.pending, (state) => {
+              state.isAddingToCart = true;
+          })
+          .addCase(addToCart.fulfilled, (state, action: PayloadAction<CartItemRequestDto>) => {
+              state.isAddingToCart = false;
+              state.notifications.push({ id: Date.now(), item: action.payload });
+          })
+          .addCase(addToCart.rejected, (state, action) => {
+              state.isAddingToCart = false;
+              console.error("Ошибка при добавлении товара в корзину:", action.error.message);
+          });
     },
 });
 

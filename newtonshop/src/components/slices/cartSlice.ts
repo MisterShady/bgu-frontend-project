@@ -13,6 +13,8 @@ interface CartState {
     currentStep: number;
     notifications: { id: number; item: CartItemDto }[];
     orderNotification: { items: CartItemDto[]; index: number } | null;
+    removalQueue: CartItemDto[];
+    currentRemovalIndex: number;
 }
 
 const initialState: CartState = {
@@ -27,6 +29,8 @@ const initialState: CartState = {
     currentStep: 1,
     notifications: [],
     orderNotification: null,
+    removalQueue: [],
+    currentRemovalIndex: 0,
 };
 
 const cartSlice = createSlice({
@@ -48,9 +52,6 @@ const cartSlice = createSlice({
         setCurrentStep: (state, action: PayloadAction<number>) => {
             state.currentStep = action.payload;
         },
-        addNotification: (state, action: PayloadAction<{ id: number; item: CartItemDto }>) => {
-            state.notifications.push(action.payload);
-        },
         removeNotification: (state, action: PayloadAction<number>) => {
             state.notifications = state.notifications.filter((notification) => notification.id !== action.payload);
         },
@@ -60,8 +61,14 @@ const cartSlice = createSlice({
         removeItem: (state, action: PayloadAction<number>) => {
             state.items = state.items.filter((item) => item.id !== action.payload);
         },
-        setOrderNotification: (state, action: PayloadAction<{ items: CartItemDto[]; index: number } | null>) => {
-            state.orderNotification = action.payload;
+        setRemovalQueue: (state, action: PayloadAction<CartItemDto[]>) => {
+            state.removalQueue = action.payload;
+        },
+        clearRemovalQueue: (state) => {
+            state.removalQueue = [];
+        },
+        setCurrentRemovalIndex: (state, action: PayloadAction<number>) => {
+            state.currentRemovalIndex = action.payload;
         },
     },
 });
@@ -72,11 +79,11 @@ export const {
     setDeliveryInfo,
     setPaymentMethod,
     setCurrentStep,
-    addNotification,
-    removeNotification,
     updateItem,
     removeItem,
-    setOrderNotification,
+    setRemovalQueue,
+    clearRemovalQueue,
+    setCurrentRemovalIndex,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

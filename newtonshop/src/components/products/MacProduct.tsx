@@ -8,7 +8,6 @@ import {
   setSelectedStorage,
   setSelectedRam,
   addToCart,
-  removeNotification,
 } from "../slices/macSlice";
 import { AppDispatch, RootState } from "../../store";
 import { CartItemRequestDto } from "../../types";
@@ -16,7 +15,7 @@ import "./ProductDetails.css";
 import { colorMapping } from "./colorMapping";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
-import Notification from "../Notification";
+import { addNotification } from "../slices/notificationSlice";
 
 const MacProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,7 +28,6 @@ const MacProduct = () => {
     selectedColor,
     selectedStorage,
     selectedRam,
-    notifications,
     isAddingToCart,
   } = useSelector((state: RootState) => state.mac);
 
@@ -40,17 +38,23 @@ const MacProduct = () => {
   useEffect(() => {
     if (id) {
       dispatch(fetchMacById(id));
+      dispatch(setSelectedImage(null));
+      dispatch(setSelectedColor(null));
     }
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (mac && selectedColor === null && !selectedImage) {
-      dispatch(setSelectedColor(mac.colors[0]));
-      dispatch(setSelectedImage(mac.images[0]));
+    if (mac && mac.images.length > 0) {
+      const defaultColor = mac.colors[0];
+      const firstImageForColor = getImagesByColor(mac.images, defaultColor)[0];
+      dispatch(setSelectedColor(defaultColor));
+      dispatch(setSelectedImage(firstImageForColor || mac.images[0]));
       dispatch(setSelectedStorage(mac.storages[0].size));
       dispatch(setSelectedRam(mac.ramMemories?.[0]?.size || null));
+    } else {
+      dispatch(setSelectedImage(null));
     }
-  }, [mac, dispatch, selectedColor, selectedImage]);
+  }, [mac, dispatch]);
 
   if (loading || !mac) {
     return <Spinner />;
@@ -61,175 +65,174 @@ const MacProduct = () => {
   }
 
   const selectedStoragePrice = getDataOrFallback(
-      mac.storages?.find((storage) => storage.size === selectedStorage),
-      "additionalPrice",
-      0
+    mac.storages?.find((storage) => storage.size === selectedStorage),
+    "additionalPrice",
+    0
   );
   const selectedRamPrice = getDataOrFallback(
-      mac.ramMemories?.find((ram) => ram.size === selectedRam),
-      "additionalPrice",
-      0
+    mac.ramMemories?.find((ram) => ram.size === selectedRam),
+    "additionalPrice",
+    0
   );
   const totalPrice = mac.price + selectedStoragePrice + selectedRamPrice;
+
+  const handleColorChange = (color: string) => {
+    const firstImageForColor = getImagesByColor(mac.images, color)[0];
+    dispatch(setSelectedColor(color));
+    dispatch(setSelectedImage(firstImageForColor || mac.images[0]));
+  };
 
   const handleAddToCart = async () => {
     if (mac && !isAddingToCart) {
       const cartItem: CartItemRequestDto = {
         productId: mac.id,
         config: `Color: ${selectedColor}, Storage: ${selectedStorage}, RAM: ${selectedRam}`,
-        imageUrl: selectedImage || mac.images[0],
+        imageUrl: selectedImage || '',
         price: totalPrice,
       };
 
       dispatch(addToCart(cartItem));
+      dispatch(addNotification({ item: cartItem, operation: 'add', id: Date.now() }));
     }
   };
 
-  const handleNotificationComplete = (id: number) => {
-    dispatch(removeNotification(id));
-  };
-
-  const handleNotificationCancel = (id: number) => {
-    dispatch(removeNotification(id));
-  };
-
   return (
-      <div className="product-details">
-        <div className="product-images">
-          <ImageWrapper src={selectedImage || (mac.images && mac.images[0])} alt={mac.title} className="main-image" />
-          <div className="image-thumbnails">
-            {mac.images.map((image, index) => (
-                <img
-                    key={image}
-                    src={image}
-                    alt={`Mac Image ${index + 1}`}
-                    className={`thumbnail ${image === selectedImage ? "selected" : ""}`}
-                    onClick={() => dispatch(setSelectedImage(image))}
-                />
+    <div className="product-details">
+      <div className="product-images">
+        {selectedImage ? (
+          <ImageWrapper src={selectedImage} alt={mac.title} className="main-image" />
+        ) : (
+          <ImageWrapper src={''} alt="No image available" className="main-image" />
+        )}
+        <div className="image-thumbnails">
+          {mac.images.length > 0 &&
+            mac.images.map((image, index) => (
+              <img
+                key={image}
+                src={image}
+                alt={`Mac Image ${index + 1}`}
+                className={`thumbnail ${image === selectedImage ? "selected" : ""}`}
+                onClick={() => dispatch(setSelectedImage(image))}
+              />
             ))}
+        </div>
+      </div>
+
+      <div className="product-info">
+        <h2>{mac.title}</h2>
+
+        <div className="price-container">
+          <p className="product-price">${totalPrice}</p>
+          <button className="buy-button" onClick={handleAddToCart}>
+            В корзину
+          </button>
+        </div>
+
+        {getDataOrFallback(mac.colors, "length", 0) > 1 && (
+          <div className="product-colors">
+            <h3>Выберите цвет</h3>
+            <div className="color-squares">
+              {mac.colors.map((color) => (
+                <div key={color} className="color-square-container">
+                  <div
+                    className={`color-square ${selectedColor === color ? "selected" : ""}`}
+                    onClick={() => handleColorChange(color)}
+                    style={{ backgroundColor: colorMapping[color] || "transparent" }}
+                  >
+                    <div className="color-tooltip">
+                      <p>{color}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="product-configuration">
+          <h3>Выбор конфигурации</h3>
+
+          <div className="config-option">
+            <h4>Память</h4>
+            <select value={selectedRam || ""} onChange={(e) => dispatch(setSelectedRam(e.target.value))}>
+              {mac.ramMemories?.map((ram) => (
+                <option key={ram.size} value={ram.size}>
+                  {ram.size} GB
+                  {ram.additionalPrice > 0 && ` (Дополнительно: $${ram.additionalPrice})`}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="config-option">
+            <h4>Хранилище</h4>
+            <select value={selectedStorage || ""} onChange={(e) => dispatch(setSelectedStorage(e.target.value))}>
+              {mac.storages?.map((storage) => (
+                <option key={storage.size} value={storage.size}>
+                  {storage.size} GB
+                  {storage.additionalPrice > 0 && ` (Дополнительно: $${storage.additionalPrice})`}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
-        <div className="product-info">
-          <h2>{mac.title}</h2>
-
-          <div className="price-container">
-            <p className="product-price">${totalPrice}</p>
-            <button className="buy-button" onClick={handleAddToCart}>
-              В корзину
-            </button>
-          </div>
-
-          {getDataOrFallback(mac.colors, "length", 0) > 1 && (
-              <div className="product-colors">
-                <h3>Выберите цвет</h3>
-                <div className="color-squares">
-                  {mac.colors.map((color) => (
-                      <div key={color} className="color-square-container">
-                        <div
-                            className={`color-square ${color === selectedColor ? "selected" : ""}`}
-                            onClick={() => dispatch(setSelectedColor(color))}
-                            style={{ backgroundColor: colorMapping[color] || "transparent" }}
-                        />
-                        <div className="color-tooltip">
-                          <p>{color}</p>
-                        </div>
-                      </div>
-                  ))}
-                </div>
-              </div>
+        <div className="product-description">
+          {getDataOrFallback(mac.display, "size", "") && (
+            <div className="description-block">
+              <h3>Экран</h3>
+              <p>
+                {mac.display.size}, {mac.display.resolution}, {mac.display.brightness} nits, {mac.display.refreshRate}
+                Hz, PPI: {mac.display.ppi}
+              </p>
+            </div>
           )}
 
-          <div className="product-configuration">
-            <h3>Выбор конфигурации</h3>
-
-            <div className="config-option">
-              <h4>Память</h4>
-              <select value={selectedRam || ""} onChange={(e) => dispatch(setSelectedRam(e.target.value))}>
-                {mac.ramMemories?.map((ram) => (
-                    <option key={ram.size} value={ram.size}>
-                      {ram.size} GB
-                      {ram.additionalPrice > 0 && ` (Дополнительно: $${ram.additionalPrice})`}
-                    </option>
-                ))}
-              </select>
+          {getDataOrFallback(mac.processor, "name", "") && (
+            <div className="description-block">
+              <h3>Процессор</h3>
+              <p>
+                {mac.processor.name}, {mac.processor.cpu}, GPU: {mac.processor.gpu}, Скорость: {mac.processor.speed}
+              </p>
             </div>
+          )}
 
-            <div className="config-option">
-              <h4>Хранилище</h4>
-              <select value={selectedStorage || ""} onChange={(e) => dispatch(setSelectedStorage(e.target.value))}>
-                {mac.storages?.map((storage) => (
-                    <option key={storage.size} value={storage.size}>
-                      {storage.size} GB
-                      {storage.additionalPrice > 0 && ` (Дополнительно: $${storage.additionalPrice})`}
-                    </option>
-                ))}
-              </select>
+          {getDataOrFallback(mac.battery, "life", "") && (
+            <div className="description-block">
+              <h3>Аккумулятор</h3>
+              <p>
+                Тип: {mac.battery.type}, Время работы: {mac.battery.life}
+              </p>
             </div>
-          </div>
+          )}
 
-          <div className="product-description">
-            {getDataOrFallback(mac.display, "size", "") && (
-                <div className="description-block">
-                  <h3>Экран</h3>
-                  <p>
-                    {mac.display.size}, {mac.display.resolution}, {mac.display.brightness} nits, {mac.display.refreshRate}
-                    Hz, PPI: {mac.display.ppi}
-                  </p>
-                </div>
-            )}
+          {getDataOrFallback(mac.operatingSystem, "initial", "") && (
+            <div className="description-block">
+              <h3>Операционная система</h3>
+              <p>
+                Начальная: {mac.operatingSystem.initial}, Последняя: {mac.operatingSystem.latest}
+              </p>
+            </div>
+          )}
 
-            {getDataOrFallback(mac.processor, "name", "") && (
-                <div className="description-block">
-                  <h3>Процессор</h3>
-                  <p>
-                    {mac.processor.name}, {mac.processor.cpu}, GPU: {mac.processor.gpu}, Скорость: {mac.processor.speed}
-                  </p>
-                </div>
-            )}
-
-            {getDataOrFallback(mac.battery, "life", "") && (
-                <div className="description-block">
-                  <h3>Аккумулятор</h3>
-                  <p>
-                    Тип: {mac.battery.type}, Время работы: {mac.battery.life}
-                  </p>
-                </div>
-            )}
-
-            {getDataOrFallback(mac.operatingSystem, "initial", "") && (
-                <div className="description-block">
-                  <h3>Операционная система</h3>
-                  <p>
-                    Начальная: {mac.operatingSystem.initial}, Последняя: {mac.operatingSystem.latest}
-                  </p>
-                </div>
-            )}
-
-            {getDataOrFallback(mac.dimensions, "height", "") && (
-                <div className="description-block">
-                  <h3>Габариты и вес</h3>
-                  <p>
-                    Высота: {mac.dimensions.height}, Ширина: {mac.dimensions.width}, Глубина: {mac.dimensions.depth}, Вес:{" "}
-                    {mac.dimensions.weight}
-                  </p>
-                </div>
-            )}
-          </div>
+          {getDataOrFallback(mac.dimensions, "height", "") && (
+            <div className="description-block">
+              <h3>Габариты и вес</h3>
+              <p>
+                Высота: {mac.dimensions.height}, Ширина: {mac.dimensions.width}, Глубина: {mac.dimensions.depth}, Вес:{" "}
+                {mac.dimensions.weight}
+              </p>
+            </div>
+          )}
         </div>
-
-        {notifications.map((notification, index) => (
-            <Notification
-                key={notification.id}
-                item={notification.item}
-                onCancel={() => handleNotificationCancel(notification.id)}
-                onComplete={() => handleNotificationComplete(notification.id)}
-                index={index}
-                operation="add"
-            />
-        ))}
       </div>
+    </div>
   );
 };
 
 export default MacProduct;
+
+const getImagesByColor = (images: string[], color: string): string[] => {
+  const normalizedColor = color.replace(/\s+/g, "").toLowerCase();
+  return images.filter((image) => image.toLowerCase().includes(normalizedColor));
+};
