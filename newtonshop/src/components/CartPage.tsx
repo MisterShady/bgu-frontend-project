@@ -126,7 +126,7 @@ const CartPage = () => {
       dispatch(setPaymentMethod(formattedValue));
     }
     if (formattedValue.length === 19) {
-      dispatch(setCurrentStep(4));
+      dispatch(setCurrentStep(3));
     }
   };
 
@@ -338,13 +338,6 @@ const CartPage = () => {
               value={paymentMethod}
               onChange={(e) => handlePaymentMethodChange(e.target.value)}
             />
-            {currentStep >= 4 && <DottedLine />}
-          </>
-        )}
-        {currentStep >= 4 && (
-          <>
-            <div className="step-circle">{currentStep >= 4 ? 4 : ""}</div>
-            <div className="step-text">Подтверждение товара</div>
           </>
         )}
         <div className="total-price">Итоговая цена: {totalPrice.toFixed(2)} $</div>

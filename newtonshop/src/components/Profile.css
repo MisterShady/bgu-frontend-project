@@ -26,6 +26,9 @@
     align-items: center;
     margin-bottom: 20px;
     position: relative;
+}
+
+.avatar-circle {
     cursor: pointer;
 }
 
@@ -37,11 +40,11 @@
     transition: filter 0.3s;
 }
 
-.avatar-container:hover .avatar {
+.avatar-circle:hover .avatar {
     filter: brightness(0.7);
 }
 
-.avatar-container:hover::after {
+.avatar-circle:hover::after {
     content: "Edit";
     position: absolute;
     top: 45%;
