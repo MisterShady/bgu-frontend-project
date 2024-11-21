@@ -342,7 +342,6 @@ export interface ProfileDto {
 }
 
 export interface CartItemRequestDto {
-  id: number;
   productId: string;
   config: string;
   imageUrl: string;

@@ -153,6 +153,11 @@ const CartPage = () => {
   };
 
   const handleDeleteAll = async () => {
+    if (items.length === 0) {
+      alert("Нет товаров в корзине :(");
+      return;
+    }
+
     dispatch(setRemovalQueue(items));
     dispatch(setCurrentRemovalIndex(0));
   };
