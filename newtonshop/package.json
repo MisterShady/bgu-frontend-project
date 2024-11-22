@@ -25,7 +25,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "lint:fix": "eslint . --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": [

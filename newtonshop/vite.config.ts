@@ -4,9 +4,13 @@ import svgr from "vite-plugin-svgr";
 import eslintPlugin from "vite-plugin-eslint";
 
 export default defineConfig(async () => {
-  const tsconfigPaths = await import("vite-tsconfig-paths").then((module) => module.default);
+  const tsconfigPaths = (await import("vite-tsconfig-paths")).default;
 
   return {
+    define: {
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env.PUBLIC_URL': JSON.stringify('/'),
+    },
     plugins: [
       react(),
       svgr(),

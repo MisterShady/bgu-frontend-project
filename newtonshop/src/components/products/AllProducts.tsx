@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductsByPage, setPage } from "../slices/productsSlice";
 import { AppDispatch, RootState } from "../../store";
@@ -19,10 +19,15 @@ export const categoryMapping: { [key: string]: string } = {
 const AllProducts = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { products, loading, error, page } = useSelector((state: RootState) => state.products);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    dispatch(fetchProductsByPage(page));
-  }, [dispatch, page]);
+    const query = new URLSearchParams(location.search);
+    const currentPage = parseInt(query.get("page") || "0", 10);
+    dispatch(setPage(currentPage));
+    dispatch(fetchProductsByPage(currentPage));
+  }, [dispatch, location.search]);
 
   const productList = useMemo(() => {
     return products.map((item) => {
@@ -53,16 +58,30 @@ const AllProducts = () => {
     return <div>Ошибка загрузки данных: {error}</div>;
   }
 
+  const handlePageChange = (newPage: number) => {
+    const query = new URLSearchParams(location.search);
+    query.set("page", newPage.toString());
+    navigate(`${location.pathname}?${query.toString()}`);
+  };
+
   return (
     <div>
       <h1 style={{ marginBottom: "20px", marginLeft: "50px" }}>Все товары</h1>
       <div className="card-container">{productList}</div>
       <div className="pagination">
-        <button className="pagination-button" onClick={() => dispatch(setPage(page - 1))} disabled={page === 0}>
+        <button
+          className="pagination-button"
+          onClick={() => handlePageChange(page - 1)}
+          disabled={page === 0}
+        >
           Назад
         </button>
         <span>Страница {page + 1}</span>
-        <button className="pagination-button" onClick={() => dispatch(setPage(page + 1))}>
+        <button
+          className="pagination-button"
+          onClick={() => handlePageChange(page + 1)}
+          disabled={products.length < 8}
+        >
           Вперед
         </button>
       </div>
