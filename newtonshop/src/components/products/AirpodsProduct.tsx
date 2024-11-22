@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAirpodsById, setSelectedImage, setSelectedColor, addToCart } from "../slices/airpodsSlice";
+import { addToCart, fetchAirpodsById, setSelectedColor, setSelectedImage } from "../slices/airpodsSlice";
 import { AppDispatch, RootState } from "../../store";
 import { CartItemRequestDto } from "../../types";
 import { colorMapping } from "./colorMapping";
@@ -14,7 +14,14 @@ import { addNotification } from "../slices/notificationSlice";
 const AirpodsProduct = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
-  const { item: airpods, loading, error, selectedImage, selectedColor, isAddingToCart } = useSelector((state: RootState) => state.airpods);
+  const {
+    item: airpods,
+    loading,
+    error,
+    selectedImage,
+    selectedColor,
+    isAddingToCart,
+  } = useSelector((state: RootState) => state.airpods);
 
   useEffect(() => {
     console.log("Fetching airpods by ID:", id);
@@ -57,13 +64,13 @@ const AirpodsProduct = () => {
     if (airpods && !isAddingToCart) {
       const cartItem: CartItemRequestDto = {
         productId: airpods.id,
-        config: `Color: ${selectedColor || ''}`,
-        imageUrl: selectedImage || '',
+        config: `Color: ${selectedColor || ""}`,
+        imageUrl: selectedImage || "",
         price: airpods.price,
       };
 
       dispatch(addToCart(cartItem));
-      dispatch(addNotification({ item: cartItem, operation: 'add', id: Date.now() }));
+      dispatch(addNotification({ item: cartItem, operation: "add", id: Date.now() }));
     }
   };
 
@@ -73,7 +80,7 @@ const AirpodsProduct = () => {
         {selectedImage ? (
           <ImageWrapper src={selectedImage} alt={airpods.title} className="main-image" />
         ) : (
-          <ImageWrapper src={''} alt="No image available" className="main-image" />
+          <ImageWrapper src={""} alt="No image available" className="main-image" />
         )}
         <div className="image-thumbnails">
           {airpods.images.length > 0 &&
@@ -111,7 +118,7 @@ const AirpodsProduct = () => {
                 ></div>
                 <div className="color-tooltip">
                   <img
-                    src={getImagesByColor(airpods.images, color)[0] || ''}
+                    src={getImagesByColor(airpods.images, color)[0] || ""}
                     alt={color}
                     style={{ width: "100px", height: "100px" }}
                   />

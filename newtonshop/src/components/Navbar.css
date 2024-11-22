@@ -206,8 +206,8 @@
 .dropdown-content li {
   padding: 15px;
   transition:
-          background-color 0.3s ease,
-          border 0.3s ease;
+    background-color 0.3s ease,
+    border 0.3s ease;
   color: white;
   font-family: "Arial", sans-serif;
 }

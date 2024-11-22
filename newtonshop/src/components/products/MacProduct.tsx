@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchMacById,
-  setSelectedImage,
-  setSelectedColor,
-  setSelectedStorage,
-  setSelectedRam,
   addToCart,
+  fetchMacById,
+  setSelectedColor,
+  setSelectedImage,
+  setSelectedRam,
+  setSelectedStorage,
 } from "../slices/macSlice";
 import { AppDispatch, RootState } from "../../store";
 import { CartItemRequestDto } from "../../types";
@@ -87,12 +87,12 @@ const MacProduct = () => {
       const cartItem: CartItemRequestDto = {
         productId: mac.id,
         config: `Color: ${selectedColor}, Storage: ${selectedStorage}, RAM: ${selectedRam}`,
-        imageUrl: selectedImage || '',
+        imageUrl: selectedImage || "",
         price: totalPrice,
       };
 
       dispatch(addToCart(cartItem));
-      dispatch(addNotification({ item: cartItem, operation: 'add', id: Date.now() }));
+      dispatch(addNotification({ item: cartItem, operation: "add", id: Date.now() }));
     }
   };
 
@@ -102,7 +102,7 @@ const MacProduct = () => {
         {selectedImage ? (
           <ImageWrapper src={selectedImage} alt={mac.title} className="main-image" />
         ) : (
-          <ImageWrapper src={''} alt="No image available" className="main-image" />
+          <ImageWrapper src={""} alt="No image available" className="main-image" />
         )}
         <div className="image-thumbnails">
           {mac.images.length > 0 &&

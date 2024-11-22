@@ -10,53 +10,53 @@ import Spinner from "../Spinner";
 import { ProductDto } from "../../Api";
 
 interface CategoryProductsProps {
-    category: string;
+  category: string;
 }
 
 const CategoryProducts = ({ category }: CategoryProductsProps) => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { items: products, loading, error } = useSelector((state: RootState) => state.category);
+  const dispatch = useDispatch<AppDispatch>();
+  const { items: products, loading, error } = useSelector((state: RootState) => state.category);
 
-    useEffect(() => {
-        dispatch(fetchProductsByCategory(category));
-    }, [dispatch, category]);
+  useEffect(() => {
+    dispatch(fetchProductsByCategory(category));
+  }, [dispatch, category]);
 
-    const productList = useMemo(() => {
-        return products.map((item: ProductDto) => (
-          <LazyLoad key={item.id} height={200} offset={100}>
-              <Link to={`/${category}/${item.id}`} style={{ textDecoration: "none", color: "inherit" }}>
-                  <motion.div className="card" whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
-                      <LazyLoad>
-                          <ImageWrapper src={item.thumbUrl} alt={item.title} className="card-image" />
-                      </LazyLoad>
-                      <h2>{item.title}</h2>
-                      <p className="price">{item.price}$</p>
-                      <button className="buy-button">Подробнее</button>
-                  </motion.div>
-              </Link>
-          </LazyLoad>
-        ));
-    }, [products, category]);
+  const productList = useMemo(() => {
+    return products.map((item: ProductDto) => (
+      <LazyLoad key={item.id} height={200} offset={100}>
+        <Link to={`/${category}/${item.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+          <motion.div className="card" whileHover={{ scale: 1.05 }} transition={{ duration: 0.2 }}>
+            <LazyLoad>
+              <ImageWrapper src={item.thumbUrl} alt={item.title} className="card-image" />
+            </LazyLoad>
+            <h2>{item.title}</h2>
+            <p className="price">{item.price}$</p>
+            <button className="buy-button">Подробнее</button>
+          </motion.div>
+        </Link>
+      </LazyLoad>
+    ));
+  }, [products, category]);
 
-    if (loading) {
-        return <Spinner />;
-    }
+  if (loading) {
+    return <Spinner />;
+  }
 
-    if (error) {
-        return <div>Ошибка загрузки данных: {error}</div>;
-    }
+  if (error) {
+    return <div>Ошибка загрузки данных: {error}</div>;
+  }
 
-    return (
-      <div>
-          <h1 style={{ marginBottom: "20px", marginLeft: "50px" }}>
-              <Link to="/products" className="all-products-link">
-                  Все товары
-              </Link>
-              {category && ` / ${category}`}
-          </h1>
-          <div className="card-container">{productList}</div>
-      </div>
-    );
+  return (
+    <div>
+      <h1 style={{ marginBottom: "20px", marginLeft: "50px" }}>
+        <Link to="/products" className="all-products-link">
+          Все товары
+        </Link>
+        {category && ` / ${category}`}
+      </h1>
+      <div className="card-container">{productList}</div>
+    </div>
+  );
 };
 
 export default CategoryProducts;

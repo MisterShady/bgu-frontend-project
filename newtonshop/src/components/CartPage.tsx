@@ -2,6 +2,9 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   createOrder,
+  deleteAllCartItems,
+  deleteAllSelectedCartItems,
+  deleteCartItem,
   getCartItems,
   getCurrentProfile,
   selectAllCartItems,
@@ -15,21 +18,19 @@ import "./Notification.css";
 import { Link } from "react-router-dom";
 import { categoryMapping } from "./products/AllProducts";
 import {
+  clearRemovalQueue,
+  removeItem,
+  setCurrentRemovalIndex,
   setCurrentStep,
   setCustomerData,
   setDeliveryInfo,
   setItems,
+  setOrderNotification,
   setPaymentMethod,
-  updateItem,
   setRemovalQueue,
-  clearRemovalQueue,
-  setCurrentRemovalIndex,
-  removeItem,
+  updateItem,
 } from "./slices/cartSlice";
 import { RootState } from "../store";
-import { addNotification } from "./slices/notificationSlice";
-import { deleteAllSelectedCartItems, deleteAllCartItems } from "../Api";
-import { deleteCartItem } from "../Api";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -41,20 +42,21 @@ const CartPage = () => {
     currentStep,
     removalQueue,
     currentRemovalIndex,
-  } = useSelector(
-    (state: RootState) => state.cart,
-  );
+    orderNotification,
+  } = useSelector((state: RootState) => state.cart);
 
   useEffect(() => {
     const fetchUserData = async () => {
       const accessToken = localStorage.getItem("accessToken");
       if (accessToken) {
         const data = await getCurrentProfile();
-        dispatch(setCustomerData({
-          fullName: data.fullName,
-          phone: data.phoneNumber,
-          email: data.email,
-        }));
+        dispatch(
+          setCustomerData({
+            fullName: data.fullName,
+            phone: data.phoneNumber,
+            email: data.email,
+          })
+        );
         dispatch(setCurrentStep(2));
       }
     };
@@ -90,8 +92,8 @@ const CartPage = () => {
   };
 
   const handleRemoveItem = async (id: number) => {
-    await deleteCartItem(id);
-    dispatch(removeItem(id));
+    dispatch(setRemovalQueue([items.find((item) => item.id === id)!]));
+    dispatch(setCurrentRemovalIndex(0));
   };
 
   const handleNotificationComplete = async () => {
@@ -99,9 +101,12 @@ const CartPage = () => {
     if (queue.length === items.length) {
       await deleteAllCartItems();
       dispatch(setItems([]));
-    } else {
+    } else if (queue.length === items.filter((item) => item.selected).length) {
       await deleteAllSelectedCartItems();
-      dispatch(setItems(items.filter(item => !queue.some(queueItem => queueItem.id === item.id))));
+      dispatch(setItems(items.filter((item) => !item.selected)));
+    } else {
+      await deleteCartItem(queue[0].id);
+      dispatch(removeItem(queue[0].id));
     }
     dispatch(clearRemovalQueue());
   };
@@ -131,7 +136,7 @@ const CartPage = () => {
   };
 
   const handleSelectAll = async () => {
-    const allSelected = items.every(item => item.selected);
+    const allSelected = items.every((item) => item.selected);
     if (allSelected) {
       const updatedItems = await setAllToUnselected();
       dispatch(setItems(updatedItems));
@@ -142,7 +147,7 @@ const CartPage = () => {
   };
 
   const handleDeleteAllSelected = async () => {
-    const selectedItems = items.filter(item => item.selected);
+    const selectedItems = items.filter((item) => item.selected);
     if (selectedItems.length === 0) {
       alert("Пожалуйста, выберите товары для удаления.");
       return;
@@ -195,20 +200,23 @@ const CartPage = () => {
 
     await createOrder(orderData);
     dispatch(setItems(items.filter((item) => !item.selected)));
-    selectedItems.forEach((item) => {
-      dispatch(addNotification({ item, operation: 'order-confirmation', id: Date.now() }));
-    });
+    dispatch(setOrderNotification({ items: selectedItems, index: 0 }));
   };
 
   useEffect(() => {
-    if (removalQueue.length > 0) {
+    if (orderNotification) {
       const interval = setInterval(() => {
-        dispatch(setCurrentRemovalIndex((currentRemovalIndex + 1) % removalQueue.length));
+        dispatch(
+          setOrderNotification({
+            items: orderNotification.items,
+            index: (orderNotification.index + 1) % orderNotification.items.length,
+          })
+        );
       }, 2000);
 
       return () => clearInterval(interval);
     }
-  }, [removalQueue, dispatch, currentRemovalIndex]);
+  }, [orderNotification, dispatch]);
 
   return (
     <div className="cart-page">
@@ -216,18 +224,18 @@ const CartPage = () => {
         <div className="cart-header">
           <div className="select-all-container">
             <label className="custom-checkbox">
-              <input
-                type="checkbox"
-                checked={items.every(item => item.selected)}
-                onChange={handleSelectAll}
-              />
+              <input type="checkbox" checked={items.every((item) => item.selected)} onChange={handleSelectAll} />
               <span className="checkmark"></span>
             </label>
             <span className="select-all-label">Выбрать все</span>
           </div>
           <div className="action-links">
-            <a onClick={handleDeleteAllSelected} className="action-link">Удалить выбранное</a>
-            <a onClick={handleDeleteAll} className="action-link">Очистить корзину</a>
+            <a onClick={handleDeleteAllSelected} className="action-link">
+              Удалить выбранное
+            </a>
+            <a onClick={handleDeleteAll} className="action-link">
+              Очистить корзину
+            </a>
           </div>
         </div>
 
@@ -252,8 +260,7 @@ const CartPage = () => {
                 </div>
 
                 <div className="item-details">
-                  <Link to={`/${categoryMapping[item.type.slice(0, 3)]}/${item.productId}`}
-                        className="product-link">
+                  <Link to={`/${categoryMapping[item.type.slice(0, 3)]}/${item.productId}`} className="product-link">
                     <h3>{item.name}</h3>
                   </Link>
                   <div className="quantity-container">
@@ -354,6 +361,17 @@ const CartPage = () => {
           onComplete={handleNotificationComplete}
           index={0}
           operation="remove"
+        />
+      )}
+
+      {orderNotification && (
+        <Notification
+          key="order-notification"
+          item={orderNotification.items[orderNotification.index]}
+          onCancel={() => dispatch(setOrderNotification(null))}
+          onComplete={() => dispatch(setOrderNotification(null))}
+          index={0}
+          operation="order-confirmation"
         />
       )}
     </div>

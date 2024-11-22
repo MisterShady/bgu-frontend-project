@@ -1,7 +1,7 @@
-import React from 'react';
-import { Provider } from 'react-redux';
+import React from "react";
+import { Provider } from "react-redux";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import store from './store';
+import store from "./store";
 import CategoryProducts from "./components/products/CategoryProducts";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";

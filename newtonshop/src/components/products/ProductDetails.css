@@ -1,6 +1,6 @@
 .content-card {
   flex-grow: 1;
-  margin: auto  auto 8%;
+  margin: auto auto 8%;
   padding: 60px;
   justify-content: center;
 }
@@ -129,7 +129,7 @@
   object-fit: contain;
 }
 
-.product-details .placeholder{
+.product-details .placeholder {
   width: 100%;
   height: auto;
   background-color: #ffffff;

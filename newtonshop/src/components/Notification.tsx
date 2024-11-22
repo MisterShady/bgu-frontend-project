@@ -5,7 +5,7 @@ import "./Notification.css";
 interface NotificationProps {
   item: CartItemDto | CartItemRequestDto;
   onCancel: () => void;
-  onComplete: (itemId: number) => void;
+  onComplete: () => void;
   index: number;
   operation: "add" | "remove" | "order-confirmation";
 }
@@ -30,12 +30,12 @@ const Notification = ({ item, onCancel, onComplete, index, operation }: Notifica
   useEffect(() => {
     if (progress === 100) {
       const fadeOutTimeout = setTimeout(() => {
-        onComplete(item.id); // Передайте item.id в onComplete
+        onComplete();
       }, 300);
 
       return () => clearTimeout(fadeOutTimeout);
     }
-  }, [progress, onComplete, item.id]);
+  }, [progress, onComplete]);
 
   const isCartItemDto = (item: CartItemDto | CartItemRequestDto): item is CartItemDto => {
     return (item as CartItemDto).name !== undefined;
@@ -58,7 +58,7 @@ const Notification = ({ item, onCancel, onComplete, index, operation }: Notifica
                   ? "Добавлено в корзину"
                   : operation === "remove"
                     ? "Удаление из корзины"
-                    : "Заказ оформлен и добавлен в профиль"}
+                    : "Заказ оформлен"}
               </span>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                 <span className="notification-item-price">

@@ -55,7 +55,9 @@ const WatchProduct = () => {
       const defaultVersionIndex = 0;
       const defaultSizeIndex = 0;
 
-      const firstImageForBandStyle = getImagesByBandStyle(watch.bandTypes[defaultBandTypeIndex].styles[defaultBandStyleIndex]);
+      const firstImageForBandStyle = getImagesByBandStyle(
+        watch.bandTypes[defaultBandTypeIndex].styles[defaultBandStyleIndex]
+      );
       dispatch(setSelectedBandTypeIndex(defaultBandTypeIndex));
       dispatch(setSelectedBandStyleIndex(defaultBandStyleIndex));
       dispatch(setSelectedCaseIndex(defaultCaseIndex));

@@ -1,9 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CartItemDto, CartItemRequestDto } from "../../types";
 
 interface Notification {
   item: CartItemDto | CartItemRequestDto;
-  operation: 'add' | 'remove' | 'order-confirmation';
+  operation: "add" | "remove" | "order-confirmation";
   id: number;
 }
 
@@ -16,18 +16,17 @@ const initialState: NotificationState = {
 };
 
 const notificationSlice = createSlice({
-  name: 'notifications',
+  name: "notifications",
   initialState,
   reducers: {
     addNotification(state, action: PayloadAction<Notification>) {
       state.notifications.push(action.payload);
     },
     removeNotification(state, action: PayloadAction<number>) {
-      state.notifications = state.notifications.filter(notification => notification.id !== action.payload);
+      state.notifications = state.notifications.filter((notification) => notification.id !== action.payload);
     },
   },
 });
-
 
 export const { addNotification, removeNotification } = notificationSlice.actions;
 export default notificationSlice.reducer;

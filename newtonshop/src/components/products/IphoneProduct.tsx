@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchIphoneById,
-  setSelectedImage,
-  setSelectedColor,
-  setSelectedStorage,
   addToCart,
+  fetchIphoneById,
+  setSelectedColor,
+  setSelectedImage,
+  setSelectedStorage,
 } from "../slices/iphoneSlice";
 import { AppDispatch, RootState } from "../../store";
 import { CartItemRequestDto } from "../../types";
@@ -73,12 +73,12 @@ const IphoneProduct = () => {
       const cartItem: CartItemRequestDto = {
         productId: iphone.id,
         config: `Color: ${selectedColor}, Storage: ${selectedStorage}`,
-        imageUrl: selectedImage || '',
+        imageUrl: selectedImage || "",
         price: totalPrice,
       };
 
       dispatch(addToCart(cartItem));
-      dispatch(addNotification({ item: cartItem, operation: 'add', id: Date.now() }));
+      dispatch(addNotification({ item: cartItem, operation: "add", id: Date.now() }));
     }
   };
 
@@ -88,7 +88,7 @@ const IphoneProduct = () => {
         {selectedImage ? (
           <ImageWrapper src={selectedImage} alt={iphone.title} className="main-image" />
         ) : (
-          <ImageWrapper src={''} alt="No image available" className="main-image" />
+          <ImageWrapper src={""} alt="No image available" className="main-image" />
         )}
         <div className="image-thumbnails">
           {iphone.images.length > 0 &&

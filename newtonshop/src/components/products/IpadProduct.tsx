@@ -2,14 +2,14 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchIpadById,
-  setSelectedImage,
-  setSelectedColor,
-  setSelectedStorage,
-  setSelectedConnectivity,
-  setSelectedApplePencil,
-  setSelectedSmartKeyboard,
   addToCart,
+  fetchIpadById,
+  setSelectedApplePencil,
+  setSelectedColor,
+  setSelectedConnectivity,
+  setSelectedImage,
+  setSelectedSmartKeyboard,
+  setSelectedStorage,
 } from "../slices/ipadSlice";
 import { AppDispatch, RootState } from "../../store";
 import { CartItemRequestDto } from "../../types";
@@ -68,15 +68,18 @@ const IpadProduct = () => {
   }
 
   const selectedStoragePrice = ipad.storages.find((storage) => storage.size === selectedStorage)?.additionalPrice || 0;
-  const selectedConnectivityPrice = ipad.connectivities.find((conn) => conn.type === selectedConnectivity)?.additionalPrice || 0;
-  const selectedApplePencilPrice = ipad.applePencils.find((pencil) => pencil.type === selectedApplePencil)?.additionalPrice || 0;
-  const selectedSmartKeyboardPrice = ipad.smartKeyboards.find((keyboard) => keyboard.type === selectedSmartKeyboard)?.additionalPrice || 0;
+  const selectedConnectivityPrice =
+    ipad.connectivities.find((conn) => conn.type === selectedConnectivity)?.additionalPrice || 0;
+  const selectedApplePencilPrice =
+    ipad.applePencils.find((pencil) => pencil.type === selectedApplePencil)?.additionalPrice || 0;
+  const selectedSmartKeyboardPrice =
+    ipad.smartKeyboards.find((keyboard) => keyboard.type === selectedSmartKeyboard)?.additionalPrice || 0;
   const totalPrice = ipad
     ? ipad.price +
-    selectedStoragePrice +
-    selectedConnectivityPrice +
-    selectedApplePencilPrice +
-    selectedSmartKeyboardPrice
+      selectedStoragePrice +
+      selectedConnectivityPrice +
+      selectedApplePencilPrice +
+      selectedSmartKeyboardPrice
     : 0;
 
   const handleColorChange = (color: string) => {
@@ -90,12 +93,12 @@ const IpadProduct = () => {
       const cartItem: CartItemRequestDto = {
         productId: ipad.id,
         config: `Color: ${selectedColor}, Storage: ${selectedStorage}, Connectivity: ${selectedConnectivity}, Apple Pencil: ${selectedApplePencil}, Smart Keyboard: ${selectedSmartKeyboard}`,
-        imageUrl: selectedImage || '',
+        imageUrl: selectedImage || "",
         price: totalPrice,
       };
 
       dispatch(addToCart(cartItem));
-      dispatch(addNotification({ item: cartItem, operation: 'add', id: Date.now() }));
+      dispatch(addNotification({ item: cartItem, operation: "add", id: Date.now() }));
     }
   };
 
@@ -105,7 +108,7 @@ const IpadProduct = () => {
         {selectedImage ? (
           <ImageWrapper src={selectedImage} alt={ipad.title} className="main-image" />
         ) : (
-          <ImageWrapper src={''} alt="No image available" className="main-image" />
+          <ImageWrapper src={""} alt="No image available" className="main-image" />
         )}
         <div className="image-thumbnails">
           {ipad.images.length > 0 &&
