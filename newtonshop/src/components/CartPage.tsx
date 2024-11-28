@@ -16,7 +16,7 @@ import Notification from "./Notification";
 import "./CartPage.css";
 import "./Notification.css";
 import { Link } from "react-router-dom";
-import { categoryMapping } from "./products/AllProducts";
+import { categoryMapping } from "./categoryMapping";
 import {
   clearRemovalQueue,
   removeItem,

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import "./Profile.css";
 import { deleteProfile, getCurrentProfile, getOrders, updateAvatar, updatePassword, updateProfile } from "../Api";
 import { ProfileDto } from "../types";
-import { categoryMapping } from "./products/AllProducts";
+import { categoryMapping } from "./categoryMapping";
 import {
   setAvatar,
   setExistingProfile,

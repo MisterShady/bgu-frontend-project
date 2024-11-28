@@ -7,14 +7,7 @@ import { AppDispatch, RootState } from "../../store";
 import ImageWrapper from "../handler/ImageWrapper";
 import LazyLoad from "react-lazyload";
 import Spinner from "../Spinner";
-
-export const categoryMapping: { [key: string]: string } = {
-  mac: "macs",
-  ipa: "ipads",
-  iph: "iphones",
-  wat: "watches",
-  air: "airpods",
-};
+import { categoryMapping } from "../categoryMapping";
 
 const AllProducts = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -24,7 +17,7 @@ const AllProducts = () => {
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
-    const currentPage = parseInt(query.get("page") || "0", 10);
+    const currentPage = parseInt(query.get("page") || "1", 10) - 1;
     dispatch(setPage(currentPage));
     dispatch(fetchProductsByPage(currentPage));
   }, [dispatch, location.search]);
@@ -58,9 +51,13 @@ const AllProducts = () => {
     return <div>Ошибка загрузки данных: {error}</div>;
   }
 
+  if (products.length === 0) {
+    return <div>Пустота :(</div>;
+  }
+
   const handlePageChange = (newPage: number) => {
     const query = new URLSearchParams(location.search);
-    query.set("page", newPage.toString());
+    query.set("page", (newPage + 1).toString());
     navigate(`${location.pathname}?${query.toString()}`);
   };
 
