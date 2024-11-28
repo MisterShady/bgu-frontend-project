@@ -18,10 +18,6 @@ const refreshTokens = async (): Promise<TokenDto> => {
   return newTokens;
 };
 
-const redirectToLogin = () => {
-  window.location.href = "/auth";
-};
-
 axios.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -38,7 +34,6 @@ axios.interceptors.response.use(
         }
         return axios(originalRequest);
       } catch (refreshError) {
-        redirectToLogin();
         return Promise.reject(refreshError);
       }
     }
