@@ -31,8 +31,7 @@ const initialState: IpadState = {
 };
 
 export const fetchIpadById = createAsyncThunk<IpadDto, string>("ipad/fetchIpadById", async (id) => {
-  const response = await getIpadById(id);
-  return response;
+  return await getIpadById(id);
 });
 
 export const addToCart = createAsyncThunk<CartItemRequestDto, CartItemRequestDto>(
@@ -104,7 +103,6 @@ export const {
   setSelectedConnectivity,
   setSelectedApplePencil,
   setSelectedSmartKeyboard,
-  removeNotification,
 } = ipadSlice.actions;
 
 export default ipadSlice.reducer;

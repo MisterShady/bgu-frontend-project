@@ -29,7 +29,7 @@ export default defineConfig(async () => {
             next();
           });
         },
-      } as PluginOption
+      } as PluginOption,
     ],
     resolve: {
       alias: {

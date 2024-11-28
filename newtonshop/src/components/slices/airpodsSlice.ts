@@ -13,8 +13,7 @@ interface AirpodsState {
 }
 
 export const fetchAirpodsById = createAsyncThunk<AirpodsDto, string>("airpods/fetchAirpodsById", async (id) => {
-  const response = await getAirpodsById(id);
-  return response;
+  return await getAirpodsById(id);
 });
 
 export const addToCart = createAsyncThunk<CartItemRequestDto, CartItemRequestDto>(
@@ -77,6 +76,6 @@ const airpodsSlice = createSlice({
   },
 });
 
-export const { setSelectedImage, setSelectedColor, removeNotification } = airpodsSlice.actions;
+export const { setSelectedImage, setSelectedColor } = airpodsSlice.actions;
 
 export default airpodsSlice.reducer;

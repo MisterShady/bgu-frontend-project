@@ -31,8 +31,7 @@ const initialState: WatchState = {
 };
 
 export const fetchWatchById = createAsyncThunk<WatchDto, string>("watch/fetchWatchById", async (id) => {
-  const response = await getWatchById(id);
-  return response;
+  return await getWatchById(id);
 });
 
 export const addToCart = createAsyncThunk<CartItemRequestDto, CartItemRequestDto>(
@@ -104,7 +103,6 @@ export const {
   setSelectedCaseIndex,
   setSelectedVersionIndex,
   setSelectedSizeIndex,
-  removeNotification,
 } = watchSlice.actions;
 
 export default watchSlice.reducer;

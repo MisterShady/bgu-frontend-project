@@ -69,19 +69,11 @@ const AllProducts = () => {
       <h1 style={{ marginBottom: "20px", marginLeft: "50px" }}>Все товары</h1>
       <div className="card-container">{productList}</div>
       <div className="pagination">
-        <button
-          className="pagination-button"
-          onClick={() => handlePageChange(page - 1)}
-          disabled={page === 0}
-        >
+        <button className="pagination-button" onClick={() => handlePageChange(page - 1)} disabled={page === 0}>
           Назад
         </button>
         <span>Страница {page + 1}</span>
-        <button
-          className="pagination-button"
-          onClick={() => handlePageChange(page + 1)}
-          disabled={products.length < 8}
-        >
+        <button className="pagination-button" onClick={() => handlePageChange(page + 1)} disabled={products.length < 8}>
           Вперед
         </button>
       </div>

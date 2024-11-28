@@ -10,8 +10,7 @@ interface ProductsState {
 export const fetchProductsByCategory = createAsyncThunk(
   "products/fetchProductsByCategory",
   async (category: string) => {
-    const response = await getProductsByCategory(category);
-    return response;
+    return await getProductsByCategory(category);
   }
 );
 

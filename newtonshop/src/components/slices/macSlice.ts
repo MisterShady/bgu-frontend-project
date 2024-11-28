@@ -27,8 +27,7 @@ const initialState: MacState = {
 };
 
 export const fetchMacById = createAsyncThunk<MacDto, string>("mac/fetchMacById", async (id) => {
-  const response = await getMacById(id);
-  return response;
+  return await getMacById(id);
 });
 
 export const addToCart = createAsyncThunk<CartItemRequestDto, CartItemRequestDto>("mac/addToCart", async (cartItem) => {
@@ -84,7 +83,7 @@ const macSlice = createSlice({
   },
 });
 
-export const { setSelectedImage, setSelectedColor, setSelectedStorage, setSelectedRam, removeNotification } =
+export const { setSelectedImage, setSelectedColor, setSelectedStorage, setSelectedRam } =
   macSlice.actions;
 
 export default macSlice.reducer;

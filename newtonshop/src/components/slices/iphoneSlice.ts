@@ -25,8 +25,7 @@ const initialState: IphoneState = {
 };
 
 export const fetchIphoneById = createAsyncThunk<IphoneDto, string>("iphone/fetchIphoneById", async (id) => {
-  const response = await getIphoneById(id);
-  return response;
+  return await getIphoneById(id);
 });
 
 export const addToCart = createAsyncThunk<CartItemRequestDto, CartItemRequestDto>(
@@ -82,6 +81,6 @@ const iphoneSlice = createSlice({
   },
 });
 
-export const { setSelectedImage, setSelectedColor, setSelectedStorage, removeNotification } = iphoneSlice.actions;
+export const { setSelectedImage, setSelectedColor, setSelectedStorage } = iphoneSlice.actions;
 
 export default iphoneSlice.reducer;

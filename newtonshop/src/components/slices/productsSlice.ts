@@ -18,8 +18,7 @@ const initialState: ProductsState = {
 export const fetchProductsByPage = createAsyncThunk<ProductDto[], number>(
   "products/fetchProductsByPage",
   async (page) => {
-    const response = await getProductsByPage(page, 8, "id,DESC");
-    return response;
+    return await getProductsByPage(page, 8, "id,DESC");
   }
 );
 

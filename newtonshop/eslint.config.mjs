@@ -15,5 +15,8 @@ export default [
         version: "detect",
       },
     },
+    rules: {
+      "indent": ["error", 2],
+    },
   },
 ];
