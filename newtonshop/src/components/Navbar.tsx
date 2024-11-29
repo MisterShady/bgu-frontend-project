@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { getCurrentProfile, ProductDto, searchProducts } from "../Api";
-import { toPlural } from "../utils";
+import React, {useCallback, useEffect, useState} from "react";
+import {Link} from "react-router-dom";
+import {getCurrentProfile, ProductDto, searchProducts} from "../Api";
+import {toPlural} from "../utils";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -9,7 +9,6 @@ const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<ProductDto[]>([]);
   const [avatar, setAvatar] = useState<string>("/image/png/account.png");
-  const navigate = useNavigate();
 
   const toggleMenu = useCallback(() => {
     setIsMenuOpen((prev) => !prev);
@@ -68,24 +67,6 @@ const Navbar = () => {
     setSuggestions([]);
   }, []);
 
-  const handleAccountClick = () => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      navigate("/profile");
-    } else {
-      navigate("/auth", { state: { message: "Для входа в профиль нужно авторизоваться." } });
-    }
-  };
-
-  const handleCartClick = () => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      navigate("/cart");
-    } else {
-      navigate("/auth", { state: { message: "Для входа в корзину нужно авторизоваться." } });
-    }
-  };
-
   return (
     <>
       <div className={"navigation-wrapper"}>
@@ -93,40 +74,41 @@ const Navbar = () => {
           <nav className="navigation">
             <div className="logo">
               <Link to="/">
-                <img src="/image/png/logo.png" alt="Apple Store" />
+                <img src="/image/png/logo.png" alt="Apple Store"/>
               </Link>
             </div>
 
             <div className="menu-item">
               <button className={`menu-button ${isMenuOpen ? "open" : ""}`} onClick={toggleMenu}>
-                Каталог <img src="/image/svg/arrow.svg" alt="Arrow" className={`arrow ${isMenuOpen ? "up" : "down"}`} />
+                                Каталог <img src="/image/svg/arrow.svg" alt="Arrow"
+                  className={`arrow ${isMenuOpen ? "up" : "down"}`}/>
               </button>
               {isMenuOpen && (
                 <div className="dropdown open">
                   <ul className="dropdown-content">
                     <Link to="/macs">
                       <li>
-                        <img src="/image/svg/mac.svg" alt="MacBook" /> MacBook
+                        <img src="/image/svg/mac.svg" alt="MacBook"/> MacBook
                       </li>
                     </Link>
                     <Link to="/ipads">
                       <li>
-                        <img src="/image/svg/ipad.svg" alt="iPad" /> iPad
+                        <img src="/image/svg/ipad.svg" alt="iPad"/> iPad
                       </li>
                     </Link>
                     <Link to="/iphones">
                       <li>
-                        <img src="/image/svg/iphone.svg" alt="iPhone" /> iPhone
+                        <img src="/image/svg/iphone.svg" alt="iPhone"/> iPhone
                       </li>
                     </Link>
                     <Link to="/watches">
                       <li>
-                        <img src="/image/svg/watch.svg" alt="Watch" /> Watch
+                        <img src="/image/svg/watch.svg" alt="Watch"/> Watch
                       </li>
                     </Link>
                     <Link to="/airpods">
-                      <li style={{ borderRadius: "0 0 15px 15px" }}>
-                        <img src="/image/svg/airpods.svg" alt="Airpods" /> Airpods
+                      <li style={{borderRadius: "0 0 15px 15px"}}>
+                        <img src="/image/svg/airpods.svg" alt="Airpods"/> Airpods
                       </li>
                     </Link>
                   </ul>
@@ -146,11 +128,12 @@ const Navbar = () => {
                   }
                 }}
               />
-              <img src="/image/magnifier.svg" alt="Search" className="search-icon" />
+              <img src="/image/magnifier.svg" alt="Search" className="search-icon"/>
               {suggestions.length > 0 && (
                 <ul className="suggestions-list">
                   {suggestions.map((suggestion) => (
-                    <li key={suggestion.id} className="suggestion-item" onMouseDown={(e) => e.preventDefault()}>
+                    <li key={suggestion.id} className="suggestion-item"
+                      onMouseDown={(e) => e.preventDefault()}>
                       <Link
                         to={`/${toPlural(suggestion.type)}/${suggestion.id}`}
                         onClick={clearSuggestions}
@@ -161,10 +144,11 @@ const Navbar = () => {
                             src="/image/placeholder.svg"
                             alt={suggestion.title}
                             className="suggestion-thumb"
-                            style={{ width: "50px", height: "50px" }}
+                            style={{width: "50px", height: "50px"}}
                           />
                         ) : (
-                          <img src={suggestion.thumbUrl} alt={suggestion.title} className="suggestion-thumb" />
+                          <img src={suggestion.thumbUrl} alt={suggestion.title}
+                            className="suggestion-thumb"/>
                         )}
                         <div className="suggestion-info">
                           <span className="suggestion-title">{suggestion.title}</span>
@@ -177,11 +161,15 @@ const Navbar = () => {
               )}
             </div>
 
-            <div className="cart-icon" onClick={handleCartClick} style={{ cursor: "pointer" }}>
-              <img src="/image/png/cart.png" alt="Cart" />
+            <div className="cart-icon" style={{cursor: "pointer"}}>
+              <Link to="/cart">
+                <img src="/image/png/cart.png" alt="Cart"/>
+              </Link>
             </div>
-            <div className="account-icon" onClick={handleAccountClick} style={{ cursor: "pointer" }}>
-              <img src={avatar} alt="Account" />
+            <div className="account-icon" style={{cursor: "pointer"}}>
+              <Link to="/profile">
+                <img src={avatar} alt="Account"/>
+              </Link>
             </div>
           </nav>
         </div>

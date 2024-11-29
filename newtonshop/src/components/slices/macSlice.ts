@@ -83,7 +83,6 @@ const macSlice = createSlice({
   },
 });
 
-export const { setSelectedImage, setSelectedColor, setSelectedStorage, setSelectedRam } =
-  macSlice.actions;
+export const { setSelectedImage, setSelectedColor, setSelectedStorage, setSelectedRam } = macSlice.actions;
 
 export default macSlice.reducer;

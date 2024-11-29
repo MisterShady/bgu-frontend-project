@@ -52,7 +52,6 @@ class MapComponent extends Component<MapComponentProps, MapComponentState> {
     await this.fetchAddress(coords);
   };
 
-
   render() {
     const { coordinates } = this.state;
 

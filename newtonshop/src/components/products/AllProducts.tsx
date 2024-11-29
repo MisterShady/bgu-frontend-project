@@ -6,7 +6,8 @@ import { fetchProductsByPage, setPage } from "../slices/productsSlice";
 import { AppDispatch, RootState } from "../../store";
 import ImageWrapper from "../handler/ImageWrapper";
 import LazyLoad from "react-lazyload";
-import Spinner from "../Spinner";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { categoryMapping } from "../categoryMapping";
 
 const AllProducts = () => {
@@ -43,8 +44,23 @@ const AllProducts = () => {
     });
   }, [products]);
 
+  const skeletonCards = Array.from({ length: 8 }).map((_, index) => (
+    <motion.div
+      key={index}
+      className="card"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+    >
+      <Skeleton height={200} />
+      <Skeleton width={150} />
+      <Skeleton width={100} />
+      <Skeleton width={80} />
+    </motion.div>
+  ));
+
   if (loading) {
-    return <Spinner />;
+    return <div className="card-container">{skeletonCards}</div>;
   }
 
   if (error) {
@@ -67,11 +83,11 @@ const AllProducts = () => {
       <div className="card-container">{productList}</div>
       <div className="pagination">
         <button className="pagination-button" onClick={() => handlePageChange(page - 1)} disabled={page === 0}>
-          Назад
+            Назад
         </button>
         <span>Страница {page + 1}</span>
         <button className="pagination-button" onClick={() => handlePageChange(page + 1)} disabled={products.length < 8}>
-          Вперед
+            Вперед
         </button>
       </div>
     </div>

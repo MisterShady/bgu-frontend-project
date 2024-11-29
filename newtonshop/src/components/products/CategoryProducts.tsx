@@ -6,11 +6,12 @@ import { fetchProductsByCategory } from "../slices/categorySlice";
 import { AppDispatch, RootState } from "../../store";
 import ImageWrapper from "../handler/ImageWrapper";
 import LazyLoad from "react-lazyload";
-import Spinner from "../Spinner";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { ProductDto } from "../../Api";
 
 interface CategoryProductsProps {
-  category: string;
+    category: string;
 }
 
 const CategoryProducts = ({ category }: CategoryProductsProps) => {
@@ -38,8 +39,23 @@ const CategoryProducts = ({ category }: CategoryProductsProps) => {
     ));
   }, [products, category]);
 
+  const skeletonCards = Array.from({ length: 8 }).map((_, index) => (
+    <motion.div
+      key={index}
+      className="card"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+    >
+      <Skeleton height={200} />
+      <Skeleton width={150} />
+      <Skeleton width={100} />
+      <Skeleton width={80} />
+    </motion.div>
+  ));
+
   if (loading) {
-    return <Spinner />;
+    return <div className="card-container">{skeletonCards}</div>;
   }
 
   if (error) {
@@ -50,7 +66,7 @@ const CategoryProducts = ({ category }: CategoryProductsProps) => {
     <div>
       <h1 style={{ marginBottom: "20px", marginLeft: "50px" }}>
         <Link to="/products" className="all-products-link">
-          Все товары
+                    Все товары
         </Link>
         {category && ` / ${category}`}
       </h1>

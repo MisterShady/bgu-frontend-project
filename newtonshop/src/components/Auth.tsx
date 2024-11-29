@@ -32,7 +32,7 @@ interface RootState {
 
 const Auth = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { isLogin, backendError, accessToken } = useSelector((state: RootState) => state.auth);
+  const { isLogin, backendError} = useSelector((state: RootState) => state.auth);
   const {
     register,
     handleSubmit,
@@ -43,12 +43,6 @@ const Auth = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const password = watch("password");
-
-  useEffect(() => {
-    if (accessToken) {
-      navigate("/profile");
-    }
-  }, [accessToken, navigate]);
 
   useEffect(() => {
     if (location.state && location.state.message) {

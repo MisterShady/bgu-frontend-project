@@ -1,15 +1,15 @@
 import React from "react";
-import {getPopularProducts, ProductDto} from "../Api";
+import { getPopularProducts, ProductDto } from "../Api";
 import ImageWrapper from "./handler/ImageWrapper";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Spinner from "./Spinner";
-import {useFetch} from "./hooks/useFetch";
+import { useFetch } from "./hooks/useFetch";
 
 const NewProducts = () => {
-  const {data: products, error, loading} = useFetch<ProductDto[]>(getPopularProducts);
+  const { data: products, error, loading } = useFetch<ProductDto[]>(getPopularProducts);
 
   if (loading || !products) {
-    return <Spinner/>;
+    return <Spinner />;
   }
 
   if (error) {
@@ -42,10 +42,10 @@ const NewProducts = () => {
             key={product.id}
             to={getProductLink(product)}
             className="product-item-link"
-            style={{textDecoration: "none"}}
+            style={{ textDecoration: "none" }}
           >
             <div className="product-item">
-              <ImageWrapper src={product.thumbUrl} alt={product.title} className="product-image"/>
+              <ImageWrapper src={product.thumbUrl} alt={product.title} className="product-image" />
               <h3>{product.title}</h3>
               <div className="product-footer">
                 <p className="price-box">{product.price}$</p>
