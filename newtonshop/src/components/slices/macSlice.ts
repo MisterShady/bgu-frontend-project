@@ -65,9 +65,9 @@ const macSlice = createSlice({
         state.loading = false;
         state.item = action.payload;
       })
-      .addCase(fetchMacById.rejected, (state, action) => {
+      .addCase(fetchMacById.rejected, (state) => {
         state.loading = false;
-        state.error = action.error.message || "Ошибка загрузки данных";
+        state.error = "Ошибка загрузки данных";
       })
       .addCase(addToCart.pending, (state) => {
         state.isAddingToCart = true;
@@ -76,9 +76,8 @@ const macSlice = createSlice({
         state.isAddingToCart = false;
         state.notifications.push({ id: Date.now(), item: action.payload });
       })
-      .addCase(addToCart.rejected, (state, action) => {
+      .addCase(addToCart.rejected, (state) => {
         state.isAddingToCart = false;
-        console.error("Ошибка при добавлении товара в корзину:", action.error.message);
       });
   },
 });

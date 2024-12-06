@@ -28,32 +28,22 @@ export interface ProductDto {
 
 export const createOrder = async (orderData: OrderRequestDto): Promise<OrderResponseDto> => {
   const accessToken = localStorage.getItem("accessToken");
-  try {
-    const response = await axios.post(`${BASE_URL}/orders`, orderData, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error creating order:", error);
-    throw error;
-  }
+  const response = await axios.post(`${BASE_URL}/orders`, orderData, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data;
 };
 
 export const getOrders = async (): Promise<OrderResponseDto[]> => {
   const accessToken = localStorage.getItem("accessToken");
-  try {
-    const response = await axios.get(`${BASE_URL}/orders`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching orders:", error);
-    throw error;
-  }
+  const response = await axios.get(`${BASE_URL}/orders`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data;
 };
 
 export const postCartItem = async (cartItem: CartItemRequestDto): Promise<CartItemDto> => {
@@ -176,16 +166,11 @@ export const getCurrentProfile = async (): Promise<ProfileDto> => {
 };
 
 export const deleteProfile = async (token: string): Promise<void> => {
-  try {
-    await axios.delete(`${BASE_URL}/users/secured/delete`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  } catch (error) {
-    console.error("Ошибка при удалении профиля:", error);
-    throw error;
-  }
+  await axios.delete(`${BASE_URL}/users/secured/delete`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 
 export const updateProfile = async (token: string, profileData: Partial<ProfileDto>): Promise<ProfileDto> => {
@@ -221,6 +206,7 @@ export const updateAvatar = async (token: string, file: File): Promise<ProfileDt
   });
   return response.data;
 };
+
 export const getProductsByPage = async (page: number, size: number, sort: string): Promise<ProductDto[]> => {
   const response = await axios.get<ProductDto[]>(
     `${BASE_URL}/products/catalog-pages?page=${page}&size=${size}&sort=${sort}`

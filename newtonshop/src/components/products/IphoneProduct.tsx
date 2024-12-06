@@ -12,10 +12,9 @@ import { AppDispatch, RootState } from "../../store";
 import { CartItemRequestDto } from "../../types";
 import "./ProductDetails.css";
 import { colorMapping } from "./colorMapping";
-import { getDataOrFallback } from "../../utils";
+import { getDataOrFallback, getImagesByColor } from "../../utils";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
-import { addNotification } from "../slices/notificationSlice";
 
 const IphoneProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,7 +30,7 @@ const IphoneProduct = () => {
   } = useSelector((state: RootState) => state.iphone);
 
   useEffect(() => {
-    if (id) {
+    if (id !== undefined) {
       dispatch(fetchIphoneById(id));
       dispatch(setSelectedImage(null));
       dispatch(setSelectedColor(null));
@@ -68,7 +67,13 @@ const IphoneProduct = () => {
     dispatch(setSelectedImage(firstImageForColor || iphone.images[0]));
   };
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      alert("Вы не залогинены. Пожалуйста, войдите в систему.");
+      return;
+    }
+
     if (iphone && !isAddingToCart) {
       const cartItem: CartItemRequestDto = {
         productId: iphone.id,
@@ -78,7 +83,6 @@ const IphoneProduct = () => {
       };
 
       dispatch(addToCart(cartItem));
-      dispatch(addNotification({ item: cartItem, operation: "add", id: Date.now() }));
     }
   };
 
@@ -236,8 +240,3 @@ const IphoneProduct = () => {
 };
 
 export default IphoneProduct;
-
-const getImagesByColor = (images: string[], color: string): string[] => {
-  const normalizedColor = color.replace(/\s+/g, "").toLowerCase();
-  return images.filter((image) => image.toLowerCase().includes(normalizedColor));
-};

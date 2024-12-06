@@ -34,9 +34,9 @@ const categorySlice = createSlice({
         state.loading = false;
         state.items = action.payload;
       })
-      .addCase(fetchProductsByCategory.rejected, (state, action) => {
+      .addCase(fetchProductsByCategory.rejected, (state) => {
         state.loading = false;
-        state.error = action.error.message || "Ошибка загрузки данных";
+        state.error = "Ошибка загрузки данных";
       });
   },
 });

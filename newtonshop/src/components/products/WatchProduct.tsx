@@ -14,10 +14,9 @@ import {
 import { AppDispatch, RootState } from "../../store";
 import { CartItemRequestDto } from "../../types";
 import "./ProductDetails.css";
-import { getDataOrFallback } from "../../utils";
+import { getDataOrFallback, getImagesByBandStyle } from "../../utils";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
-import { addNotification } from "../slices/notificationSlice";
 
 const WatchProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -36,7 +35,7 @@ const WatchProduct = () => {
   } = useSelector((state: RootState) => state.watch);
 
   useEffect(() => {
-    if (id) {
+    if (id !== undefined) {
       dispatch(fetchWatchById(id));
       dispatch(setSelectedImage(null));
       dispatch(setSelectedBandTypeIndex(null));
@@ -107,6 +106,12 @@ const WatchProduct = () => {
   };
 
   const handleAddToCart = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      alert("Вы не залогинены. Пожалуйста, войдите в систему.");
+      return;
+    }
+
     if (watch && !isAddingToCart) {
       const cartItem: CartItemRequestDto = {
         productId: watch.id,
@@ -125,7 +130,6 @@ const WatchProduct = () => {
       };
 
       dispatch(addToCart(cartItem));
-      dispatch(addNotification({ item: cartItem, operation: "add", id: Date.now() }));
     }
   };
 
@@ -135,7 +139,7 @@ const WatchProduct = () => {
         {selectedImage ? (
           <ImageWrapper src={selectedImage} alt={watch.title} className="main-image" />
         ) : (
-          <ImageWrapper src="" alt="No image available" className="main-image" />
+          <ImageWrapper src={""} alt="No image available" className="main-image" />
         )}
         <div className="image-thumbnails">
           {watch.images.length > 0 &&
@@ -303,7 +307,3 @@ const WatchProduct = () => {
 };
 
 export default WatchProduct;
-
-const getImagesByBandStyle = (bandStyle: { image: string }): string | null => {
-  return bandStyle.image || null;
-};

@@ -11,8 +11,6 @@ interface CartState {
   deliveryInfo: string;
   paymentMethod: string;
   currentStep: number;
-  notifications: { id: number; item: CartItemDto }[];
-  orderNotification: { items: CartItemDto[]; index: number } | null;
   removalQueue: CartItemDto[];
   currentRemovalIndex: number;
 }
@@ -27,8 +25,6 @@ const initialState: CartState = {
   deliveryInfo: "",
   paymentMethod: "",
   currentStep: 1,
-  notifications: [],
-  orderNotification: null,
   removalQueue: [],
   currentRemovalIndex: 0,
 };
@@ -49,12 +45,6 @@ const cartSlice = createSlice({
     setPaymentMethod: (state, action: PayloadAction<string>) => {
       state.paymentMethod = action.payload;
     },
-    setCurrentStep: (state, action: PayloadAction<number>) => {
-      state.currentStep = action.payload;
-    },
-    removeNotification: (state, action: PayloadAction<number>) => {
-      state.notifications = state.notifications.filter((notification) => notification.id !== action.payload);
-    },
     updateItem: (state, action: PayloadAction<CartItemDto>) => {
       state.items = state.items.map((item) => (item.id === action.payload.id ? action.payload : item));
     },
@@ -70,9 +60,6 @@ const cartSlice = createSlice({
     setCurrentRemovalIndex: (state, action: PayloadAction<number>) => {
       state.currentRemovalIndex = action.payload;
     },
-    setOrderNotification: (state, action: PayloadAction<{ items: CartItemDto[]; index: number } | null>) => {
-      state.orderNotification = action.payload;
-    },
   },
 });
 
@@ -81,13 +68,11 @@ export const {
   setCustomerData,
   setDeliveryInfo,
   setPaymentMethod,
-  setCurrentStep,
   updateItem,
   removeItem,
   setRemovalQueue,
   clearRemovalQueue,
   setCurrentRemovalIndex,
-  setOrderNotification,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

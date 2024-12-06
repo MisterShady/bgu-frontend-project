@@ -8,8 +8,7 @@ import { colorMapping } from "./colorMapping";
 import "./ProductDetails.css";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
-import { getDataOrFallback } from "../../utils";
-import { addNotification } from "../slices/notificationSlice";
+import { getImagesByColor } from "../../utils";
 
 const AirpodsProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,10 +23,11 @@ const AirpodsProduct = () => {
   } = useSelector((state: RootState) => state.airpods);
 
   useEffect(() => {
-    console.log("Fetching airpods by ID:", id);
-    dispatch(fetchAirpodsById(id!));
-    dispatch(setSelectedImage(null));
-    dispatch(setSelectedColor(null));
+    if (id !== undefined) {
+      dispatch(fetchAirpodsById(id));
+      dispatch(setSelectedImage(null));
+      dispatch(setSelectedColor(null));
+    }
   }, [dispatch, id]);
 
   useEffect(() => {
@@ -40,11 +40,6 @@ const AirpodsProduct = () => {
       dispatch(setSelectedImage(null));
     }
   }, [airpods, dispatch]);
-
-  useEffect(() => {
-    console.log("Selected Image:", selectedImage);
-    console.log("Selected Color:", selectedColor);
-  }, [selectedImage, selectedColor]);
 
   if (loading || !airpods) {
     return <Spinner />;
@@ -61,6 +56,12 @@ const AirpodsProduct = () => {
   };
 
   const handleAddToCart = async () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      alert("Вы не залогинены. Пожалуйста, войдите в систему.");
+      return;
+    }
+
     if (airpods && !isAddingToCart) {
       const cartItem: CartItemRequestDto = {
         productId: airpods.id,
@@ -70,7 +71,6 @@ const AirpodsProduct = () => {
       };
 
       dispatch(addToCart(cartItem));
-      dispatch(addNotification({ item: cartItem, operation: "add", id: Date.now() }));
     }
   };
 
@@ -130,28 +130,28 @@ const AirpodsProduct = () => {
         </div>
 
         <div className="product-description">
-          {getDataOrFallback(airpods, "audioFeatures", []).length > 0 && (
+          {airpods.audioFeatures.length > 0 && (
             <div className="description-block">
               <h3>Audio Features</h3>
               <p>{airpods.audioFeatures.join(", ")}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods, "mic", "").length > 0 && (
+          {airpods.mic.length > 0 && (
             <div className="description-block">
               <h3>Microphone</h3>
               <p>{airpods.mic}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods, "chip", "").length > 0 && (
+          {airpods.chip.length > 0 && (
             <div className="description-block">
               <h3>Chip</h3>
               <p>{airpods.chip}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods, "controls", []).length > 0 && (
+          {airpods.controls.length > 0 && (
             <div className="description-block">
               <h3>Controls</h3>
               <p>{airpods.controls.join(", ")}</p>
@@ -168,49 +168,49 @@ const AirpodsProduct = () => {
             </div>
           )}
 
-          {getDataOrFallback(airpods, "battery", "").length > 0 && (
+          {airpods.battery.length > 0 && (
             <div className="description-block">
               <h3>Battery</h3>
               <p>{airpods.battery}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods, "connectivity", "").length > 0 && (
+          {airpods.connectivity.length > 0 && (
             <div className="description-block">
               <h3>Connectivity</h3>
               <p>{airpods.connectivity}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods, "resistance", "").length > 0 && (
+          {airpods.resistance.length > 0 && (
             <div className="description-block">
               <h3>Resistance</h3>
               <p>{airpods.resistance}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods, "sensors", []).length > 0 && (
+          {airpods.sensors.length > 0 && (
             <div className="description-block">
               <h3>Sensors</h3>
               <p>{airpods.sensors.join(", ")}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods, "packageEquipments", []).length > 0 && (
+          {airpods.packageEquipments.length > 0 && (
             <div className="description-block">
               <h3>Package Equipments</h3>
               <p>{airpods.packageEquipments.join(", ")}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods, "accessibilities", []).length > 0 && (
+          {airpods.accessibilities.length > 0 && (
             <div className="description-block">
               <h3>Accessibilities</h3>
               <p>{airpods.accessibilities.join(", ")}</p>
             </div>
           )}
 
-          {getDataOrFallback(airpods, "caseType", "").length > 0 && (
+          {airpods.caseType.length > 0 && (
             <div className="description-block">
               <h3>Case Type</h3>
               <p>{airpods.caseType}</p>
@@ -223,8 +223,3 @@ const AirpodsProduct = () => {
 };
 
 export default AirpodsProduct;
-
-const getImagesByColor = (images: string[], color: string): string[] => {
-  const normalizedColor = color.replace(/\s+/g, "").toLowerCase();
-  return images.filter((image) => image.toLowerCase().includes(normalizedColor));
-};

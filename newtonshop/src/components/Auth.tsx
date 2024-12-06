@@ -32,7 +32,7 @@ interface RootState {
 
 const Auth = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { isLogin, backendError} = useSelector((state: RootState) => state.auth);
+  const { isLogin, backendError } = useSelector((state: RootState) => state.auth);
   const {
     register,
     handleSubmit,

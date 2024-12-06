@@ -9,7 +9,6 @@ import watchReducer from "./components/slices/watchSlice";
 import authSlice from "./components/slices/authSlice";
 import cartSlice from "./components/slices/cartSlice";
 import profileSlice from "./components/slices/profileSlice";
-import notificationReducer from "./components/slices/notificationSlice";
 
 const store = configureStore({
   reducer: {
@@ -23,7 +22,6 @@ const store = configureStore({
     auth: authSlice,
     cart: cartSlice,
     profile: profileSlice,
-    notifications: notificationReducer,
   },
 });
 

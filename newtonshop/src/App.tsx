@@ -6,8 +6,8 @@ import CategoryProducts from "./components/products/CategoryProducts";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import "./App.css";
-import HomePage from "./components/HomePage";
-import Profile from "./components/Profile";
+import HomePage from "./components/homepage/HomePage";
+import Profile from "./components/profile/Profile";
 import AboutUs from "./components/AboutUs";
 import NotFound from "./components/NotFound";
 import AirpodsProduct from "./components/products/AirpodsProduct";
@@ -16,10 +16,9 @@ import IpadProduct from "./components/products/IpadProduct";
 import IphoneProduct from "./components/products/IphoneProduct";
 import MacProduct from "./components/products/MacProduct";
 import Auth from "./components/Auth";
-import CartPage from "./components/CartPage";
+import CartPage from "./components/cartpage/CartPage";
 import AllProducts from "./components/products/AllProducts";
 import PrivateRoute from "./components/PrivateRoute";
-import NotificationList from "./components/NotificationList";
 
 const App = () => {
   return (
@@ -28,7 +27,6 @@ const App = () => {
         <div className="app-container">
           <Navbar />
           <div className="content">
-            <NotificationList />
             <Routes>
               <Route path="/products" element={<AllProducts />} />
               <Route path="/" element={<HomePage />} />

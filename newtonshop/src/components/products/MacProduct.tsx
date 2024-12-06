@@ -15,7 +15,7 @@ import "./ProductDetails.css";
 import { colorMapping } from "./colorMapping";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
-import { addNotification } from "../slices/notificationSlice";
+import { getDataOrFallback, getImagesByColor } from "../../utils";
 
 const MacProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,12 +31,8 @@ const MacProduct = () => {
     isAddingToCart,
   } = useSelector((state: RootState) => state.mac);
 
-  const getDataOrFallback = <T, K extends keyof T>(obj: T | null | undefined, key: K, fallback: T[K]): T[K] => {
-    return obj && obj[key] !== undefined ? obj[key] : fallback;
-  };
-
   useEffect(() => {
-    if (id) {
+    if (id !== undefined) {
       dispatch(fetchMacById(id));
       dispatch(setSelectedImage(null));
       dispatch(setSelectedColor(null));
@@ -82,7 +78,13 @@ const MacProduct = () => {
     dispatch(setSelectedImage(firstImageForColor || mac.images[0]));
   };
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      alert("Вы не залогинены. Пожалуйста, войдите в систему.");
+      return;
+    }
+
     if (mac && !isAddingToCart) {
       const cartItem: CartItemRequestDto = {
         productId: mac.id,
@@ -92,7 +94,6 @@ const MacProduct = () => {
       };
 
       dispatch(addToCart(cartItem));
-      dispatch(addNotification({ item: cartItem, operation: "add", id: Date.now() }));
     }
   };
 
@@ -231,8 +232,3 @@ const MacProduct = () => {
 };
 
 export default MacProduct;
-
-const getImagesByColor = (images: string[], color: string): string[] => {
-  const normalizedColor = color.replace(/\s+/g, "").toLowerCase();
-  return images.filter((image) => image.toLowerCase().includes(normalizedColor));
-};

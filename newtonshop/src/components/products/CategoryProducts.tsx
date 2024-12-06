@@ -11,7 +11,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { ProductDto } from "../../Api";
 
 interface CategoryProductsProps {
-    category: string;
+  category: string;
 }
 
 const CategoryProducts = ({ category }: CategoryProductsProps) => {
@@ -66,7 +66,7 @@ const CategoryProducts = ({ category }: CategoryProductsProps) => {
     <div>
       <h1 style={{ marginBottom: "20px", marginLeft: "50px" }}>
         <Link to="/products" className="all-products-link">
-                    Все товары
+          Все товары
         </Link>
         {category && ` / ${category}`}
       </h1>

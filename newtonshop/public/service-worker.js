@@ -15,42 +15,34 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (event.request.cache === "only-if-cached" && event.request.mode !== "same-origin") {
-    console.log("Пропуск ресурса из памяти:", event.request.url);
     event.respondWith(fetch(event.request));
     return;
   }
 
-
   const isImageRequest =
-      event.request.destination === "image" ||
-      url.pathname.endsWith(".svg") ||
-      url.pathname.endsWith(".jpg") ||
-      url.pathname.endsWith(".jpeg") ||
-      url.pathname.endsWith(".png") ||
-      url.pathname.endsWith(".gif");
+    event.request.destination === "image" ||
+    url.pathname.endsWith(".svg") ||
+    url.pathname.endsWith(".jpg") ||
+    url.pathname.endsWith(".jpeg") ||
+    url.pathname.endsWith(".png") ||
+    url.pathname.endsWith(".gif");
 
   if (isImageRequest) {
     event.respondWith(
-        caches.open(CACHE_NAME).then((cache) => {
-          return cache.match(event.request).then((response) => {
-            if (response) {
-              console.log("Обслуживание из кеша:", event.request.url);
-              return response;
-            } else {
-              console.log("Загрузка из сети:", event.request.url);
-              return fetch(event.request).then((networkResponse) => {
-                if (
-                    networkResponse.ok &&
-                    networkResponse.headers.get("Content-Type")?.startsWith("image/")
-                ) {
-                  console.log("Кеширование изображения:", event.request.url);
-                  cache.put(event.request, networkResponse.clone());
-                }
-                return networkResponse;
-              });
-            }
-          });
-        })
+      caches.open(CACHE_NAME).then((cache) => {
+        return cache.match(event.request).then((response) => {
+          if (response) {
+            return response;
+          } else {
+            return fetch(event.request).then((networkResponse) => {
+              if (networkResponse.ok && networkResponse.headers.get("Content-Type")?.startsWith("image/")) {
+                cache.put(event.request, networkResponse.clone());
+              }
+              return networkResponse;
+            });
+          }
+        });
+      })
     );
   } else {
     event.respondWith(fetch(event.request));

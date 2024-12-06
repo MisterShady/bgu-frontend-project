@@ -1,9 +1,9 @@
 import React from "react";
-import { getPopularProducts, ProductDto } from "../Api";
-import ImageWrapper from "./handler/ImageWrapper";
+import { getPopularProducts, ProductDto } from "../../Api";
+import ImageWrapper from "../handler/ImageWrapper";
 import { Link } from "react-router-dom";
-import Spinner from "./Spinner";
-import { useFetch } from "./hooks/useFetch";
+import Spinner from "../Spinner";
+import { useFetch } from "../hooks/useFetch";
 
 const NewProducts = () => {
   const { data: products, error, loading } = useFetch<ProductDto[]>(getPopularProducts);

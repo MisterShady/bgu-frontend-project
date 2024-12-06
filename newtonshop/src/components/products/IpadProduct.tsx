@@ -17,8 +17,7 @@ import "./ProductDetails.css";
 import ImageWrapper from "../handler/ImageWrapper";
 import { colorMapping } from "./colorMapping";
 import Spinner from "../Spinner";
-import { getDataOrFallback } from "../../utils";
-import { addNotification } from "../slices/notificationSlice";
+import { getDataOrFallback, getImagesByColor } from "../../utils";
 
 const IpadProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -37,7 +36,7 @@ const IpadProduct = () => {
   } = useSelector((state: RootState) => state.ipad);
 
   useEffect(() => {
-    if (id) {
+    if (id !== undefined) {
       dispatch(fetchIpadById(id));
       dispatch(setSelectedImage(null));
       dispatch(setSelectedColor(null));
@@ -88,7 +87,13 @@ const IpadProduct = () => {
     dispatch(setSelectedImage(firstImageForColor || ipad.images[0]));
   };
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = () => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      alert("Вы не залогинены. Пожалуйста, войдите в систему.");
+      return;
+    }
+
     if (ipad && !isAddingToCart) {
       const cartItem: CartItemRequestDto = {
         productId: ipad.id,
@@ -98,7 +103,6 @@ const IpadProduct = () => {
       };
 
       dispatch(addToCart(cartItem));
-      dispatch(addNotification({ item: cartItem, operation: "add", id: Date.now() }));
     }
   };
 
@@ -267,8 +271,3 @@ const IpadProduct = () => {
 };
 
 export default IpadProduct;
-
-const getImagesByColor = (images: string[], color: string): string[] => {
-  const normalizedColor = color.replace(/\s+/g, "").toLowerCase();
-  return images.filter((image) => image.toLowerCase().includes(normalizedColor));
-};

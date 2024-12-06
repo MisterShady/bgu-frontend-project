@@ -7,29 +7,17 @@ const Footer = () => {
   const audioRefRight = useRef<HTMLAudioElement>(null);
   const audioRefAlien = useRef<HTMLAudioElement>(null);
 
-  const handleLeftGifClick = async () => {
+  const handleLeftGifClick = () => {
     if (audioRefLeft.current) {
-      try {
-        await audioRefLeft.current.play();
-      } catch (error) {
-        console.error("Ошибка при проигрывании аудио:", error);
-      }
+      audioRefLeft.current.play();
     }
   };
 
-  const handleRightGifClick = async () => {
+  const handleRightGifClick = () => {
     if (Math.random() < 0.2 && audioRefAlien.current) {
-      try {
-        await audioRefAlien.current.play();
-      } catch (error) {
-        console.error("Ошибка при проигрывании аудио:", error);
-      }
+      audioRefAlien.current.play();
     } else if (audioRefRight.current) {
-      try {
-        await audioRefRight.current.play();
-      } catch (error) {
-        console.error("Ошибка при проигрывании аудио:", error);
-      }
+      audioRefRight.current.play();
     }
   };
 
