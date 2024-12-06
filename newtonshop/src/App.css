@@ -15,7 +15,7 @@ html {
 
 .content {
   flex-grow: 1;
-  margin-top: 50px;
+  margin-top: 40px;
   padding: 60px;
   display: flex;
   justify-content: center;

@@ -10,10 +10,19 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
 
   if (EXCLUDED_DOMAINS.some((domain) => url.hostname.endsWith(domain))) {
+    event.respondWith(fetch(event.request));
     return;
   }
 
-  const isImageRequest = event.request.destination === "image" ||
+  if (event.request.cache === "only-if-cached" && event.request.mode !== "same-origin") {
+    console.log("Пропуск ресурса из памяти:", event.request.url);
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
+
+  const isImageRequest =
+      event.request.destination === "image" ||
       url.pathname.endsWith(".svg") ||
       url.pathname.endsWith(".jpg") ||
       url.pathname.endsWith(".jpeg") ||
@@ -30,7 +39,11 @@ self.addEventListener("fetch", (event) => {
             } else {
               console.log("Загрузка из сети:", event.request.url);
               return fetch(event.request).then((networkResponse) => {
-                if (networkResponse.ok && networkResponse.headers.get("Content-Type").startsWith("image/")) {
+                if (
+                    networkResponse.ok &&
+                    networkResponse.headers.get("Content-Type")?.startsWith("image/")
+                ) {
+                  console.log("Кеширование изображения:", event.request.url);
                   cache.put(event.request, networkResponse.clone());
                 }
                 return networkResponse;
