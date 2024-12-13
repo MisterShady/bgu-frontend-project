@@ -48,5 +48,10 @@ export default defineConfig(async () => {
     esbuild: {
       // Дополнительные настройки для esbuild
     },
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      setupFiles: './src/setupTests.ts',
+    },
   };
 });

@@ -1,5 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { CartItemDto } from "../../types";
+import { categoryMapping } from "../categoryMapping";
 
 interface CartItemProps {
   item: CartItemDto;
@@ -28,7 +30,12 @@ const CartItem = ({ item, onQuantityChange, onSelectedChange, onRemoveItem }: Ca
       </div>
 
       <div className="item-details">
-        <h3>{item.name}</h3>
+        <Link
+          to={`/${categoryMapping[item.type.slice(0, 3)]}/${item.productId}`}
+          className="product-link"
+        >
+          <h3>{item.name}</h3>
+        </Link>
         <div className="quantity-container">
           <button className="quantity-button left" onClick={() => onQuantityChange(item.id, item.quantity - 1)}>
             -

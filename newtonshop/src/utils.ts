@@ -32,6 +32,10 @@ export const getImagesByColor = (images: string[], color: string): string[] => {
   return images.filter((image) => image.toLowerCase().includes(normalizedColor));
 };
 
-export const getImagesByBandStyle = (bandStyle: { image: string }): string | null => {
+interface BandStyle {
+  image: string | null;
+}
+
+export const getImagesByBandStyle = (bandStyle: BandStyle): string | null => {
   return bandStyle.image || null;
 };
