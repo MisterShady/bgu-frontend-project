@@ -7,28 +7,21 @@ interface MapComponentProps {
 
 const MapComponent = ({ onSelectAddress }: MapComponentProps) => {
   const [coordinates, setCoordinates] = useState<[number, number]>([55.751574, 37.573856]); // Москва
-  const [address, setAddress] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
   const addressCache = useRef<globalThis.Map<string, string>>(new globalThis.Map());
 
   const fetchAddress = async (coords: [number, number]) => {
     const key = coords.join(",");
     if (addressCache.current.has(key)) {
-      setAddress(addressCache.current.get(key)!);
-      setLoading(false);
+      onSelectAddress(addressCache.current.get(key)!);
       return;
     }
 
-    setLoading(true);
     const response = await fetch(
       `https://geocode-maps.yandex.ru/1.x/?apikey=6cf0e337-a000-4bfd-abd2-4e2784ddd12e&format=json&geocode=${coords[1]},${coords[0]}`
     );
     const data = await response.json();
     const geoObjects = data?.response?.GeoObjectCollection?.featureMember;
     const foundAddress = geoObjects?.[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.text;
-
-    setAddress(foundAddress || "Адрес не найден");
-    setLoading(false);
 
     if (foundAddress) {
       addressCache.current.set(key, foundAddress);
@@ -43,7 +36,6 @@ const MapComponent = ({ onSelectAddress }: MapComponentProps) => {
   };
 
   const handleGeolocation = () => {
-    setLoading(true);
     navigator.geolocation.getCurrentPosition(async (position) => {
       const coords: [number, number] = [position.coords.latitude, position.coords.longitude];
       setCoordinates(coords);
@@ -53,7 +45,6 @@ const MapComponent = ({ onSelectAddress }: MapComponentProps) => {
 
   return (
     <div style={{ width: "100%", marginTop: "20px" }}>
-      {loading && <div>Определяем адрес...</div>}
       <YMaps query={{ apikey: "6cf0e337-a000-4bfd-abd2-4e2784ddd12e" }}>
         <Map
           defaultState={{ center: [55.751574, 37.573856], zoom: 10 }}
@@ -75,14 +66,10 @@ const MapComponent = ({ onSelectAddress }: MapComponentProps) => {
             options={{
               float: "right",
               noPlacemark: true,
-              placeholderContent: "Введите адрес",
             }}
           />
         </Map>
       </YMaps>
-      <div>
-        <strong>Адрес:</strong> {address}
-      </div>
     </div>
   );
 };

@@ -1,9 +1,9 @@
-const { TextEncoder, TextDecoder } = require('util');
+const { TextEncoder, TextDecoder } = require("util");
 
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 
-const matchMediaPolyfill = jest.fn().mockImplementation(query => ({
+const matchMediaPolyfill = jest.fn().mockImplementation((query) => ({
   matches: false,
   media: query,
   onchange: null,

@@ -18,6 +18,7 @@ import ImageWrapper from "../handler/ImageWrapper";
 import { colorMapping } from "./colorMapping";
 import Spinner from "../Spinner";
 import { getDataOrFallback, getImagesByColor } from "../../utils";
+import { showSuccess, showError } from "../Notifications";
 
 const IpadProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -90,7 +91,7 @@ const IpadProduct = () => {
   const handleAddToCart = () => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
-      alert("Вы не залогинены. Пожалуйста, войдите в систему.");
+      showError("Вы не залогинены. Пожалуйста, войдите в систему.");
       return;
     }
 
@@ -103,6 +104,14 @@ const IpadProduct = () => {
       };
 
       dispatch(addToCart(cartItem));
+      showSuccess(
+        <div>
+          <img src={selectedImage || ""} alt={ipad.title || "Product"} style={{ width: 40, marginRight: 10 }} />
+          <span>
+            {ipad.title || "Product"} успешно добавлен в корзину за ${totalPrice}!
+          </span>
+        </div>
+      );
     }
   };
 

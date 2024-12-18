@@ -54,3 +54,24 @@ html {
     background-position: center;
   }
 }
+
+body {
+  font-family: "Montserrat", serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Montserrat", serif;
+}
+
+p,
+span,
+div,
+a,
+button {
+  font-family: "Montserrat", serif;
+}

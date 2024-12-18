@@ -17,6 +17,7 @@ import "./ProductDetails.css";
 import { getDataOrFallback, getImagesByBandStyle } from "../../utils";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
+import { showSuccess, showError } from "../Notifications";
 
 const WatchProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -108,7 +109,7 @@ const WatchProduct = () => {
   const handleAddToCart = async () => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
-      alert("Вы не залогинены. Пожалуйста, войдите в систему.");
+      showError("Вы не залогинены. Пожалуйста, войдите в систему.");
       return;
     }
 
@@ -130,6 +131,14 @@ const WatchProduct = () => {
       };
 
       dispatch(addToCart(cartItem));
+      showSuccess(
+        <div>
+          <img src={selectedImage || ""} alt={watch.title || "Product"} style={{ width: 40, marginRight: 10 }} />
+          <span>
+            {watch.title || "Product"} успешно добавлен в корзину за ${totalPrice}!
+          </span>
+        </div>
+      );
     }
   };
 

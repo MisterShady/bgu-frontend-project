@@ -30,10 +30,7 @@ const CartItem = ({ item, onQuantityChange, onSelectedChange, onRemoveItem }: Ca
       </div>
 
       <div className="item-details">
-        <Link
-          to={`/${categoryMapping[item.type.slice(0, 3)]}/${item.productId}`}
-          className="product-link"
-        >
+        <Link to={`/${categoryMapping[item.type.slice(0, 3)]}/${item.productId}`} className="product-link">
           <h3>{item.name}</h3>
         </Link>
         <div className="quantity-container">

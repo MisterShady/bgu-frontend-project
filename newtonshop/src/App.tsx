@@ -19,6 +19,7 @@ import Auth from "./components/Auth";
 import CartPage from "./components/cartpage/CartPage";
 import AllProducts from "./components/products/AllProducts";
 import PrivateRoute from "./components/PrivateRoute";
+import { NotificationContainer } from "./components/Notifications";
 
 const App = () => {
   return (
@@ -52,6 +53,7 @@ const App = () => {
           <Footer />
         </div>
       </Router>
+      <NotificationContainer />
     </Provider>
   );
 };

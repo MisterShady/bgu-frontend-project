@@ -15,6 +15,7 @@ import { colorMapping } from "./colorMapping";
 import { getDataOrFallback, getImagesByColor } from "../../utils";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
+import { showSuccess, showError } from "../Notifications";
 
 const IphoneProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -70,7 +71,7 @@ const IphoneProduct = () => {
   const handleAddToCart = () => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
-      alert("Вы не залогинены. Пожалуйста, войдите в систему.");
+      showError("Вы не залогинены. Пожалуйста, войдите в систему.");
       return;
     }
 
@@ -83,6 +84,14 @@ const IphoneProduct = () => {
       };
 
       dispatch(addToCart(cartItem));
+      showSuccess(
+        <div>
+          <img src={selectedImage || ""} alt={iphone.title || "Product"} style={{ width: 40, marginRight: 10 }} />
+          <span>
+            {iphone.title || "Product"} успешно добавлен в корзину за ${totalPrice}!
+          </span>
+        </div>
+      );
     }
   };
 

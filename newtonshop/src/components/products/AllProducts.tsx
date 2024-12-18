@@ -11,18 +11,25 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { categoryMapping } from "../categoryMapping";
 import "./Products.css";
 
+const sortOptions = [
+  { value: "title,ASC", label: "Названию (A-Z)" },
+  { value: "title,DESC", label: "Названию (Z-A)" },
+  { value: "price,ASC", label: "Цене (возрастание)" },
+  { value: "price,DESC", label: "Цене (убывание)" },
+];
+
 const AllProducts = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { products, loading, error, page } = useSelector((state: RootState) => state.products);
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [sortCriteria, setSortCriteria] = useState("title,ASC");
+  const [sortCriteria, setSortCriteria] = useState(sortOptions[0].value);
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     const currentPage = parseInt(query.get("page") || "1", 10) - 1;
-    const sort = query.get("sort") || "title,ASC";
+    const sort = query.get("sort") || sortOptions[0].value;
 
     setSortCriteria(sort);
     dispatch(setPage(currentPage));
@@ -31,13 +38,7 @@ const AllProducts = () => {
 
   const handleSortChange = (newSort: string) => {
     const query = new URLSearchParams(location.search);
-
-    if (newSort === "default") {
-      query.delete("sort");
-    } else {
-      query.set("sort", newSort);
-    }
-
+    query.set("sort", newSort);
     navigate(`${location.pathname}?${query.toString()}`);
   };
 
@@ -89,6 +90,8 @@ const AllProducts = () => {
     </motion.div>
   ));
 
+  const currentSortLabel = sortOptions.find((option) => option.value === sortCriteria)?.label || "";
+
   if (loading) {
     return <div className="card-container">{skeletonCards}</div>;
   }
@@ -103,24 +106,25 @@ const AllProducts = () => {
 
   return (
     <div>
-      <h1 style={{ marginBottom: "20px", marginLeft: "50px" }}>Все товары</h1>
-      <div className="sort-dropdown">
-        <label htmlFor="sort">Сортировка по: </label>
-        <div className="custom-select-container">
-          <select
-            id="sort"
-            value={sortCriteria}
-            onChange={(e) => handleSortChange(e.target.value)}
-            className={`custom-select ${isSortOpen ? "open" : ""}`}
-            onClick={handleSortToggle}
-          >
-            <option value="default">По умолчанию</option>
-            <option value="title,ASC">По названию (A-Z)</option>
-            <option value="title,DESC">По названию (Z-A)</option>
-            <option value="price,ASC">По цене (возрастание)</option>
-            <option value="price,DESC">По цене (убывание)</option>
-          </select>
-          <img src="/image/svg/arrow.svg" alt="Arrow" className={`arrow-icon ${isSortOpen ? "rotate" : ""}`} />
+      <div className="header-container">
+        <h1>Все товары</h1>
+        <div className="sort-dropdown">
+          <label htmlFor="sort">Сортировка по: </label>
+          <div className="custom-select-container">
+            <div className={`custom-select ${isSortOpen ? "open" : ""}`} onClick={handleSortToggle}>
+              {currentSortLabel}
+              <img src="/image/svg/arrow.svg" alt="Arrow" className={`arrow-icon ${isSortOpen ? "rotate" : ""}`} />
+            </div>
+            <div className={`custom-dropdown ${isSortOpen ? "open" : ""}`}>
+              <ul>
+                {sortOptions.map((option) => (
+                  <li key={option.value} onClick={() => handleSortChange(option.value)}>
+                    {option.label}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -16,6 +16,7 @@ import { colorMapping } from "./colorMapping";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
 import { getDataOrFallback, getImagesByColor } from "../../utils";
+import { showSuccess, showError } from "../Notifications";
 
 const MacProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -81,7 +82,7 @@ const MacProduct = () => {
   const handleAddToCart = () => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
-      alert("Вы не залогинены. Пожалуйста, войдите в систему.");
+      showError("Вы не залогинены. Пожалуйста, войдите в систему.");
       return;
     }
 
@@ -94,6 +95,14 @@ const MacProduct = () => {
       };
 
       dispatch(addToCart(cartItem));
+      showSuccess(
+        <div>
+          <img src={selectedImage || ""} alt={mac.title || "Product"} style={{ width: 40, marginRight: 10 }} />
+          <span>
+            {mac.title || "Product"} успешно добавлен в корзину за ${totalPrice}!
+          </span>
+        </div>
+      );
     }
   };
 

@@ -27,6 +27,8 @@ import {
 import { RootState } from "../../store";
 import CartItem from "./CartItem";
 import CustomerInfo from "./CustomerInfo";
+import "react-toastify/dist/ReactToastify.css";
+import { showSuccess, showError } from "../Notifications";
 
 const CartPage = () => {
   const dispatch = useDispatch();
@@ -78,11 +80,25 @@ const CartPage = () => {
   };
 
   const handleRemoveItem = async (id: number) => {
-    dispatch(setRemovalQueue([items.find((item: CartItemDto) => item.id === id)!]));
-    dispatch(setCurrentRemovalIndex(0));
-    await deleteCartItem(id);
-    dispatch(removeItem(id));
-    dispatch(clearRemovalQueue());
+    try {
+      const item = items.find((item: CartItemDto) => item.id === id);
+      if (item) {
+        dispatch(setRemovalQueue([item]));
+        dispatch(setCurrentRemovalIndex(0));
+        await deleteCartItem(id);
+        dispatch(removeItem(id));
+        dispatch(clearRemovalQueue());
+
+        showSuccess(
+          <div>
+            <img src={item.imageUrl} alt={item.name} style={{ width: 40, marginRight: 10 }} />
+            <span>Товар {item.name} успешно удален из корзины!</span>
+          </div>
+        );
+      }
+    } catch {
+      showError("Ошибка при удалении товара.");
+    }
   };
 
   const handleCustomerDataChange = (field: string, value: string) => {
@@ -124,6 +140,8 @@ const CartPage = () => {
 
     await deleteAllSelectedCartItems();
     dispatch(setItems(items.filter((item: CartItemDto) => !item.selected)));
+
+    showSuccess("Выбранные товары успешно удалены.");
   };
 
   const handleDeleteAll = async () => {
@@ -134,6 +152,8 @@ const CartPage = () => {
 
     await deleteAllCartItems();
     dispatch(setItems([]));
+
+    showSuccess("Вся корзина была очищена.");
   };
 
   const totalPrice = items.reduce(
@@ -144,22 +164,27 @@ const CartPage = () => {
   const handleOrderSubmit = async () => {
     const selectedItems = items.filter((item: CartItemDto) => item.selected);
     if (selectedItems.length === 0) {
-      alert("Пожалуйста, выберите товары для оформления заказа.");
+      showError("Пожалуйста, выберите товары для оформления заказа.");
       return;
     }
 
-    const orderData: OrderRequestDto = {
-      fullName: customerData.fullName,
-      email: customerData.email,
-      phoneNumber: customerData.phone,
-      address: deliveryInfo,
-      cardNumber: paymentMethod,
-      totalPrice: selectedItems.reduce((total: number, item: CartItemDto) => total + item.price * item.quantity, 0),
-      cartItemIds: selectedItems.map((item: CartItemDto) => item.id),
-    };
+    try {
+      const orderData: OrderRequestDto = {
+        fullName: customerData.fullName,
+        email: customerData.email,
+        phoneNumber: customerData.phone,
+        address: deliveryInfo,
+        cardNumber: paymentMethod,
+        totalPrice: selectedItems.reduce((total: number, item: CartItemDto) => total + item.price * item.quantity, 0),
+        cartItemIds: selectedItems.map((item: CartItemDto) => item.id),
+      };
 
-    await createOrder(orderData);
-    dispatch(setItems(items.filter((item: CartItemDto) => !item.selected)));
+      await createOrder(orderData);
+      dispatch(setItems(items.filter((item: CartItemDto) => !item.selected)));
+      showSuccess("Заказ успешно оформлен!");
+    } catch {
+      showError("Ошибка при оформлении заказа.");
+    }
   };
 
   return (

@@ -1,23 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "./NotFound.css";
 
 const NotFound = () => {
-  const [soundPlayed, setSoundPlayed] = useState(false);
-
-  const sound = new Audio("/image/mememe.mp3");
-
-  const handleClick = () => {
-    if (!soundPlayed) {
-      sound.play();
-      setSoundPlayed(true);
-    }
-  };
-
   return (
     <div className="not-found-container">
       <h1>404</h1>
-      <img src="/image/404.gif" alt="404 GIF" className="not-found-gif" onClick={handleClick} />
+      <img src="/image/404.gif" alt="404 GIF" className="not-found-gif" />
       <h2>Страница не найдена</h2>
       <p>Извините, но запрашиваемая вами страница не найдена.</p>
       <Link to="/" className="back-home-link">

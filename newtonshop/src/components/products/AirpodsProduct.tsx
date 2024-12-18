@@ -9,6 +9,7 @@ import "./ProductDetails.css";
 import Spinner from "../Spinner";
 import ImageWrapper from "../handler/ImageWrapper";
 import { getImagesByColor } from "../../utils";
+import { showSuccess, showError } from "../Notifications";
 
 const AirpodsProduct = () => {
   const { id } = useParams<{ id: string }>();
@@ -58,7 +59,7 @@ const AirpodsProduct = () => {
   const handleAddToCart = async () => {
     const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) {
-      alert("Вы не залогинены. Пожалуйста, войдите в систему.");
+      showError("Вы не залогинены. Пожалуйста, войдите в систему.");
       return;
     }
 
@@ -71,6 +72,14 @@ const AirpodsProduct = () => {
       };
 
       dispatch(addToCart(cartItem));
+      showSuccess(
+        <div>
+          <img src={selectedImage || ""} alt={airpods.title || "Product"} style={{ width: 40, marginRight: 10 }} />
+          <span>
+            {airpods.title || "Product"} успешно добавлен в корзину за ${airpods.price}!
+          </span>
+        </div>
+      );
     }
   };
 
